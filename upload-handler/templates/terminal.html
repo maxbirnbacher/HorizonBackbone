@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css"/>
+        <script src="https://unpkg.com/xterm"></script>
+        <script src="https://unpkg.com/xterm-addon-fit"></script>
+        <title>RevShell</title>
+    </head>
+    <body>
+        <h1>Reverse Shell</h1>
+        <a href="/webshell">Back</a>
+        <div id="terminal"></div>
+        <script>
+            const terminal = new Terminal();
+            terminal.open(document.getElementById('terminal'));
+
+            const socket = new WebSocket('ws://localhost:8000/ws/{{ client_id }}/}}');
+
+            socket.onopen = function (e) {
+                terminal.writeln('Connection established');
+            };
+
+            socket.onmessage = function (event) {
+                terminal.writeln(event.data);
+            };
+
+            terminal.onData(data => {
+                socket.send(data);
+            });
+        </script>
+    </body>
+</html>
