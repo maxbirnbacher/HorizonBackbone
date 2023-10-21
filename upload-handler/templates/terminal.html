@@ -13,19 +13,31 @@
             const webglAddon = new WebglAddon.WebglAddon();
             terminal.loadAddon(webglAddon);
             terminal.open(document.getElementById('terminal'));
-        
-            const socket = new WebSocket('ws://localhost:8000/ws/1');
-        
+                    
+            let socket;
+            try {
+                socket = new WebSocket('ws://localhost:8000/ws/1');
+            } catch (error) {
+                console.error('Failed to create WebSocket connection:', error);
+                return;
+            }
+            
             socket.onopen = function(e) {
                 terminal.writeln('Connection established');
             };
-        
+            
+            socket.onerror = function(error) {
+                console.error('WebSocket error:', error);
+            };
+            
             socket.onmessage = function(event) {
                 terminal.writeln(event.data);
             };
-        
+            
             terminal.onData(data => {
-                socket.send(data);
+                if (socket.readyState === WebSocket.OPEN) {
+                    socket.send(data);
+                }
             });
         </script>
     </body>

