@@ -121,6 +121,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
     try:
         while True:
             command = await manager.receive_shell_command(websocket)
+            print(f"Client {client_id} sent command: {command}")
             process = await aiosubprocess.create_subprocess_shell(command, stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
             stdout, stderr = await process.communicate()
             await manager.send_shell_output(websocket, stdout.decode())
