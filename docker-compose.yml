@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-upload
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-config:/etc/nginx/conf.d
+      - ./uploads:/var/www/html/uploads
+
+  upload-handler:
+    build:
+      context: ./upload-handler
+      dockerfile: Dockerfile
+    container_name: upload-handler
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads
