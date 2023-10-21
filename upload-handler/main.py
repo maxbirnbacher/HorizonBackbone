@@ -41,6 +41,9 @@ class ConnectionManager:
     async def receive_shell_command(self, websocket: WebSocket):
         command = await websocket.receive_text()
         return command
+    
+    def is_connected(self, websocket: WebSocket):
+        return websocket in self.active_connections
 
 manager = ConnectionManager()
 
