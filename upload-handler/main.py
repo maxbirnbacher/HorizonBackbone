@@ -58,7 +58,24 @@ async def file_content(request: Request, filename: str):
     if not grid_file:
         return HTMLResponse(content="File not found", status_code=404)
 
+    # Check if the file has a supported file extension
+    supported_extensions = ['.txt', '.pdf', '.docx']
+    file_extension = os.path.splitext(filename)[1]
+    if file_extension not in supported_extensions:
+        return templates.TemplateResponse('unsupported_file.html', {'request': request, 'filename': filename})
+
     content = grid_file.read()
 
     # Render the content in an HTML template
     return templates.TemplateResponse('file_content.html', {'request': request, 'filename': filename, 'content': content.decode()})
+
+# download the file
+@app.get('/download/{filename}')
+async def download_file(filename: str):
+    # Retrieve the file content from MongoDB GridFS
+    grid_file = fs.find_one({"filename": filename})
+    if not grid_file:
+        return HTMLResponse(content="File not found", status_code=404)
+
+    # Return the file data as a response
+    return {"file": grid_file.read().decode()}
