@@ -4,19 +4,29 @@
         <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css"/>
         <<script src="https://unpkg.com/xterm"></script>
         <script src="https://unpkg.com/xterm-addon-fit"></script>
-        <script src="https://unpkg.com/xterm-addon-attach"></script>
-        <title>RevShell</title>
+        <script src="https://unpkg.com/xterm-addon-webgl"></script>
     </head>
     <body>
-        <h1>Reverse Shell</h1>
-        <a href="/webshell">Back</a>
         <div id="terminal"></div>
         <script>
-            var term = new Terminal();
-            var socket = new WebSocket('ws://localhost:8000/ws/1'); // replace with your WebSocket server URL
-            var attachAddon = new AttachAddon.AttachAddon(socket);
-            term.loadAddon(attachAddon);
-            term.open(document.getElementById('terminal'));
+            const terminal = new Terminal();
+            const webglAddon = new WebglAddon.WebglAddon();
+            terminal.loadAddon(webglAddon);
+            terminal.open(document.getElementById('terminal'));
+        
+            const socket = new WebSocket('ws://localhost:8000/ws/1');
+        
+            socket.onopen = function(e) {
+                terminal.writeln('Connection established');
+            };
+        
+            socket.onmessage = function(event) {
+                terminal.writeln(event.data);
+            };
+        
+            terminal.onData(data => {
+                socket.send(data);
+            });
         </script>
     </body>
 </html>
