@@ -13,7 +13,7 @@
         <div id="terminal"></div>
         <script>
             var term = new Terminal();
-            var socket = new WebSocket('ws://localhost:{{ port }}/'); // replace with your WebSocket server URL
+            var socket = new WebSocket('ws://localhost:8000/ws/1'); // replace with your WebSocket server URL
             var attachAddon = new AttachAddon.AttachAddon(socket);
             term.loadAddon(attachAddon);
             term.open(document.getElementById('terminal'));
