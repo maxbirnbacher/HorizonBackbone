@@ -2,7 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css"/>
-        <script src="https://unpkg.com/xterm"></script>
+        <<script src="https://unpkg.com/xterm"></script>
         <script src="https://unpkg.com/xterm-addon-fit"></script>
         <script src="https://unpkg.com/xterm-addon-attach"></script>
         <title>RevShell</title>
@@ -12,22 +12,11 @@
         <a href="/webshell">Back</a>
         <div id="terminal"></div>
         <script>
-            const terminal = new Terminal();
-            terminal.open(document.getElementById('terminal'));
-
-            const socket = new WebSocket('ws://localhost:{{ port }}/');
-
-            socket.onopen = function (e) {
-                terminal.writeln('Connection established');
-            };
-
-            socket.onmessage = function (event) {
-                terminal.writeln(event.data);
-            };
-
-            terminal.onData(data => {
-                socket.send(data);
-            });
+            var term = new Terminal();
+            var socket = new WebSocket('ws://localhost:{{ port }}/'); // replace with your WebSocket server URL
+            var attachAddon = new AttachAddon.AttachAddon(socket);
+            term.loadAddon(attachAddon);
+            term.open(document.getElementById('terminal'));
         </script>
     </body>
 </html>
