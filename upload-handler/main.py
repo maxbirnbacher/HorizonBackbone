@@ -130,3 +130,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
 def terminal(request: Request):
     return templates.TemplateResponse("terminal.html", {"request": request})
 
+# render the terminal in an HTML template
+@app.get("/terminal-view")
+def terminal_view(request: Request):
+    return templates.TemplateResponse("terminal.html", {"request": request})
+
