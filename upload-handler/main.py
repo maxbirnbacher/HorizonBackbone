@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 from gridfs import GridFS
 from pymongo import MongoClient
 from pydantic import BaseModel
@@ -59,7 +59,7 @@ async def file_content(request: Request, filename: str):
         return HTMLResponse(content="File not found", status_code=404)
 
     # Check if the file has a supported file extension
-    supported_extensions = ['.txt', '.pdf', '.png', '.jpg', '.jpeg', '.conf', '.json']
+    supported_extensions = ['.txt', '.pdf', '.conf', '.json']
     file_extension = os.path.splitext(filename)[1]
     if file_extension not in supported_extensions:
         return templates.TemplateResponse('unsupported_file.html', {'request': request, 'filename': filename})
@@ -78,4 +78,4 @@ async def download_file(filename: str):
         return HTMLResponse(content="File not found", status_code=404)
 
     # Return the file data as a response
-    return {"file": grid_file.read().decode()}
+    return StreamingResponse(grid_file, media_type='application/octet-stream')
