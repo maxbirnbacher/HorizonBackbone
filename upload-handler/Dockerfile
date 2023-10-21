@@ -8,6 +8,9 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# install netcat
+RUN apt-get update && apt-get install -y netcat
+
 # Copy the rest of the application code into the container
 COPY . .
 

