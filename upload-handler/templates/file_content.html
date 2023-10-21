@@ -5,6 +5,10 @@
     </head>
     <body>
         <h1>{{ filename }}</h1>
+        <a href="/list-files-view">Back</a>
+        <p>Uploaded on {{ timestamp }}</p>
+        <p>Size: {{ size }}</p>
+        <p>MD5: {{ md5 }}</p>
         <pre>{{ content }}</pre>
     </body>
 </html>
