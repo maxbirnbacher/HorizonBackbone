@@ -3,12 +3,11 @@ The heart of the Horizon Malware Suite and used for all kinds of things
 
 ## Setup & Start
 
-Just start the stack with `docker-compose up -d` and you are good to go. The stack will start the following services:
+Clone the repository and run `docker-compose build` to build the images.
 
-- Nginx (to view the files)
-- FastAPI (API for uploading files)
+Start the stack with `docker-compose up -d` and you are good to go.
 
 ## What's next?
 
-- [ ] Make a better UI for the Nginx Server
+- [ ] Make a better UI for the Webinterface
 - [ ] Add C2 Server

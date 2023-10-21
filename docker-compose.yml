@@ -1,19 +1,6 @@
 version: '3'
 
 services:
-  nginx:
-    build:
-      name: nginx-upload
-      context: ./nginx-config   # Specify the directory containing your Nginx Dockerfile
-      dockerfile: Dockerfile    # Specify the Dockerfile name if different
-    image: nginx:latest
-    container_name: nginx-upload
-    ports:
-      - "1080:1080"
-    volumes:
-      - ./nginx-config:/etc/nginx/conf.d
-      - ./uploads:/var/www/html/uploads
-
   upload-handler:
     build:
       name: upload-handler
