@@ -59,7 +59,7 @@ async def file_content(request: Request, filename: str):
         return HTMLResponse(content="File not found", status_code=404)
 
     # Check if the file has a supported file extension
-    supported_extensions = ['.txt', '.pdf', '.docx']
+    supported_extensions = ['.txt', '.pdf', '.png', '.jpg', '.jpeg', '.conf', '.json']
     file_extension = os.path.splitext(filename)[1]
     if file_extension not in supported_extensions:
         return templates.TemplateResponse('unsupported_file.html', {'request': request, 'filename': filename})
