@@ -11,32 +11,30 @@
         <script>
             const terminal = new Terminal();
             const webglAddon = new WebglAddon.WebglAddon();
+            const fitAddon = new FitAddon.FitAddon();
             terminal.loadAddon(webglAddon);
-            terminal.open(document.getElementById('terminal'));
-                    
-            let socket;
-            try {
-                socket = new WebSocket('ws://localhost:8000/ws/1');
-            } catch (error) {
-                console.error('Failed to create WebSocket connection:', error);
+            terminal.loadAddon(fitAddon);
+            fitAddon.fit();
+            
+            function sendCommand(command) {
+                fetch('/send-command', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ command: command })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    terminal.writeln(data.output);
+                })
+                .catch(error => {
+                    console.error('Failed to send command:', error);
+                });
             }
             
-            socket.onopen = function(e) {
-                terminal.writeln('Connection established');
-            };
-            
-            socket.onerror = function(error) {
-                console.error('WebSocket error:', error);
-            };
-            
-            socket.onmessage = function(event) {
-                terminal.writeln(event.data);
-            };
-            
             terminal.onData(data => {
-                if (socket.readyState === WebSocket.OPEN) {
-                    socket.send(data);
-                }
+                sendCommand(data);
             });
         </script>
     </body>

