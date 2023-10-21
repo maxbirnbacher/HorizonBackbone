@@ -4,6 +4,9 @@ FROM python:3.9-slim
 # Set the working directory in the container
 WORKDIR /app
 
+# Create the directory for uploaded files and make it writable
+RUN mkdir /app/uploads && chmod 777 /app/uploads
+
 # Copy the requirements file and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
