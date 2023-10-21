@@ -117,14 +117,16 @@ async def download_file(filename: str):
 async def websocket_endpoint(websocket: WebSocket, client_id: int):
     print("waiting for connection")
     await manager.connect(websocket)
-    print(f"Client {client_id} connected")
+    if manager.is_connected(websocket):
+        print(f"Client {client_id} connected")
     try:
         while True:
             command = await manager.receive_shell_command(websocket)
             print(f"Client {client_id} sent command: {command}")
-            process = await aiosubprocess.create_subprocess_shell(command, stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
-            stdout, stderr = await process.communicate()
-            await manager.send_shell_output(websocket, stdout.decode())
+            if manager.is_connected(websocket):
+                process = await aiosubprocess.create_subprocess_shell(command, stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
+                stdout, stderr = await process.communicate()
+                await manager.send_shell_output(websocket, stdout.decode())
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
