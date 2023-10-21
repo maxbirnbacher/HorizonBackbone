@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, Request
+from fastapi.responses import HTMLResponse
 from gridfs import GridFS
 from pymongo import MongoClient
 from pydantic import BaseModel
@@ -17,6 +18,7 @@ fs = GridFS(db)
 class FileResponse(BaseModel):
     filename: str
 
+# render the upload form in an HTML template
 @app.post('/upload')
 async def upload_file(file: UploadFile = File(...)):
     if not file:
@@ -31,6 +33,7 @@ async def upload_file(file: UploadFile = File(...)):
 
     return {'message': 'File uploaded successfully', 'filename': file.filename}
 
+# render the upload form in an HTML template
 @app.get('/list-files')
 async def list_files():
     file_list = []  # This will store a list of files and directories
@@ -41,7 +44,21 @@ async def list_files():
 
     return file_list
 
+# render the file list in an HTML template
 @app.get('/list-files-view')
 async def list_files_view(request: Request):
     file_list = await list_files()
     return templates.TemplateResponse('list_files.html', {'request': request, 'file_list': file_list})
+
+# render the file content in an HTML template
+@app.get('/file/{filename}')
+async def file_content(request: Request, filename: str):
+    # Retrieve the file content from MongoDB GridFS
+    grid_file = fs.find_one({"filename": filename})
+    if not grid_file:
+        return HTMLResponse(content="File not found", status_code=404)
+
+    content = grid_file.read()
+
+    # Render the content in an HTML template
+    return templates.TemplateResponse('file_content.html', {'request': request, 'filename': filename, 'content': content.decode()})
