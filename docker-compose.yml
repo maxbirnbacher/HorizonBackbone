@@ -2,6 +2,9 @@ version: '3'
 
 services:
   nginx:
+    build:
+      context: ./nginx-config   # Specify the directory containing your Nginx Dockerfile
+      dockerfile: Dockerfile    # Specify the Dockerfile name if different
     image: nginx:latest
     container_name: nginx-upload
     ports:
@@ -12,10 +15,10 @@ services:
 
   upload-handler:
     build:
-      context: ./upload-handler
-      dockerfile: Dockerfile
+      context: ./upload-handler # Specify the directory containing your upload handler Dockerfile
+      dockerfile: Dockerfile    # Specify the Dockerfile name if different
     container_name: upload-handler
     ports:
       - "8000:8000"
     volumes:
-      - ./uploads:/app/uploads
+      - ./uploads:/app/uploads  # Map the uploads directory to the script's working directory
