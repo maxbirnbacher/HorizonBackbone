@@ -10,8 +10,8 @@ RUN mkdir /app/uploads
 # Add a non-root user named 'upload-handler-user'
 RUN groupadd -r upload-handler-group && useradd -r -g upload-handler-group upload-handler-user
 
-# Change the owner of the uploads directory to a non-root user (e.g., appuser)
-RUN chown -R upload-handler-user:upload-handler-user /app/uploads
+# Change the owner of the uploads directory to the 'upload-handler-user'
+RUN chown -R upload-handler-user:upload-handler-group /app/uploads
 
 # Copy the requirements file and install dependencies
 COPY requirements.txt .
