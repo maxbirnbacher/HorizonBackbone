@@ -24,3 +24,9 @@ services:
       - "8000:8000"
     volumes:
       - ./uploads:/app/uploads  # Map the uploads directory to the script's working directory
+
+  mongo:
+    image: mongo:latest
+    container_name: horizon-database
+    ports:
+      - "27017:27017"
