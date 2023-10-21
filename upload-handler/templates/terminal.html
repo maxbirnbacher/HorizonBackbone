@@ -19,7 +19,6 @@
                 socket = new WebSocket('ws://localhost:8000/ws/1');
             } catch (error) {
                 console.error('Failed to create WebSocket connection:', error);
-                return false;
             }
             
             socket.onopen = function(e) {
