@@ -19,11 +19,10 @@
         });
 
         // Connect to the WebSocket
-        const socket = new WebSocket(`ws://10.0.0.9:8000/ws/{{ client_id }}`);
+        const socket = new WebSocket(`ws://10.0.0.9:8000/ws/1`);
 
         // Initialize the terminal
         term.open(document.getElementById('terminal'));
-        term.fit();
 
         socket.addEventListener('open', (event) => {
             term.open(document.getElementById('terminal'));

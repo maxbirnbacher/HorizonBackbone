@@ -125,6 +125,10 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
     # Store the WebSocket connection for future reference
     active_websockets[client_id] = websocket
 
+    print(f"Client {client_id} connected to the WebSocket")
+    print(f"Number of active WebSocket connections: {len(active_websockets)}")
+    print(f"Active WebSocket connections: {active_websockets}")
+
     try:
         while True:
             data = await websocket.receive_text()
@@ -133,7 +137,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
             # You can execute commands, run scripts, etc., on the server.
 
             # For demonstration, let's echo the data back to the terminal.
-            await websocket.send_text(f"You said: {data}")
+            print(f"Received data from client {client_id}: {data}")
+            await websocket.send_text(data)
     except WebSocketDisconnect:
         # WebSocket disconnected, remove it from the dictionary
         del active_websockets[client_id]
