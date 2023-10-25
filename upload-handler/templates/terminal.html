@@ -25,18 +25,16 @@
         term.open(document.getElementById('terminal'));
         term.fit();
 
+        socket.addEventListener('open', (event) => {
+            term.open(document.getElementById('terminal'));
+            term.attach(socket);
+        });
 
-        // Attach the WebSocket to the terminal
-        socket.onmessage = function (event) {
-            term.write(event.data);
-        };
+        socket.addEventListener('close', (event) => {
+            term.writeln('\r\nConnection closed.');
+        });
 
-        // send initial message
-        socket.onopen = function (event) {
-            socket.send("RevShellHorizon v0.1\r\n");
-        };
-
-        term.onData(data => {
+        term.onData((data) => {
             socket.send(data);
         });
 

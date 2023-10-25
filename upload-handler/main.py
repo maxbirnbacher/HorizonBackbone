@@ -116,11 +116,27 @@ async def download_file(filename: str):
     # Return the file data as a response
     return StreamingResponse(grid_file, media_type='application/octet-stream')
 
-# open a websocket connection to the reverse shell
+active_websockets = {}
+
 @app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket):
+async def websocket_endpoint(websocket: WebSocket, client_id: int):
     await websocket.accept()
-    await start_shell(websocket)
+
+    # Store the WebSocket connection for future reference
+    active_websockets[client_id] = websocket
+
+    try:
+        while True:
+            data = await websocket.receive_text()
+
+            # Process the command or data received from the web terminal here.
+            # You can execute commands, run scripts, etc., on the server.
+
+            # For demonstration, let's echo the data back to the terminal.
+            await websocket.send_text(f"You said: {data}")
+    except WebSocketDisconnect:
+        # WebSocket disconnected, remove it from the dictionary
+        del active_websockets[client_id]
 
 @app.get("/terminal/{client_id}")
 def terminal(request: Request, client_id: int):
