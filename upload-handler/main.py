@@ -136,7 +136,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
 # render the terminal in an HTML template
 @app.get("/terminal")
 def terminal(request: Request):
-    return templates.TemplateResponse("terminal.html", {"request": request, "output": manager.send_shell_output()})
+    # Replace `websocket` and `message` with the appropriate values
+    return templates.TemplateResponse("terminal.html", {"request": request, "output": manager.send_shell_output(websocket, message)})
 
 # send the command to the reverse shell
 @app.post("/send-command")
