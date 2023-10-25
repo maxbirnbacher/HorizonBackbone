@@ -3,7 +3,6 @@ version: '3'
 services:
   upload-handler:
     build:
-      name: upload-handler
       context: ./upload-handler # Specify the directory containing your upload handler Dockerfile
       dockerfile: Dockerfile    # Specify the Dockerfile name if different
     container_name: upload-handler
