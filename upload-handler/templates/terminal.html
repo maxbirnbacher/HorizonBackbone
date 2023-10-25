@@ -19,7 +19,7 @@
         });
 
         // Connect to the WebSocket
-        const socket = new WebSocket(`ws://localhost:8000/ws/{{ client_id }}/`);
+        const socket = new WebSocket(`ws://localhost:8000/ws/{{ client_id }}`);
 
         // Initialize the terminal
         term.open(document.getElementById('terminal'));
