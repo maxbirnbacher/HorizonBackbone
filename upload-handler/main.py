@@ -5,6 +5,7 @@ from pymongo import MongoClient
 from pydantic import BaseModel
 from fastapi.templating import Jinja2Templates
 from typing import List
+from utils.shell import start_shell
 import aiosubprocess
 import websockets
 import subprocess
@@ -117,14 +118,9 @@ async def download_file(filename: str):
 
 # open a websocket connection to the reverse shell
 @app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: int):
-    await manager.connect(websocket, client_id)
-    try:
-        while True:
-            data = await websocket.receive_text()
-            await manager.send_shell_input(data, websocket, client_id)
-    except WebSocketDisconnect:
-        manager.disconnect(websocket, client_id)
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    await start_shell(websocket)
 
 @app.get("/terminal/{client_id}")
 def terminal(request: Request, client_id: int):

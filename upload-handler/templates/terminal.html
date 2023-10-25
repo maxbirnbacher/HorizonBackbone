@@ -21,51 +21,27 @@
                     foreground: '#ffffff',
                 },
             });
-      const ws = new WebSocket("ws://localhost:8000/ws/1", "echo-protocol");
-      var curr_line = "";
-      var entries = [];
-      terminal.open(document.getElementById("terminal"));
-      terminal.write("web shell $ ");
+            // Connect to the WebSocket
+            const socket = new WebSocket("ws://localhost:8000/ws/1");
 
-      terminal.prompt = () => {
-        if (curr_line) {
-          let data = { method: "command", command: curr_line };
-          ws.send(JSON.stringify(data));
-        }
-      };
-      terminal.prompt();
+            // Initialize the terminal
+            const term = new Terminal();
+            term.open(document.getElementById('terminal'));
+            term.fit();
 
-      // Receive data from socket
-      ws.onmessage = msg => {
-        terminal.write("\r\n" + JSON.parse(msg.data).data);
-        curr_line = "";
-      };
+            // Attach the WebSocket to the terminal
+            socket.onmessage = function (event) {
+                term.write(event.data);
+            };
 
-      terminal.on("key", function(key, ev) {
-        //Enter
-        if (ev.keyCode === 13) {
-          if (curr_line) {
-            entries.push(curr_line);
-            terminal.write("\r\n");
-            terminal.prompt();
-          }
-        } else if (ev.keyCode === 8) {
-          // Backspace
-          if (curr_line) {
-            curr_line = curr_line.slice(0, curr_line.length - 1);
-            terminal.write("\b \b");
-          }
-        } else {
-          curr_line += key;
-          terminal.write(key);
-        }
-      });
+            term.onData(data => {
+                socket.send(data);
+            });
 
-      // paste value
-      terminal.on("paste", function(data) {
-        curr_line += data;
-        terminal.write(data);
-      });
+            socket.onclose = function (event) {
+                term.write("\r\n\r\nConnection closed.");
+            };
+
         </script>
     </body>
 </html>
