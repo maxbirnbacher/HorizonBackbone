@@ -1,45 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css"/>
-    <script src="https://unpkg.com/xterm"></script>
-    <script src="https://unpkg.com/xterm-addon-fit"></script>
-</head>
-<body>
-    <div id="terminal"></div>
-    <script>
-        const term = new Terminal({
-            cursorBlink: true,
-            fontFamily: 'Courier New',
-            fontSize: 12,
-            theme: {
-                background: '#000000',
-                foreground: '#ffffff',
-            },
-        });
+    <head>
+        <title>Terminal</title>
+    </head>
+    <body>
+        <h1>Terminal</h1>
+        <a href="/command-center">Back</a>
+        <button id="refresh">Refresh</button>
+        <h4>Output</h4>
+        <div id="terminal">{{ output }}</div>
+        <h4>Input</h4>
+        <form id="command-form">
+            <input type="text" id="command-input" name="command"/>
+            <input type="submit" value="Execute"/>
+        </form>
+        <h4>Commands</h4>
+        <div id="commands">
+            {% for command in commands %}
+                <p>{{ command }}</p>
+            {% endfor %}
+        </div>
 
-        // Connect to the WebSocket
-        const socket = new WebSocket(`ws://10.0.0.9:8000/ws/1`);
+        <script connectionid="{{ connection_id}}">
+            const connectionId = document
+                .getElementsByTagName('script')[0]
+                .getAttribute('connectionId');
+            const commandForm = document.getElementById('command-form');
+            const commandInput = document.getElementById('command-input');
+            const terminal = document.getElementById('terminal');
+            const refreshButton = document.getElementById('refresh');
 
-        // Initialize the terminal
-        term.open(document.getElementById('terminal'));
+            // Submit command form
+            commandForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const command = commandInput.value;
+                commandInput.value = '';
+                fetch(`/command-center/terminal/${connectionId}`, {
+                    method: 'POST',
+                    body: JSON.stringify({command: command}),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            });
 
-        socket.addEventListener('open', (event) => {
-            term.open(document.getElementById('terminal'));
-            term.attach(socket);
-        });
-
-        socket.addEventListener('close', (event) => {
-            term.writeln('\r\nConnection closed.');
-        });
-
-        term.onData((data) => {
-            socket.send(data);
-        });
-
-        socket.onclose = function (event) {
-            term.write("\r\n\r\nConnection closed.");
-        };
-    </script>
-</body>
+            // Refresh output
+            refreshButton.addEventListener('click', () => {
+                fetch(`/command-center/terminal/${connectionId}/output`)
+                    .then(
+                        response => response.text()
+                    )
+                    .then(data => {
+                        terminal.innerHTML = data;
+                    });
+            });
+        </script>
+    </body>
 </html>

