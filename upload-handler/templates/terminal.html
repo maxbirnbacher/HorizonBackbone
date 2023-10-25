@@ -5,37 +5,67 @@
         <<script src="https://unpkg.com/xterm"></script>
         <script src="https://unpkg.com/xterm-addon-fit"></script>
         <script src="https://unpkg.com/xterm-addon-webgl"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
     </head>
     <body>
         <div id="terminal"></div>
         <script>
-            const terminal = new Terminal();
-            const webglAddon = new WebglAddon.WebglAddon();
-            const fitAddon = new FitAddon.FitAddon();
-            terminal.loadAddon(webglAddon);
-            terminal.loadAddon(fitAddon);
-            fitAddon.fit();
-            
-            function sendCommand(command) {
-                fetch('/send-command', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ command: command })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    terminal.writeln(data.output);
-                })
-                .catch(error => {
-                    console.error('Failed to send command:', error);
-                });
-            }
-            
-            terminal.onData(data => {
-                sendCommand(data);
+            const terminal = new Terminal({
+                cursorBlink: true,
+                fontFamily: 'Courier New',
+                fontSize: 12,
+                rows: 30,
+                cols: 100,
+                theme: {
+                    background: '#000000',
+                    foreground: '#ffffff',
+                },
             });
+      const ws = new WebSocket("ws://localhost:8000/ws/1", "echo-protocol");
+      var curr_line = "";
+      var entries = [];
+      terminal.open(document.getElementById("terminal"));
+      terminal.write("web shell $ ");
+
+      terminal.prompt = () => {
+        if (curr_line) {
+          let data = { method: "command", command: curr_line };
+          ws.send(JSON.stringify(data));
+        }
+      };
+      terminal.prompt();
+
+      // Receive data from socket
+      ws.onmessage = msg => {
+        terminal.write("\r\n" + JSON.parse(msg.data).data);
+        curr_line = "";
+      };
+
+      terminal.on("key", function(key, ev) {
+        //Enter
+        if (ev.keyCode === 13) {
+          if (curr_line) {
+            entries.push(curr_line);
+            terminal.write("\r\n");
+            terminal.prompt();
+          }
+        } else if (ev.keyCode === 8) {
+          // Backspace
+          if (curr_line) {
+            curr_line = curr_line.slice(0, curr_line.length - 1);
+            terminal.write("\b \b");
+          }
+        } else {
+          curr_line += key;
+          terminal.write(key);
+        }
+      });
+
+      // paste value
+      terminal.on("paste", function(data) {
+        curr_line += data;
+        terminal.write(data);
+      });
         </script>
     </body>
 </html>
