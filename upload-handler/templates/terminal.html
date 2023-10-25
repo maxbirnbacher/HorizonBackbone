@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css"/>
-        <<script src="https://unpkg.com/xterm"></script>
-        <script src="https://unpkg.com/xterm-addon-fit"></script>
-        <script src="https://unpkg.com/xterm-addon-webgl"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
-    </head>
-    <body>
-        <div id="terminal"></div>
-        <script>
-            const terminal = new Terminal({
-                cursorBlink: true,
-                fontFamily: 'Courier New',
-                fontSize: 12,
-                rows: 30,
-                cols: 100,
-                theme: {
-                    background: '#000000',
-                    foreground: '#ffffff',
-                },
-            });
-            // Connect to the WebSocket
-            const socket = new WebSocket("ws://localhost:8000/ws/{{ client_id }}/}}");
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css"/>
+    <script src="https://unpkg.com/xterm"></script>
+    <script src="https://unpkg.com/xterm-addon-fit"></script>
+</head>
+<body>
+    <div id="terminal"></div>
+    <script>
+        const term = new Terminal({
+            cursorBlink: true,
+            fontFamily: 'Courier New',
+            fontSize: 12,
+            theme: {
+                background: '#000000',
+                foreground: '#ffffff',
+            },
+        });
 
-            // Initialize the terminal
-            const term = new Terminal();
-            term.open(document.getElementById('terminal'));
-            term.fit();
+        // Connect to the WebSocket
+        const socket = new WebSocket(`ws://localhost:8000/ws/${client_id}`);
 
-            // Attach the WebSocket to the terminal
-            socket.onmessage = function (event) {
-                term.write(event.data);
-            };
+        // Initialize the terminal
+        term.open(document.getElementById('terminal'));
+        term.fit();
 
-            term.onData(data => {
-                socket.send(data);
-            });
 
-            socket.onclose = function (event) {
-                term.write("\r\n\r\nConnection closed.");
-            };
+        // Attach the WebSocket to the terminal
+        socket.onmessage = function (event) {
+            term.write(event.data);
+        };
 
-        </script>
-    </body>
+        // send initial message
+        socket.onopen = function (event) {
+            socket.send("RevShellHorizon v0.1\r\n");
+        };
+
+        term.onData(data => {
+            socket.send(data);
+        });
+
+        socket.onclose = function (event) {
+            term.write("\r\n\r\nConnection closed.");
+        };
+    </script>
+</body>
 </html>
