@@ -2,11 +2,11 @@ version: '3'
 
 services:
   upload-handler:
-    image: upload-handler:latest
     build:
       context: ./upload-handler # Specify the directory containing your upload handler Dockerfile
       dockerfile: Dockerfile    # Specify the Dockerfile name if different
     container_name: upload-handler
+    image: ""
     ports:
       - "8000:8000"
 
