@@ -102,7 +102,7 @@ async def command_center(request: Request):
 
 # "terminal" or command center route
 @app.get("/command-center/terminal/{connection_id}")
-def terminal(request: Request, connection_id: int):
+def terminal(request: Request, connection_id: str):
     # get all commands for the client from the database
     commands = get_command_list(connection_id)
     # get the output of the command from the database
