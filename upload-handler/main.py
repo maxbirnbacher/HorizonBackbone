@@ -93,7 +93,7 @@ async def command_center(request: Request):
     connection_list = []
     for connection in connections.find():
         # get the _id: ObjectId of the connection and convert it to a string
-        connection["_id"] = str(connection["_id"])
+        # connection["_id"] = str(connection["_id"])
         # append the connection to the list
         connection_list.append(connection)
 
