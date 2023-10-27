@@ -6,12 +6,16 @@
     <body>
         <h1>Command Center</h1>
         <a href="/">Back</a>
-        <ul>
-            {% for connection in connection_list %}
-                <li>
-                    <a href="/command-center/terminal/{{ connection['id'] }}">{{ connection['hostname'] }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+        {% if connection_list %}
+            <ul>
+                {% for connection in connection_list %}
+                    <li>
+                        <a href="/command-center/terminal/{{ connection['id'] }}">{{ connection['hostname'] }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No connections found.</p>
+        {% endif %}
     </body>
 </html>

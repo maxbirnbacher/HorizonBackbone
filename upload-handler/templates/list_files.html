@@ -6,12 +6,16 @@
     <body>
         <h1 style="font-family: sans-serif;">HorizonBackbone v1.0</h1>
         <h2>File List</h2>
-        <ul>
-            {% for file in file_list %}
-                <li>
-                    <a href="/file/{{ file }}">{{ file }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+        {% if file_list %}
+            <ul>
+                {% for file in file_list %}
+                    <li>
+                        <a href="/file/{{ file }}">{{ file }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No files uploaded.</p>
+        {% endif %}
     </body>
 </html>
