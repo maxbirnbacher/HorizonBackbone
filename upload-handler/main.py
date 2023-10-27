@@ -155,12 +155,12 @@ async def terminal(request: Request, connection_id):
         raise HTTPException(status_code=404, detail="Connection not found")
 
     # retrieve the commands from the database
-    commands = await get_commands(connection_id)
+    commands = get_commands(connection_id)
 
     # retrieve the output from the database
     output = connection['output']
 
-    return templates.TemplateResponse("terminal.html", {"request": request, "connection_id": connection_id, "commands": await commands.to_list(length=100), "output": output, "connection": connection})
+    return templates.TemplateResponse("terminal.html", {"request": request, "connection_id": connection_id, "commands": commands, "output": output, "connection": connection})
 
 # register a new connection
 @app.post('/register')
