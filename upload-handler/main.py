@@ -129,7 +129,7 @@ async def get_command_list(connection_id):
         raise HTTPException(status_code=404, detail="Connection not found")
 
     # retrieve the commands from the database
-    commands = connection["commands"]
+    commands = connections.find_one({"_id": ObjectId(connection_id)})["commands"]
 
     return {"commands": commands}
 
@@ -155,7 +155,7 @@ async def terminal(request: Request, connection_id):
         raise HTTPException(status_code=404, detail="Connection not found")
 
     # retrieve the commands from the database
-    commands = get_commands(connection_id)
+    commands = get_command_list(connection_id)
 
     # retrieve the output from the database
     output = connection['output']

@@ -19,7 +19,7 @@
             <p>{{ commands }}</p>
         </div>
 
-        <script connectionid="{{ connection_id}}">
+        <script connectionId="{{ connection_id}}">
             const connectionId = document
                 .getElementsByTagName('script')[0]
                 .getAttribute('connectionId');
@@ -32,14 +32,28 @@
             commandForm.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const command = commandInput.value;
+                const commandQueue = document.getElementById('commands');
+                const commandElement = document.createElement('p');
+                commandElement.innerHTML = command;
+                commandQueue.appendChild(commandElement);
                 commandInput.value = '';
-                fetch(`/command-center/terminal/${connectionId}`, {
+                fetch(`/command/${connectionId}`, {
                     method: 'POST',
                     body: JSON.stringify({command: command}),
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 });
+
+                // Refresh command output
+                fetch(`/command-list/${connectionId}`)
+                    .then(
+                        response => response.text()
+                    )
+                    .then(data => {
+                        commandElement.innerHTML = data;
+                    });
+
             });
 
             // Refresh output
