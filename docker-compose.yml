@@ -7,7 +7,6 @@ services:
       dockerfile: Dockerfile    # Specify the Dockerfile name if different
       tag: upload-handler
     container_name: upload-handler
-    image: ""
     ports:
       - "8000:8000"
 
