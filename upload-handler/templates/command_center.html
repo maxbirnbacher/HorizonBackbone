@@ -11,7 +11,7 @@
             <ul>
                 {% for connection in connection_list %}
                     <li>
-                        <a href="/command-center/terminal/{{ connection['id'] }}">{{ connection['hostname'] }}</a>
+                        <a href="/command-center/terminal/{{ connection['_id'] }}">{{ connection['hostname'] }}</a>
                     </li>
                 {% endfor %}
             </ul>
