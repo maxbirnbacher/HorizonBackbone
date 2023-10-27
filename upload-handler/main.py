@@ -1,3 +1,4 @@
+from bson import ObjectId
 from fastapi import FastAPI, File, HTTPException, UploadFile, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, StreamingResponse
 from gridfs import GridFS
@@ -132,14 +133,19 @@ async def command_center(request: Request):
 
 # "terminal" or command center route
 @app.get("/command-center/terminal/{connection_id}")
-def terminal(request: Request, connection_id: str):
-    # get all commands for the client from the database
-    commands = get_command_list(connection_id)
-    # get the output of the command from the database
-    output = get_output(connection_id)
-    # get the details of the connection from the database
-    connection = get_connection_details(connection_id)
-    return templates.TemplateResponse("terminal.html", {"request": request, "connection_id": connection_id, "commands": commands, "output": output, "connection": connection})
+async def terminal(request: Request, connection_id: str):
+    # retrieve the connection from the database
+    connection = connections.find_one({"_id": ObjectId(connection_id)})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Connection not found")
+
+    # retrieve the commands from the database
+    commands = await get_commands(connection_id)
+
+    # retrieve the output from the database
+    output = connection['output']
+
+    return templates.TemplateResponse("terminal.html", {"request": request, "connection_id": connection_id, "commands": await commands.to_list(length=100), "output": output, "connection": connection})
 
 # register a new connection
 @app.post('/register')
