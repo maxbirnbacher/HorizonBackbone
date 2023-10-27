@@ -7,6 +7,7 @@
         <h1>Command Center</h1>
         <a href="/">Back</a>
         {% if connection_list %}
+            <p>{{ connection_list }}</p>
             <ul>
                 {% for connection in connection_list %}
                     <li>
