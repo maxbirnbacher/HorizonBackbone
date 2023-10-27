@@ -92,6 +92,9 @@ async def command_center(request: Request):
     # Retrieve all connections from the database
     connection_list = []
     for connection in connections.find():
+        # get the _id: ObjectId of the connection and convert it to a string
+        connection["_id"] = str(connection["_id"])
+        # append the connection to the list
         connection_list.append(connection)
 
     return templates.TemplateResponse('command_center.html', {'request': request, 'connection_list': connection_list})
