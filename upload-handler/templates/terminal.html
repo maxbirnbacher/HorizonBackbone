@@ -16,7 +16,11 @@
         </form>
         <h4>Commands</h4>
         <div id="commands">
-            <p>{{ commands }}</p>
+            <!-- check if commands is empty -->
+            {% if commands %}
+                <p id="commandElement">{{ commands }}</p>
+                {% endfor %}
+            {% endif %}
         </div>
 
         <script connectionId="{{ connection_id}}">
@@ -32,10 +36,7 @@
             commandForm.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const command = commandInput.value;
-                const commandQueue = document.getElementById('commands');
-                const commandElement = document.createElement('p');
-                commandElement.innerHTML = command;
-                commandQueue.appendChild(commandElement);
+                const commandElement = document.getElementById('commandElement');
                 commandInput.value = '';
                 fetch(`/command/${connectionId}`, {
                     method: 'POST',
@@ -51,7 +52,7 @@
                         response => response.text()
                     )
                     .then(data => {
-                        commandElement.innerHTML = data;
+                        commandElement.innerText = data;
                     });
 
             });

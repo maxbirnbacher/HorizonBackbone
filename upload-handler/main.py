@@ -131,7 +131,7 @@ async def get_command_list(connection_id):
     # retrieve the commands from the database
     commands = connections.find_one({"_id": ObjectId(connection_id)})["commands"]
 
-    return {"commands": commands}
+    return commands
 
 # render a list of all connections in an HTML template
 @app.get('/command-center')
