@@ -199,7 +199,11 @@ async def get_connection_details(connection_id: str):
 
 # add the output of the command to the database
 @app.post('/output/{connection_id}')
-async def add_output(connection_id: str, output: str):
+async def add_output(connection_id: str, request: Request):
+    data = await request.json()
+    print(data)
+    output = data.get('output')
+    print(f'Received output: {output} for connection: {connection_id}')
     # retrieve the connection from the database
     connection = connections.find_one({"_id": ObjectId(connection_id)})
     if not connection:
