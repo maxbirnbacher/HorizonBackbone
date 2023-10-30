@@ -198,7 +198,7 @@ async def get_connection_details(connection_id: str):
     return connection
 
 # add the output of the command to the database
-@app.post('/output/{connection_id}')
+@app.post('/output/send/{connection_id}')
 async def add_output(connection_id: str, request: Request):
     data = await request.json()
     print(data)
@@ -215,7 +215,7 @@ async def add_output(connection_id: str, request: Request):
     return {"message": "Output added"}
 
 # get the output of the command from the database
-@app.get('/output/{connection_id}')
+@app.get('/output/read/{connection_id}')
 async def get_output(connection_id: str):
     # retrieve the connection from the database
     connection = connections.find_one({"_id": ObjectId(connection_id)})
