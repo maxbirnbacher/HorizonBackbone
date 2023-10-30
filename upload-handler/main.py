@@ -110,7 +110,7 @@ async def add_command(connection_id, request: Request):
 
 # return the new commands for the client from the database based on the connection ID
 @app.get('/commands/{connection_id}')
-async def get_commands(connection_id: str):
+async def get_commands(connection_id):
     # retrieve the connection from the database
     connection = connections.find_one({"_id": ObjectId(connection_id)})
     if not connection:
@@ -118,6 +118,7 @@ async def get_commands(connection_id: str):
 
     # retrieve the commands from the database
     commands = connections.find_one({"_id": ObjectId(connection_id)})["commands"]
+    print(commands)
 
     # clear the commands from the database
     connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"commands": []}})
