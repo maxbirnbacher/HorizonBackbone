@@ -41,12 +41,19 @@
 
                 const data = { command: command };
 
+                console.log('data before stringify:', data);
+
+                const json = JSON.stringify(data);
+
+                console.log('json:', json);
+                console.log('json length:', json.length);
+
                 fetch(`/command/${connectionId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data)
+                    body: json
                 })
                     .then(response => {
                         if (response.ok) {
