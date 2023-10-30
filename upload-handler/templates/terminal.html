@@ -36,7 +36,7 @@
                 event.preventDefault();
                 const command = commandInput.value;
                 const commandElement = document.getElementById('commandElement');
-                commandInput.value = '';
+                console.log("Command: " + command);
                 fetch(`/command/${connectionId}`, {
                     method: 'POST',
                     body: JSON.stringify({command: command}),
