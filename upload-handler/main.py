@@ -94,8 +94,9 @@ async def download_file(filename: str):
 # add a new command to the database
 @app.post('/command/{connection_id}')
 async def add_command(connection_id: str, command: str):
+    print(f'Received command: {command} for connection: {connection_id}')
     # retrieve the connection from the database
-    connection = connections.find_one({"_id": connection_id})
+    connection = connections.find_one({"_id": ObjectId(connection_id)})
     if not connection:
         raise HTTPException(status_code=404, detail="Connection not found")
 
