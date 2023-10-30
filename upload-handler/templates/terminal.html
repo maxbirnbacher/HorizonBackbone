@@ -35,6 +35,7 @@
             commandForm.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const command = commandInput.value;
+                const commandDiv = document.getElementById('commands');
                 const commandElement = document.getElementById('commandElement');
                 console.log("Command: " + command);
                 fetch(`/command/${connectionId}`, {
@@ -51,7 +52,12 @@
                         response => response.text()
                     )
                     .then(data => {
-                        commandElement.innerText = data;
+                        // check if the commandElement exists
+                        if (commandElement) {
+                            commandElement.innerHTML = data;
+                        } else {
+                            commandDiv.innerHTML = `<p id="commandElement">${data}</p>`;
+                        }
                     });
 
             });
