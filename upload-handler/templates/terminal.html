@@ -52,6 +52,7 @@
                         response => response.text()
                     )
                     .then(data => {
+                        console.log("Commands" + data);
                         // check if the commandElement exists
                         if (commandElement) {
                             commandElement.innerHTML = data;
