@@ -103,7 +103,7 @@
 
             // Refresh output
             refreshButton.addEventListener('click', () => {
-                fetch(`/command-center/terminal/${connectionId}/output`)
+                fetch(`/output/${connectionId}`)
                     .then(
                         response => response.text()
                     )

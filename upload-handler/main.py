@@ -184,14 +184,14 @@ async def register_connection(os_type: str, ip_address: str, hostname: str, user
 @app.delete('/unregister/{connection_id}')
 async def unregister_connection(connection_id: str):
     # delete the connection from the database
-    connections.delete_one({"_id": connection_id})
+    connections.delete_one({"_id": ObjectId(connection_id)})
     return {"message": "Connection unregistered"}
 
 # get the details of a connection
 @app.get('/connection/{connection_id}/details')
 async def get_connection_details(connection_id: str):
     # retrieve the connection from the database
-    connection = connections.find_one({"_id": connection_id})
+    connection = connections.find_one({"_id": ObjectId(connection_id)})
     if not connection:
         raise HTTPException(status_code=404, detail="Connection not found")
 
@@ -201,12 +201,12 @@ async def get_connection_details(connection_id: str):
 @app.post('/output/{connection_id}')
 async def add_output(connection_id: str, output: str):
     # retrieve the connection from the database
-    connection = connections.find_one({"_id": connection_id})
+    connection = connections.find_one({"_id": ObjectId(connection_id)})
     if not connection:
         raise HTTPException(status_code=404, detail="Connection not found")
 
     # add the output to the database
-    connections.update_one({"_id": connection_id}, {"$set": {"output": output}})
+    connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"output": output}})
 
     return {"message": "Output added to queue"}
 
@@ -214,7 +214,7 @@ async def add_output(connection_id: str, output: str):
 @app.get('/output/{connection_id}')
 async def get_output(connection_id: str):
     # retrieve the connection from the database
-    connection = connections.find_one({"_id": connection_id})
+    connection = connections.find_one({"_id": ObjectId(connection_id)})
     if not connection:
         raise HTTPException(status_code=404, detail="Connection not found")
 
@@ -222,7 +222,7 @@ async def get_output(connection_id: str):
     output = connection["output"]
 
     # clear the output from the database
-    connections.update_one({"_id": connection_id}, {"$set": {"output": ""}})
+    connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"output": ""}})
 
     return {"output": output}
 
