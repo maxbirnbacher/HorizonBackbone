@@ -88,7 +88,14 @@
                                 commandList.appendChild(commandItem);
                             }
                         } else {
-                            commandDiv.innerHTML = `<p id="commandElement">${data}</p>`;
+                            // output a list of commands in a list
+                            let commandList = document.createElement('ol');
+                            commandList.setAttribute('id', 'commandElement');
+                            for (let command of JSON.parse(data)) {
+                                let commandItem = document.createElement('li');
+                                commandItem.innerHTML = command;
+                                commandList.appendChild(commandItem);
+                            }
                         }
                     });
 
