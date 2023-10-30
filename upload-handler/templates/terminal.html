@@ -78,7 +78,15 @@
                         console.log("Commands" + data);
                         // check if the commandElement exists
                         if (commandElement) {
-                            commandElement.innerHTML = data;
+                            // output a list of commands in a list and remove the old commandElement
+                            let commandList = document.createElement('ol');
+                            commandList.setAttribute('id', 'commandElement');
+                            commandDiv.replaceChild(commandList, commandElement);
+                            for (let command of JSON.parse(data)) {
+                                let commandItem = document.createElement('li');
+                                commandItem.innerHTML = command;
+                                commandList.appendChild(commandItem);
+                            }
                         } else {
                             commandDiv.innerHTML = `<p id="commandElement">${data}</p>`;
                         }
