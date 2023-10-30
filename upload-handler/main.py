@@ -208,7 +208,7 @@ async def add_output(connection_id: str, output: str):
     # add the output to the database
     connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"output": output}})
 
-    return {"message": "Output added to queue"}
+    return {"message": "Output added"}
 
 # get the output of the command from the database
 @app.get('/output/{connection_id}')

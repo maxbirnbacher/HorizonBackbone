@@ -69,7 +69,7 @@
                         console.error(error);
                     });
 
-                // Refresh command output
+                // Refresh command queue
                 fetch(`/command-list/${connectionId}`)
                     .then(
                         response => response.text()
@@ -88,14 +88,7 @@
                                 commandList.appendChild(commandItem);
                             }
                         } else {
-                            // output a list of commands in a list
-                            let commandList = document.createElement('ol');
-                            commandList.setAttribute('id', 'commandElement');
-                            for (let command of JSON.parse(data)) {
-                                let commandItem = document.createElement('li');
-                                commandItem.innerHTML = command;
-                                commandList.appendChild(commandItem);
-                            }
+                            commandDiv.innerHTML = `<p id="commandElement">${data}</p>`;
                         }
                     });
 
@@ -103,7 +96,7 @@
 
             // Refresh output
             refreshButton.addEventListener('click', () => {
-                fetch(`/output/${connectionId}`)
+                fetch(`/output${connectionId}`)
                     .then(
                         response => response.text()
                     )
@@ -111,6 +104,29 @@
                         terminal.innerHTML = data;
                     });
             });
+
+            // Refresh command queue
+            fetch(`/command-list/${connectionId}`)
+                    .then(
+                        response => response.text()
+                    )
+                    .then(data => {
+                        console.log("Commands" + data);
+                        // check if the commandElement exists
+                        if (commandElement) {
+                            // output a list of commands in a list and remove the old commandElement
+                            let commandList = document.createElement('ol');
+                            commandList.setAttribute('id', 'commandElement');
+                            commandDiv.replaceChild(commandList, commandElement);
+                            for (let command of JSON.parse(data)) {
+                                let commandItem = document.createElement('li');
+                                commandItem.innerHTML = command;
+                                commandList.appendChild(commandItem);
+                            }
+                        } else {
+                            commandDiv.innerHTML = `<p id="commandElement">${data}</p>`;
+                        }
+                    });
         </script>
     </body>
 </html>
