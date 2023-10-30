@@ -96,7 +96,7 @@
 
             // Refresh output
             refreshButton.addEventListener('click', () => {
-                fetch(`/output${connectionId}`)
+                fetch(`/output/${connectionId}`)
                     .then(
                         response => response.text()
                     )
