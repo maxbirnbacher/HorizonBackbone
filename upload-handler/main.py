@@ -103,8 +103,8 @@ async def add_command(connection_id, request: Request):
     if not connection:
         raise HTTPException(status_code=404, detail="Connection not found")
 
-    # add the command to the database
-    connections.update_one({"_id": connection_id}, {"$push": {"commands": command}})
+    # add the command to the database with an upsert
+    connections.update_one({"_id": ObjectId(connection_id)}, {"$push": {"commands": command}}, upsert=True)
 
     return {"message": "Command added to queue"}
 
@@ -131,6 +131,8 @@ async def get_command_list(connection_id):
     connection = connections.find_one({"_id": ObjectId(connection_id)})
     if not connection:
         raise HTTPException(status_code=404, detail="Connection not found")
+    
+    print(connection)
 
     # retrieve the commands from the database
     commands = connections.find_one({"_id": ObjectId(connection_id)})["commands"]
