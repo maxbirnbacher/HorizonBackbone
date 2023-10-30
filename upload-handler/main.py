@@ -93,7 +93,17 @@ async def download_file(filename: str):
 
 # add a new command to the database
 @app.post('/command/{connection_id}')
-async def add_command(connection_id: str, command: str):
+async def add_command(connection_id, command):
+    # change the command to a string if it is a list or json object
+    if isinstance(command, list) or isinstance(command, dict):
+        command = str(command)
+    elif isinstance(command, bytes):
+        command = command.decode('utf-8')
+    elif isinstance(command, str):
+        pass
+    else:
+        command = str(command)
+
     print(f'Received command: {command} for connection: {connection_id}')
     # retrieve the connection from the database
     connection = connections.find_one({"_id": ObjectId(connection_id)})
