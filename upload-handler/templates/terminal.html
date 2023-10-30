@@ -41,7 +41,7 @@
 
                 const data = { command: command };
 
-                fetch('/command/${connectionId}', {
+                fetch(`/command/${connectionId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
