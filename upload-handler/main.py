@@ -120,7 +120,7 @@ async def get_commands(connection_id):
     commands = connections.find_one({"_id": ObjectId(connection_id)})["commands"]
     print(commands)
     # add a | between the commands
-    commands = "|".join(commands)
+    commands = "| ".join(commands)
     print(commands)
 
     # clear the commands from the database
