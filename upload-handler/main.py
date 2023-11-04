@@ -6,6 +6,7 @@ from pymongo import MongoClient
 from pydantic import BaseModel
 from fastapi.templating import Jinja2Templates
 import os
+import datetime
 
 app = FastAPI()
 
@@ -213,8 +214,11 @@ async def add_output(connection_id: str, request: Request):
     if not connection:
         raise HTTPException(status_code=404, detail="Connection not found")
 
+    # make a object with the timestamp and output
+    output = {"timestamp": datetime.now(), "output": output}
+
     # add the output to the database
-    connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"output": output}})
+    connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"output": output}}, upsert=True)
 
     return {"message": "Output added"}
 
@@ -230,7 +234,7 @@ async def get_output(connection_id: str):
     output = connection["output"]
 
     # clear the output from the database
-    connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"output": ""}})
+    # connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"output": ""}})
 
     return {"output": output}
 
