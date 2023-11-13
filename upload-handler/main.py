@@ -214,8 +214,10 @@ async def add_output(connection_id: str, request: Request):
     if not connection:
         raise HTTPException(status_code=404, detail="Connection not found")
 
+    now = datetime.datetime.now()
+
     # make a object with the timestamp and output
-    output = {"timestamp": datetime.now(), "output": output}
+    output = {"timestamp": now.strftime("%H:%M:%S"), "output": output}
 
     # add the output to the database
     connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"output": output}}, upsert=True)
