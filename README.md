@@ -11,6 +11,8 @@
 
 **THIS SERVICE IS DESIGNED FOR EDUCATIONAL PURPOSE ONLY! DO NOT USE IT FOR ILLEGAL PURPOSES!**
 
+***Go to the [development-microservices](https://github.com/maxbirnbacher/HorizonBackbone/tree/development-microservices) branch for a preview of the microservices version (currently in development and not ready for production).***
+
 The heart of the Horizon Malware Suite and used for all kinds of things.
 
 ## Roadmap
