@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>File List</title>
+        <link rel='stylesheet' href='/stylesheets/style.css'/>
+    </head>
+    <body>
+        <h1>Uploaded Files</h1>
+        <h2>File List</h2>
+        <% if (file_list) { %>
+            <ul>
+                <% file_list.forEach(function(file) { %>
+                    <li>
+                        <a href="/file/<%= file %>"><%= file %></a>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No files uploaded.</p>
+        <% } %>
+    </body>
+</html>

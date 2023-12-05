@@ -34,3 +34,4 @@ pytest.ini
 
 # Jupyter Notebook
 .ipynb_checkpoints/
+

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Command Center</title>
+        <link rel='stylesheet' href='/stylesheets/style.css'/>
+    </head>
+    <body>
+        <h1>Command Center</h1>
+        <a href="/">Back</a>
+        <% if (connection_list) { %>
+            <ul>
+                <% connection_list.forEach(function(connection) { %>
+                    <li>
+                        <a href="/command-center/terminal/<%= connection['_id'] %>"><%= connection['hostname'] %></a>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No connections found.</p>
+        <% } %>
+    </body>
+</html>

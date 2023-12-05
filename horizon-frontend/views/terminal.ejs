@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Terminal</title>
+    </head>
+    <body>
+        <h1>Terminal</h1>
+        <a href="/command-center">Back</a>
+        <button id="refresh">Refresh</button>
+        <h4>Output</h4>
+        <div id="terminal">{{ output }}</div>
+        <h4>Input</h4>
+        <form id="command-form">
+            <input type="text" id="command-input" name="command"/>
+            <input type="submit" value="Execute"/>
+        </form>
+        <h4>Commands</h4>
+        <div id="commands">
+            <!-- check if commands is empty -->
+            <% if commands %>
+                <p id="commandElement"><%= commands %></p>
+            <% endif %>
+        </div>
+
+        <script connectionId="<%= connection_id %>">
+            const connectionId = document
+                .getElementsByTagName('script')[0]
+                .getAttribute('connectionId');
+            const commandForm = document.getElementById('command-form');
+            const commandInput = document.getElementById('command-input');
+            const terminal = document.getElementById('terminal');
+            const refreshButton = document.getElementById('refresh');
+
+            // Submit command form
+            commandForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const command = commandInput.value;
+                const commandDiv = document.getElementById('commands');
+                const commandElement = document.getElementById('commandElement');
+                console.log("Command: " + command);
+
+                const data = { command: command };
+
+                console.log('data before stringify:', data);
+
+                const json = JSON.stringify(data);
+
+                console.log('json:', json);
+                console.log('json length:', json.length);
+
+                fetch(`/command/${connectionId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: json
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                    })
+                    .then(result => {
+                        console.log(result);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+
+                // Refresh command queue
+                fetch(`/command-list/${connectionId}`)
+                    .then(
+                        response => response.text()
+                    )
+                    .then(data => {
+                        console.log("Commands" + data);
+                        // check if the commandElement exists
+                        if (commandElement) {
+                            // output a list of commands in a list and remove the old commandElement
+                            let commandList = document.createElement('ol');
+                            commandList.setAttribute('id', 'commandElement');
+                            commandDiv.replaceChild(commandList, commandElement);
+                            for (let command of JSON.parse(data)) {
+                                let commandItem = document.createElement('li');
+                                commandItem.innerHTML = command;
+                                commandList.appendChild(commandItem);
+                            }
+                        } else {
+                            commandDiv.innerHTML = `<p id="commandElement">${data}</p>`;
+                        }
+                    });
+
+            });
+
+            // Refresh output
+            refreshButton.addEventListener('click', () => {
+                fetch(`/output/read/${connectionId}`)
+                    .then(
+                        response => response.text()
+                    )
+                    .then(data => {
+                        terminal.innerHTML = data;
+                    });
+            });
+
+            // Refresh command queue
+            fetch(`/command-list/${connectionId}`)
+                    .then(
+                        response => response.text()
+                    )
+                    .then(data => {
+                        console.log("Commands" + data);
+                        // check if the commandElement exists
+                        if (commandElement) {
+                            // output a list of commands in a list and remove the old commandElement
+                            let commandList = document.createElement('ol');
+                            commandList.setAttribute('id', 'commandElement');
+                            commandDiv.replaceChild(commandList, commandElement);
+                            for (let command of JSON.parse(data)) {
+                                let commandItem = document.createElement('li');
+                                commandItem.innerHTML = command;
+                                commandList.appendChild(commandItem);
+                            }
+                        } else {
+                            commandDiv.innerHTML = `<p id="commandElement">${data}</p>`;
+                        }
+                    });
+        </script>
+    </body>
+</html>
