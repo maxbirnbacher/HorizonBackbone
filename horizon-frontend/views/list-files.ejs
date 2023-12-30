@@ -5,18 +5,40 @@
         <link rel='stylesheet' href='/stylesheets/style.css'/>
     </head>
     <body>
-        <h1>Uploaded Files</h1>
-        <h2>File List</h2>
+        <div class="flex justify-center">
+            <h1 class="font-semibold text-4xl pt-2">HorizonBackbone</h1>
+        </div>
+        <nav class="bg-gray-800 m-5 rounded-sm">
+            <div class="">
+                <div class="flex justify-between p-2">
+                    <div class="flex space-x-4">
+                        <a
+                            href="/"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-red-600 px-3 py-2 text-sm rounded-sm font-medium">Home</a>
+                        <a
+                            href="/list-files"
+                            class="text-gray-300 bg-gray-700 hover:bg-gray-700 hover:text-red-600 px-3 py-2 text-sm rounded-sm font-medium">View Uploaded Files</a>
+                        <a
+                            href="/command-center"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-red-600 px-3 py-2 text-sm rounded-sm font-medium">Reverse Shells</a>
+                        <a
+                            href="/user/login"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-red-600 px-3 py-2 text-sm rounded-sm font-medium ">Login</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
         <% if (file_list) { %>
             <ul>
                 <% file_list.forEach(function(file) { %>
                     <li>
                         <a href="/file/<%= file %>"><%= file %></a>
                     </li>
-                <% }); %>
-            </ul>
-        <% } else { %>
-            <p>No files uploaded.</p>
-        <% } %>
-    </body>
-</html>
+                    <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p>No files uploaded.</p>
+                <% } %>
+            </div>
+        </body>
+    </html>
