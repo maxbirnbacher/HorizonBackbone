@@ -11,14 +11,38 @@ services:
     depends_on:
       - kafka
 
-  horizon-api:
+  c2-api:
     build:
-      context: ./horizon-api # Specify the directory containing your upload handler Dockerfile
-      dockerfile: Dockerfile    # Specify the Dockerfile name if different
-      tag: upload-handler
-    container_name: horizon-api
+      context: ./c2-api
+      dockerfile: Dockerfile
+      tag: revshell-handler
+    container_name: c2-api
     ports:
-      - "8000:8000"
+      - "8001:8000"
+    depends_on:
+      - kafka
+      - mongo
+
+  user-api:
+    build:
+      context: ./user-api
+      dockerfile: Dockerfile
+      tag: user-handler
+    container_name: user-api
+    ports:
+      - "8002:8000"
+    depends_on:
+      - kafka
+      - mongo
+
+  file-api:
+    build:
+      context: ./file-api
+      dockerfile: Dockerfile
+      tag: file-handler
+    container_name: file-api
+    ports:
+      - "8003:8000"
     depends_on:
       - kafka
       - mongo
@@ -37,7 +61,7 @@ services:
     environment:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_CREATE_TOPICS=upload-handler:1:1,revshell-handler:1:1
+      - KAFKA_CREATE_TOPICS=c2-connections:1:1,revshell-handler:1:1,user-handler:1:1
     depends_on:
       - zookeeper
 

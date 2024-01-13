@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login - HorizonBackbone</title>
+        <link rel='stylesheet' href='/stylesheets/patternfly.min.css'/>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    </head>
+    <body>
+        <div
+            class="pf-v5-c-background-image"
+            style="--pf-v5-c-background-image--BackgroundImage: url(/images/background-login.svg); background-size: cover; background-position: center;"></div>
+        <div class="pf-v5-c-login">
+            <div class="pf-v5-c-login__container">
+                <header class="pf-v5-c-login__header">
+                    <img
+                        class="pf-v5-c-brand"
+                        src="/images/only-logo-no-background.png"
+                        height="64px"
+                        alt="PatternFly Logo"/>
+                </header>
+                <main class="pf-v5-c-login__main">
+                    <header class="pf-v5-c-login__main-header">
+                        <h1 class="pf-v5-c-title pf-m-3xl">Log in to your account</h1>
+                        <p class="pf-v5-c-login__main-header-desc">Everything is stored locally.</p>
+                    </header>
+                    <div class="pf-v5-c-login__main-body">
+                        <form class="pf-v5-c-form" novalidate="novalidate">
+                            <div class="pf-v5-c-form__helper-text" aria-live="polite">
+                                <div class="pf-v5-c-helper-text pf-m-hidden">
+                                    <div class="pf-v5-c-helper-text__item pf-m-error" id="-helper">
+                                        <span class="pf-v5-c-helper-text__item-icon">
+                                            <i class="fas fa-fw fa-exclamation-circle" aria-hidden="true"></i>
+                                        </span>
+                                        <span class="pf-v5-c-helper-text__item-text">Invalid login credentials.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pf-v5-c-form__group">
+                                <label class="pf-v5-c-form__label" for="login-demo-form-username">
+                                    <span class="pf-v5-c-form__label-text">Username</span>&nbsp;<span class="pf-v5-c-form__label-required" aria-hidden="true">&#42;</span></label>
+
+                                <span class="pf-v5-c-form-control pf-m-required">
+                                    <input
+                                        required="required"
+                                        input="true"
+                                        type="text"
+                                        id="login-demo-form-username"
+                                        name="login-demo-form-username"/>
+                                </span>
+                            </div>
+                            <div class="pf-v5-c-form__group">
+                                <label class="pf-v5-c-form__label" for="login-demo-form-password">
+                                    <span class="pf-v5-c-form__label-text">Password</span>&nbsp;<span class="pf-v5-c-form__label-required" aria-hidden="true">&#42;</span></label>
+
+                                <span class="pf-v5-c-form-control pf-m-required">
+                                    <input
+                                        required="required"
+                                        type="password"
+                                        id="login-demo-form-password"
+                                        name="login-demo-form-password"/>
+                                </span>
+                            </div>
+                            <div class="pf-v5-c-form__group">
+                                <p>Your token will timeout after 60 minutes. This is not negotiable.</p>
+                            </div>
+                            <div class="pf-v5-c-form__group pf-m-action">
+                                <button class="pf-v5-c-button pf-m-primary pf-m-block" type="submit">Log in</button>
+                            </div>
+                        </form>
+                    </div>
+                    <footer class="pf-v5-c-login__main-footer">
+                        <div class="pf-v5-c-login__main-footer-band">
+                            <p class="pf-v5-c-login__main-footer-band-item">
+                                Need an account?
+                                <a href="https://www.patternfly.org/">Sign up.</a>
+                            </p>
+                            <p class="pf-v5-c-login__main-footer-band-item">
+                                <a href="#">Forgot username or password?</a>
+                            </p>
+                        </div>
+                    </footer>
+                </main>
+                <footer class="pf-v5-c-login__footer">
+                    <p>Welcome to HorizonBackbone. A simple C2 framework (including some other stuff) for your red teaming needs. <br><strong>DO NOT USE THIS FOR MALICIOUS PURPOSES!</strong></p>
+                    <ul class="pf-v5-c-list pf-m-inline" role="list">
+                        <li>
+                            <a href="#">Terms of use</a>
+                        </li>
+                        <li>
+                            <a href="#">Help</a>
+                        </li>
+                        <li>
+                            <a href="https://raw.githubusercontent.com/maxbirnbacher/HorizonBackbone/main/LICENSE">License</a>
+                        </li>
+                    </ul>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
