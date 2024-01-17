@@ -19,11 +19,8 @@ COPY init.sh /usr/src/app/init.sh
 # Make the init script executable
 RUN chmod +x /usr/src/app/init.sh
 
-# Run the init script during the build process
-RUN /usr/src/app/init.sh
-
 # Expose the port your Express app is listening on
 EXPOSE 3000
 
 # Start the Express app
-CMD [ "npm", "start" ]
+CMD /usr/src/app/init.sh && npm start
