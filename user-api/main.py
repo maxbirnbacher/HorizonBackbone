@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from fastapi import FastAPI, Request, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from . import usermodel
+import usermodel
 from datetime import timedelta
 
 
