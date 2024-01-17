@@ -38,13 +38,20 @@ app.use('/list-files', filesRouter);
 app.use('/command-center', commandRouter);
 app.use('/user', userRouter);
 app.use('/login', loginRouter);
+app.use('/api', require('./routes/api'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
+// get ip address
+var ip = require('ip');
+var ipAddr = ip.address();
 
+print("Starting horizon-frontend");
+print("Listening on port 3000")
+print("URL: http://" + ipAddr + ":3000")
 
 // error handler
 app.use(function(err, req, res, next) {

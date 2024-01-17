@@ -11,16 +11,10 @@ document
             .querySelector('#login-demo-form-password')
             .value;
 
-        // Hash the password with sha256
-        var hashedPass = crypto
-            .createHash('sha256')
-            .update(password)
-            .digest('hex');
-
         axios
-            .post('http://10.0.0.9:8002/users/login', {
+            .post('http://localhost:3000/api/login', {
                 username: username,
-                password: hashedPass
+                password: password
             })
             .then(function (response) {
                 // Login successful, save the token
