@@ -11,6 +11,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code into the container
 COPY . .
 
+# create a env variable that can be used as a secret for the JWT token
+RUN export JWT_SECRET_KEY=$(openssl rand -hex 32)
+
 # Expose port 8000 to communicate with the FastAPI app
 EXPOSE 8000
 
