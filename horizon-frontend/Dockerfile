@@ -13,6 +13,15 @@ RUN npm install
 # Copy the rest of the project files to the container
 COPY . .
 
+# Copy the init script into the container
+COPY init.sh /usr/src/app/init.sh
+
+# Make the init script executable
+RUN chmod +x /usr/src/app/init.sh
+
+# Run the init script during the build process
+RUN /usr/src/app/init.sh
+
 # Expose the port your Express app is listening on
 EXPOSE 3000
 
