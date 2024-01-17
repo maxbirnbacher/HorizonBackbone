@@ -14,8 +14,8 @@ COPY . .
 # create a env variable that can be used as a secret for the JWT token
 RUN export JWT_SECRET_KEY=$(openssl rand -hex 32)
 
-# Expose port 8000 to communicate with the FastAPI app
-EXPOSE 8000
+# Expose port 8002 to communicate with the FastAPI app
+EXPOSE 8002
 
 # Start the FastAPI application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8002"]
