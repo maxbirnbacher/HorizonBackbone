@@ -31,7 +31,7 @@ async def list_users():
 @app.post('/users/register', response_model=usermodel.User)
 async def register_user(user: usermodel.UserCreate):
     # check if the user already exists
-    if connections.find_one({"username": data["username"]}):
+    if connections.find_one({"username": user.username}):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User already exists")
 
     # create a new user object
