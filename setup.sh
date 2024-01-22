@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get the system's IP address
-IP=$(hostname -I | awk '{print $1}')
+IP=$(hostname -I | awk '{print $2}')
 
 # Replace localhost with the system's IP address in the main.py files
 sed -i "s/localhost/$IP/g" c2-api/main.py
