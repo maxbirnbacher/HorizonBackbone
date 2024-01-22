@@ -53,7 +53,7 @@ services:
       - mongo
 
   mongo:
-    image: mongo:latest
+    image: dokcer.io/library/mongo:latest
     container_name: horizon-database
     ports:
       - "27017:27017"
