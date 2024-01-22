@@ -13,6 +13,9 @@ RUN npm install
 # Copy the rest of the project files to the container
 COPY . .
 
+# Copy the bin/www file into the container
+COPY bin/www /usr/src/app/bin/www
+
 # Copy the init script into the container
 COPY init.sh /usr/src/app/init.sh
 
