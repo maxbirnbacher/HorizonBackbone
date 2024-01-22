@@ -22,6 +22,7 @@ sed -i "s/localhost/$IP/g" user-api/main.py
 
 # Replace localhost with the system's IP address in the Node.js application files
 find ./horizon-frontend/routes -name "*.js" -exec sed -i "s/localhost/$IP/g" {} \;
+sed -i "s/localhost/$IP/g" horizon-frontend/init.sh
 
 # debug output
 cat c2-api/main.py | grep "$IP"

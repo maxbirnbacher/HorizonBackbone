@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# Wait for the server to start
-sleep 10
-
 # Create the admin account
-curl -X POST http://10.0.0.9:8002/users/register \
+hashed_password=$(echo -n "admin" | openssl dgst -sha256)
+curl -X POST http://localhost:8002/users/register \
     -H "Content-Type: application/json" \
     -d '{
         "username": "admin",
-        "password": "admin"
+        "hashed_password": "'"$hashed_password"'"
     }'
