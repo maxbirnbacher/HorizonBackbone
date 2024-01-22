@@ -10,6 +10,7 @@ var filesRouter = require('./routes/list-files');
 var commandRouter = require('./routes/command-center');
 var userRouter = require('./routes/user');
 var loginRouter = require('./routes/login');
+var apiRouter = require('./routes/api');
 
 var app = express();
 
@@ -38,7 +39,7 @@ app.use('/list-files', filesRouter);
 app.use('/command-center', commandRouter);
 app.use('/user', userRouter);
 app.use('/login', loginRouter);
-app.use('/api', require('./routes/api'));
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
