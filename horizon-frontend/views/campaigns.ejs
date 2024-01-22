@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Campaigns - HorizonBackbone</title>
+        <link rel='stylesheet' href='/stylesheets/patternfly.min.css'/>
+        <link
+            rel="stylesheet"
+            rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"
+        />
+    </head>
+    <body>
+        <div class="pf-v5-c-page">
+            <header class="pf-v5-c-masthead">
+                <span class="pf-v5-c-masthead__toggle">
+                    <button
+                        class="pf-v5-c-button pf-m-plain"
+                        type="button"
+                        aria-label="Global navigation"
+                        onclick="document.getElementById('nav').classList.toggle('pf-m-expanded');">
+                        <i class="fas fa-bars" aria-hidden="true"></i>
+                    </button>
+                </span>
+                <div class="pf-v5-c-masthead__main">
+                    <a class="pf-v5-c-masthead__brand" href="#"><img src="/images/only-logo-no-background.png" width="32px" alt="Logo"></a>
+                </div>
+                <div class="pf-v5-c-masthead__content">
+                    <span>HorizonBackbone</span>
+                    <div class="pf-v5-c-page__header-tools">
+                        <div class="pf-v5-c-toolbar__item pf-m-hidden pf-m-visible-on-sm">
+                            <button
+                                class="pf-v5-c-menu-toggle pf-m-full-height"
+                                type="button"
+                                aria-expanded="false"
+                                onclick="document.getElementById('user-menu').classList.toggle('pf-m-expanded');">
+                                <span class="pf-v5-c-menu-toggle__icon">
+                                    <img
+                                        class="pf-v5-c-avatar"
+                                        alt="Avatar image"
+                                        src="/images/img_avatar-light.svg">
+                                </span>
+                                <span class="pf-v5-c-menu-toggle__text">User</span>
+                                <span class="pf-v5-c-menu-toggle__controls">
+                                    <span class="pf-v5-c-menu-toggle__toggle-icon">
+                                        <a href="#">Logout</a>
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <div id="nav" class="pf-v5-c-page__sidebar">
+                <div class="pf-v5-c-page__sidebar-body">
+                    <nav class="pf-v5-c-nav" aria-label="Global">
+                        <section class="pf-v5-c-nav__section" aria-labelledby="group_home">
+                            <ul class="pf-v5-c-nav__list" role="list">
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="/" class="pf-v5-c-nav__link" aria-current="page">Home</a>
+                                </li>
+                            </ul>
+                        </section>
+                        <section class="pf-v5-c-nav__section" aria-labelledby="group_c2">
+                            <h2 class="pf-v5-c-nav__section-title" id="grouped-title1">Command & Control</h2>
+                            <ul class="pf-v5-c-nav__list" role="list">
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="/c2/campaigns" class="pf-v5-c-nav__link pf-m-current">Campaigns</a>
+                                </li>
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="/c2/agents" class="pf-v5-c-nav__link">Agents</a>
+                                </li>
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="/c2/broadcast" class="pf-v5-c-nav__link">Broadcast</a>
+                                </li>
+                            </ul>
+                        </section>
+                        <section class="pf-v5-c-nav__section" aria-labelledby="group_file_exfil">
+                            <h2 class="pf-v5-c-nav__section-title" id="grouped-title2">Files</h2>
+                            <ul class="pf-v5-c-nav__list" role="list">
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="#" class="pf-v5-c-nav__link">Delivery</a>
+                                </li>
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="/list-files" class="pf-v5-c-nav__link">Data Exfiltration</a>
+                                </li>
+                            </ul>
+                        </section>
+                        <section class="pf-v5-c-nav__section" aria-labelledby="group_system">
+                            <h2 class="pf-v5-c-nav__section-title" id="grouped-title2">System</h2>
+                            <ul class="pf-v5-c-nav__list" role="list">
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="#" class="pf-v5-c-nav__link">User Management</a>
+                                </li>
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="#" class="pf-v5-c-nav__link">Extra Modules</a>
+                                </li>
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="#" class="pf-v5-c-nav__link">Support</a>
+                                </li>
+                            </ul>
+                        </section>
+                    </nav>
+                </div>
+            </div>
+            <main class="pf-v5-c-page__main" tabindex="-1">
+                <section class="pf-v5-c-page__main-section">
+                    <div class="pf-v5-c-page__main-body">
+                        <div class="pf-v5-c-content">
+                            <div class="pf-v5-l-grid pf-m-gutter">
+                                <!-- component if no campaign exists and button to create new campaign -->
+                                <div id="empty_campaign_state" class="pf-v5-l-grid__item pf-m-12-col-on-md">
+                                    <div class="pf-v5-c-card">
+                                        <div class="pf-v5-c-empty-state">
+                                            <div class="pf-v5-c-empty-state__content">
+                                                <div class="pf-v5-c-empty-state__header">
+                                                    <div class="pf-v5-c-empty-state__icon">
+                                                        <i class="fas fa-cubes" aria-hidden="true"></i>
+                                                    </div>
+                                                    <div class="pf-v5-c-empty-state__title">
+                                                        <h1 class="pf-v5-c-empty-state__title-text">No campaign</h1>
+                                                    </div>
+                                                </div>
+
+                                                <div class="pf-v5-c-empty-state__body">
+                                                    Currently there are no campaigns. Click the button below to create a new
+                                                    campaign.
+                                                </div>
+
+                                                <div class="pf-v5-c-empty-state__footer">
+                                                    <div class="pf-v5-c-empty-state__actions">
+                                                        <button class="pf-v5-c-button pf-m-primary" type="button">Create campaign</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- dialog component for name and date range of the campaign -->
+                                <div id="campaign_dialog_step1" class="pf-v5-l-grid__item pf-m-12-col-on-md">
+                                    <div class="pf-v5-c-card">
+                                        <div class="pf-v5-c-card__header">
+                                            <ol class="pf-v5-c-progress-stepper" role="list">
+                                                <li
+                                                    class="pf-v5-c-progress-stepper__step pf-m-success"
+                                                    role="listitem"
+                                                    aria-label="completed step,">
+                                                    <div class="pf-v5-c-progress-stepper__step-connector">
+                                                        <span class="pf-v5-c-progress-stepper__step-icon">
+                                                            <i class="fas fa-check-circle" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div class="pf-v5-c-progress-stepper__step-main">
+                                                        <div class="pf-v5-c-progress-stepper__step-title">Successful completion</div>
+                                                    </div>
+                                                </li>
+                                                <li
+                                                    class="pf-v5-c-progress-stepper__step pf-m-current"
+                                                    role="listitem"
+                                                    aria-label="current step,in process step,">
+                                                    <div class="pf-v5-c-progress-stepper__step-connector">
+                                                        <span class="pf-v5-c-progress-stepper__step-icon">
+                                                            <i class="pf-v5-pficon pf-v5-pficon-in-progress" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div class="pf-v5-c-progress-stepper__step-main">
+                                                        <div class="pf-v5-c-progress-stepper__step-title">In process</div>
+                                                    </div>
+                                                </li>
+                                                <li
+                                                    class="pf-v5-c-progress-stepper__step pf-m-pending"
+                                                    role="listitem"
+                                                    aria-label="pending step,">
+                                                    <div class="pf-v5-c-progress-stepper__step-connector">
+                                                        <span class="pf-v5-c-progress-stepper__step-icon">
+                                                            <i class="pf-v5-pficon pf-v5-pficon-pending" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div class="pf-v5-c-progress-stepper__step-main">
+                                                        <div class="pf-v5-c-progress-stepper__step-title">Pending</div>
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                            <br>
+                                            <div class="pf-v5-c-card__header-main">
+                                                <h1 class="pf-v5-c-card__title">Create campaign</h1>
+                                            </div>
+                                        </div>
+                                        <div class="pf-v5-c-card__body">
+                                            <form class="pf-v5-c-form">
+                                                <div class="pf-v5-c-form__group">
+                                                    <label class="pf-v5-c-form__label" for="campaign_name">Campaign name</label>
+                                                    <input
+                                                        class="pf-v5-c-form__control"
+                                                        type="text"
+                                                        id="campaign_name"
+                                                        name="campaign_name"
+                                                        placeholder="Campaign name">
+                                                </div>
+                                                <div class="pf-v5-c-form__group">
+                                                    <label class="pf-v5-c-form__label" for="campaign_date_range">Date range</label>
+                                                    <input
+                                                        class="pf-v5-c-form__control"
+                                                        type="text"
+                                                        id="campaign_date_range"
+                                                        name="campaign_date_range"
+                                                        placeholder="Date range">
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="pf-v5-c-card__footer">
+                                            <div class="pf-v5-c-card__footer-actions">
+                                                <button class="pf-v5-c-button pf-m-link" type="button">Cancel</button>
+                                                <button class="pf-v5-c-button pf-m-primary" type="button">Create</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </body>
+    </html>

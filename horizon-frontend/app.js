@@ -7,7 +7,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var filesRouter = require('./routes/list-files');
-var commandRouter = require('./routes/command-center');
+var c2Router = require('./routes/c2');
 var userRouter = require('./routes/user');
 var loginRouter = require('./routes/login');
 var apiRouter = require('./routes/api');
@@ -36,7 +36,7 @@ app.use(function(req, res, next) {
 
 app.use('/', indexRouter);
 app.use('/list-files', filesRouter);
-app.use('/command-center', commandRouter);
+app.use('/c2', c2Router);
 app.use('/user', userRouter);
 app.use('/login', loginRouter);
 app.use('/api', apiRouter);
