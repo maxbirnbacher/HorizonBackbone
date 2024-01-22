@@ -40,8 +40,6 @@ It will also allow me to develop the different parts of the suite independently 
 
 Microservices will bring a very big change to the project. For example the frontend will be a NodeJS application that will communicate with the API via REST. I previously used Jinja2 templates to render the frontend. This is why I also need to rewrite parts of the API.
 
-As a message queue/broker I will use Apache Kafka.
-
 ## Setup & Start
 
 Clone the repository and run `docker-compose build` to build the images.
