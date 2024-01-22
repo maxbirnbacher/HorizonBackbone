@@ -3,14 +3,6 @@
 # Get the system's IP address
 IP=$(hostname -I | awk '{print $2}')
 
-# Replace localhost with the system's IP address in the main.py files
-sed -i "s/localhost/$IP/g" c2-api/main.py
-sed -i "s/localhost/$IP/g" file-api/main.py
-sed -i "s/localhost/$IP/g" user-api/main.py
-
-# debug output
-cat c2-api/main.py | grep "$IP"
-
 echo "Welcome to the setup script for HorizonBackbone"
 # echo "This script will build the docker images and start the containers"
 # echo "Please make sure you have docker(-compose) or podman(-compose) installed"
@@ -22,6 +14,18 @@ if [ ! -z "$IP_INPUT" ]; then
 fi
 
 echo "Using IP address $IP"
+
+# Replace localhost with the system's IP address in the main.py files
+sed -i "s/localhost/$IP/g" c2-api/main.py
+sed -i "s/localhost/$IP/g" file-api/main.py
+sed -i "s/localhost/$IP/g" user-api/main.py
+
+# Replace localhost with the system's IP address in the Node.js application files
+find ./horizon-frontend/routes -name "*.js" -exec sed -i "s/localhost/$IP/g" {} \;
+
+# debug output
+cat c2-api/main.py | grep "$IP"
+
 echo "Start the containers with docker-compose up or podman-compose up"
 
 # if command -v docker &>/dev/null; then

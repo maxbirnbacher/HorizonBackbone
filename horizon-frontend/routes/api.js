@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios');
+var crypto = require('crypto');
 
 /* make a post request to the user-api for login */
 router.post('/login', function(req, res, next) {
