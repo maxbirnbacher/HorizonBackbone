@@ -50,9 +50,9 @@ app.use(function(req, res, next) {
 var ip = require('ip');
 var ipAddr = ip.address();
 
-print("Starting horizon-frontend");
-print("Listening on port 3000")
-print("URL: http://" + ipAddr + ":3000")
+console.log("Starting horizon-frontend");
+console.log("Listening on port 3000")
+console.log("URL: http://" + ipAddr + ":3000")
 
 // error handler
 app.use(function(err, req, res, next) {
