@@ -26,6 +26,10 @@ sed -i "s/localhost/$IP/g" horizon-frontend/init.sh
 
 # debug output
 cat c2-api/main.py | grep "$IP"
+cat file-api/main.py | grep "$IP"
+cat user-api/main.py | grep "$IP"
+find ./horizon-frontend/routes -name "*.js" -exec cat {} \; | grep "$IP"
+cat horizon-frontend/init.sh | grep "$IP"
 
 echo "Start the containers with docker-compose up or podman-compose up"
 
