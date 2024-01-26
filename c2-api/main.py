@@ -31,9 +31,16 @@ async def list_connections():
 async def register_connection(request: Request):
     data = await request.json()
 
+    print(data)
+
     # check if the connection has the required fields
     if 'ip_address' not in data or 'hostname' not in data or 'username' not in data or 'os' not in data:
         raise HTTPException(status_code=400, detail="Missing required fields")
+
+    print(data.ip_address)
+    print(data.hostname)
+    print(data.username)
+    print(data.os)
 
     # Add the timestamp to the connection
     data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
