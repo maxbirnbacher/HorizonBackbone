@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const table = document.getElementById('table-basic');
             agents.forEach(agent => {
                 const row = document.createElement('tr');
-                row.classList.add('pf-c-table__tr');
+                row.classList.add('pf-v5-c-table__tr');
                 row.innerHTML = `
                     <td class="pf-v5-c-table__td" role="cell">${agent._id}</td>
                     <td class="pf-v5-c-table__td" role="cell"><a href="/agent/${agent._id}">${agent.hostname}</a></td>
