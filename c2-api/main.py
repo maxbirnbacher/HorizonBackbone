@@ -21,9 +21,9 @@ async def list_connections():
 
     # Query MongoDB for a list of connections
     for connection in connections.find():
-        print("Before stringify: " + connection)
+        print("Before stringify: " + str(connection))
         connection['_id'] = str(connection['_id'])
-        print("After stringify: " + connection)
+        print("After stringify: " + str(connection))
         connection_list.append(connection)
 
     # Return the list of connections
@@ -34,13 +34,8 @@ async def list_connections():
 async def register_connection(request: Request):
     data = await request.json()
 
-    print(data)
-
     # transform the data into a dictionary
-    print("transforming to dictionary")
     data = dict(data)
-
-    print(data)
 
     # check if the connection has the required fields
     if 'ip_address' not in data or 'hostname' not in data or 'username' not in data or 'os' not in data:
@@ -50,10 +45,7 @@ async def register_connection(request: Request):
     data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # Insert the connection into MongoDB
-    print("inserting into MongoDB")
     connection_id = connections.insert_one(data).inserted_id
-    print("connection_id: " + str(connection_id))
-    print("inserted into MongoDB")
 
     return {'message': 'Connection registered successfully', 'connection_id': str(connection_id)}
 
