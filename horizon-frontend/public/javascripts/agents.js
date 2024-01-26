@@ -7,13 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const row = document.createElement('tr');
                 row.classList.add('pf-c-table__tr');
                 row.innerHTML = `
-                    <td class="pf-c-table__td">${agent.id}</td>
-                    <td class="pf-c-table__td"><a href="/agent/${agent.id}">${agent.hostname}</a></td>
-                    <td class="pf-c-table__td">${agent.os}</td>
-                    <td class="pf-c-table__td">${agent.ip}</td>
-                    <td class="pf-c-table__td">${agent.username}</td>
-                    <td class="pf-c-table__td">${agent.lastSeen}</td>
-                    <td class="pf-c-table__td"><button class="pf-c-button pf-m-danger remove-btn" data-id="${agent.id}">Remove</button></td>
+                    <td class="pf-v5-c-table__td" role="cell">${agent._id}</td>
+                    <td class="pf-v5-c-table__td" role="cell"><a href="/agent/${agent._id}">${agent.hostname}</a></td>
+                    <td class="pf-v5-c-table__td" role="cell">${agent.os}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${agent.ip}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${agent.username}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${agent.lastSeen}</td>
+                    <td class="pf-v5-c-table__td" role="cell"><button class="pf-c-button pf-m-danger remove-btn" data-id="${agent.id}">Remove</button></td>
                 `;
                 table.appendChild(row);
             });
