@@ -33,6 +33,9 @@ async def register_connection(request: Request):
 
     print(data)
 
+    # transform the data into a dictionary
+    data = dict(data)
+
     # check if the connection has the required fields
     if 'ip_address' not in data or 'hostname' not in data or 'username' not in data or 'os' not in data:
         raise HTTPException(status_code=400, detail="Missing required fields")
