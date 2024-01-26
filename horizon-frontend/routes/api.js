@@ -43,6 +43,8 @@ router.get('/agents/all', function(req, res, next) {
     })
     .then(function (response) {
         // Check if response.data is an array
+        console.log(response.data.type);
+        console.log(response.data);
         if (response.data.length > 0) {
             // calculate the last seen time from the timestamp in the format of "%Y-%m-%d %H:%M:%S"
             response.data.forEach(agent => {

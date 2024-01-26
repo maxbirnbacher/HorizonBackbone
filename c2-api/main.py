@@ -21,10 +21,10 @@ async def list_connections():
 
     # Query MongoDB for a list of connections
     for connection in connections.find():
-        print("Before stringify: " + str(connection))
         connection['_id'] = str(connection['_id'])
-        print("After stringify: " + str(connection))
         connection_list.append(connection)
+
+    print("Connection list: " + str(connection_list))
 
     # Return the list of connections
     return {'connection_list': connection_list}
