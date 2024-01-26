@@ -43,21 +43,15 @@ router.get('/agents/all', function(req, res, next) {
     })
     .then(function (response) {
         // Check if response.data is an array
-        console.log(response.data.type);
-        console.log(response.data);
-        if (response.data.length > 0) {
+        console.log(response.data.connection_list);
+        if (response.data.connection_list.length > 0) {
             // calculate the last seen time from the timestamp in the format of "%Y-%m-%d %H:%M:%S"
-            response.data.forEach(agent => {
-                agent.lastSeen = new Date(agent.lastSeen * 1000).toLocaleString();
-            });
-            
-            // get the id of the agent from the ObjectID
-            response.data.forEach(agent => {
-                agent.id = agent._id;
+            response.data.connection_list.forEach(agent => {
+                var lastSeen = new Date(agent.last_seen);
+                agent.lastSeen = lastSeen.toLocaleString();
             });
 
-            res.json(response.data);
-
+            res.json(response.data.connection_list);
         } else {
             console.log('No data returned from API');
         }
