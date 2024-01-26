@@ -21,6 +21,9 @@ async def list_connections():
 
     # Query MongoDB for a list of connections
     for connection in connections.find():
+        print("Before stringify: " + connection)
+        connection['_id'] = str(connection['_id'])
+        print("After stringify: " + connection)
         connection_list.append(connection)
 
     # Return the list of connections
@@ -43,14 +46,14 @@ async def register_connection(request: Request):
     if 'ip_address' not in data or 'hostname' not in data or 'username' not in data or 'os' not in data:
         raise HTTPException(status_code=400, detail="Missing required fields")
     
-
     # Add the timestamp to the connection
     data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    print(data)
-
     # Insert the connection into MongoDB
+    print("inserting into MongoDB")
     connection_id = connections.insert_one(data).inserted_id
+    print("connection_id: " + str(connection_id))
+    print("inserted into MongoDB")
 
     return {'message': 'Connection registered successfully', 'connection_id': str(connection_id)}
 
