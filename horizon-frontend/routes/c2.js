@@ -13,7 +13,7 @@ router.get('/agents', function(req, res, next) {
     res.render('agents');
 });
 
-router.get('/agents/:agentID', function(req, res, next) {
+router.get('/agent/:agentID', function(req, res, next) {
     res.render('agent');
 });
 

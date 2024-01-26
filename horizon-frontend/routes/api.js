@@ -35,4 +35,29 @@ router.post('/login', function(req, res, next) {
     });
 });
 
+router.get('/agents/all', function(req, res, next) {
+    axios.get('http://localhost:8001/c2/list-connections', {
+        // headers: {
+        //     Authorization: 'Bearer ' + localStorage.getItem('token')
+        // }
+    })
+    .then(function (response) {
+        // calculate the last seen time from the timestamp in the format of "%Y-%m-%d %H:%M:%S"
+        response.data.forEach(agent => {
+            agent.lastSeen = new Date(agent.lastSeen * 1000).toLocaleString();
+        });
+        
+        // get the id of the agent from the ObjectID
+        response.data.forEach(agent => {
+            agent.id = agent._id;
+        });
+    
+        res.json(response.data);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+});
+
+
 module.exports = router;

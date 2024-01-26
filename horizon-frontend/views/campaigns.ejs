@@ -5,8 +5,10 @@
         <link rel='stylesheet' href='/stylesheets/patternfly.min.css'/>
         <link
             rel="stylesheet"
-            rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"
-        />
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"/>
     </head>
     <body>
         <div class="pf-v5-c-page">
@@ -46,13 +48,9 @@
                                 </span>
                             </button>
                         </div>
-
                     </div>
-
                 </div>
-
             </header>
-
             <div id="nav" class="pf-v5-c-page__sidebar">
                 <div class="pf-v5-c-page__sidebar-body">
                     <nav class="pf-v5-c-nav" aria-label="Global">
@@ -107,7 +105,6 @@
             </div>
             <main class="pf-v5-c-page__main" tabindex="-1">
                 <section class="pf-v5-c-page__main-section">
-                    <div class="pf-v5-c-page__main-body">
                         <div class="pf-v5-c-content">
                             <div class="pf-v5-l-grid pf-m-gutter">
                                 <!-- component if no campaign exists and button to create new campaign -->
@@ -131,7 +128,10 @@
 
                                                 <div class="pf-v5-c-empty-state__footer">
                                                     <div class="pf-v5-c-empty-state__actions">
-                                                        <button class="pf-v5-c-button pf-m-primary" type="button">Create campaign</button>
+                                                        <button
+                                                            id="button_start_campaign_wizzard"
+                                                            class="pf-v5-c-button pf-m-primary"
+                                                            type="button">Create campaign</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -140,90 +140,407 @@
                                 </div>
 
                                 <!-- dialog component for name and date range of the campaign -->
-                                <div id="campaign_dialog_step1" class="pf-v5-l-grid__item pf-m-12-col-on-md">
-                                    <div class="pf-v5-c-card">
-                                        <div class="pf-v5-c-card__header">
-                                            <ol class="pf-v5-c-progress-stepper" role="list">
-                                                <li
-                                                    class="pf-v5-c-progress-stepper__step pf-m-success"
-                                                    role="listitem"
-                                                    aria-label="completed step,">
-                                                    <div class="pf-v5-c-progress-stepper__step-connector">
-                                                        <span class="pf-v5-c-progress-stepper__step-icon">
-                                                            <i class="fas fa-check-circle" aria-hidden="true"></i>
-                                                        </span>
-                                                    </div>
-                                                    <div class="pf-v5-c-progress-stepper__step-main">
-                                                        <div class="pf-v5-c-progress-stepper__step-title">Successful completion</div>
-                                                    </div>
-                                                </li>
-                                                <li
-                                                    class="pf-v5-c-progress-stepper__step pf-m-current"
-                                                    role="listitem"
-                                                    aria-label="current step,in process step,">
-                                                    <div class="pf-v5-c-progress-stepper__step-connector">
-                                                        <span class="pf-v5-c-progress-stepper__step-icon">
-                                                            <i class="pf-v5-pficon pf-v5-pficon-in-progress" aria-hidden="true"></i>
-                                                        </span>
-                                                    </div>
-                                                    <div class="pf-v5-c-progress-stepper__step-main">
-                                                        <div class="pf-v5-c-progress-stepper__step-title">In process</div>
-                                                    </div>
-                                                </li>
-                                                <li
-                                                    class="pf-v5-c-progress-stepper__step pf-m-pending"
-                                                    role="listitem"
-                                                    aria-label="pending step,">
-                                                    <div class="pf-v5-c-progress-stepper__step-connector">
-                                                        <span class="pf-v5-c-progress-stepper__step-icon">
-                                                            <i class="pf-v5-pficon pf-v5-pficon-pending" aria-hidden="true"></i>
-                                                        </span>
-                                                    </div>
-                                                    <div class="pf-v5-c-progress-stepper__step-main">
-                                                        <div class="pf-v5-c-progress-stepper__step-title">Pending</div>
-                                                    </div>
-                                                </li>
-                                            </ol>
-                                            <br>
-                                            <div class="pf-v5-c-card__header-main">
-                                                <h1 class="pf-v5-c-card__title">Create campaign</h1>
+                                <div
+                                    id="campaign_dialog_step1"
+                                    style="display: none;"
+                                    class="pf-v5-l-grid__item pf-m-12-col-on-md">
+                                    <div class="pf-v5-c-wizard">
+                                        <div class="pf-v5-c-wizard__header">
+                                            <div class="pf-v5-c-wizard__title">
+                                                <h1 class="pf-v5-c-wizard__title-text">Create campaign</h1>
                                             </div>
+                                            <div class="pf-v5-c-wizard__description">Manage your C2 operations in campaigns</div>
                                         </div>
-                                        <div class="pf-v5-c-card__body">
-                                            <form class="pf-v5-c-form">
-                                                <div class="pf-v5-c-form__group">
-                                                    <label class="pf-v5-c-form__label" for="campaign_name">Campaign name</label>
-                                                    <input
-                                                        class="pf-v5-c-form__control"
-                                                        type="text"
-                                                        id="campaign_name"
-                                                        name="campaign_name"
-                                                        placeholder="Campaign name">
-                                                </div>
-                                                <div class="pf-v5-c-form__group">
-                                                    <label class="pf-v5-c-form__label" for="campaign_date_range">Date range</label>
-                                                    <input
-                                                        class="pf-v5-c-form__control"
-                                                        type="text"
-                                                        id="campaign_date_range"
-                                                        name="campaign_date_range"
-                                                        placeholder="Date range">
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="pf-v5-c-card__footer">
-                                            <div class="pf-v5-c-card__footer-actions">
-                                                <button class="pf-v5-c-button pf-m-link" type="button">Cancel</button>
-                                                <button class="pf-v5-c-button pf-m-primary" type="button">Create</button>
+                                        <div class="pf-v5-c-wizard__outer-wrap">
+                                            <div class="pf-v5-c-wizard__inner-wrap">
+                                                <nav class="pf-v5-c-wizard__nav" aria-label="Steps">
+                                                    <ol class="pf-v5-c-wizard__nav-list" role="list">
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link pf-m-current" type="button">Information</button>
+                                                        </li>
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link" type="button">Configuration</button>
+                                                        </li>
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link" type="button">Additional</button>
+                                                        </li>
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link" type="button" disabled="disabled">Review</button>
+                                                        </li>
+                                                    </ol>
+                                                </nav>
+                                                <main class="pf-v5-c-wizard__main" tabindex="0">
+                                                    <div class="pf-v5-c-wizard__main-body">
+                                                        <form class="pf-v5-c-form pf-m-limit-width">
+                                                            <div class="pf-v5-c-form__group">
+                                                                <div class="pf-v5-c-form__group-label">
+                                                                    <label class="pf-v5-c-form__label" for="wizard-form-field-name">
+                                                                        <span class="pf-v5-c-form__label-text">Name</span>&nbsp;<span class="pf-v5-c-form__label-required" aria-hidden="true">&#42;</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="pf-v5-c-form__group-control">
+                                                                    <span class="pf-v5-c-form-control">
+                                                                        <input type="text" id="wizard-form-field-name" name="wizard-form-field-name"/>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pf-v5-c-form__group">
+                                                                <div class="pf-v5-c-form__group-label">
+                                                                    <label class="pf-v5-c-form__label" for="wizard-form-field-start-date">
+                                                                        <span class="pf-v5-c-form__label-text">Target</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="pf-v5-c-form__group-control">
+                                                                    <span class="pf-v5-c-form-control">
+                                                                        <input
+                                                                            type="text"
+                                                                            id="wizard-form-field-target"
+                                                                            name="wizard-form-field-target"/>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pf-v5-c-form__group">
+                                                                <div class="pf-v5-c-form__group-label">
+                                                                    <label class="pf-v5-c-form__label" for="wizard-form-field-start-date">
+                                                                        <span class="pf-v5-c-form__label-text">Start date</span></label>
+                                                                </div>
+                                                                <div class="pf-v5-c-form__group-control">
+                                                                    <div class="pf-v5-c-date-picker">
+                                                                        <div class="pf-v5-c-date-picker__input">
+                                                                            <div class="pf-v5-c-input-group">
+                                                                                <div class="pf-v5-c-input-group__item pf-m-fill">
+                                                                                    <span class="pf-v5-c-form-control">
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            placeholder="YYYY-MM-DD"
+                                                                                            id="wizard-form-field-start-date"
+                                                                                            name="helper-text-input"
+                                                                                            aria-label="Date picker"/>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="pf-v5-c-date-picker__helper-text">
+                                                                            <div class="pf-v5-c-helper-text">
+                                                                                <div class="pf-v5-c-helper-text__item">
+                                                                                    <span class="pf-v5-c-helper-text__item-text">Select a start date.</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pf-v5-c-form__group">
+                                                                <div class="pf-v5-c-form__group-label">
+                                                                    <label class="pf-v5-c-form__label" for="wizard-form-field-end-date">
+                                                                        <span class="pf-v5-c-form__label-text">End date</span></label>
+                                                                </div>
+                                                                <div class="pf-v5-c-form__group-control">
+                                                                    <div class="pf-v5-c-date-picker">
+                                                                        <div class="pf-v5-c-date-picker__input">
+                                                                            <div class="pf-v5-c-input-group">
+                                                                                <div class="pf-v5-c-input-group__item pf-m-fill">
+                                                                                    <span class="pf-v5-c-form-control">
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            placeholder="YYYY-MM-DD"
+                                                                                            id="wizard-form-field-end-date"
+                                                                                            name="helper-text-input"
+                                                                                            aria-label="Date picker"/>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="pf-v5-c-date-picker__helper-text">
+                                                                            <div class="pf-v5-c-helper-text">
+                                                                                <div class="pf-v5-c-helper-text__item">
+                                                                                    <span class="pf-v5-c-helper-text__item-text">Select an end date.</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pf-v5-c-form__group">
+                                                                <div class="pf-v5-c-form__group-label">
+                                                                    <label class="pf-v5-c-form__label" for="wizard-basic-form-field4">
+                                                                        <span class="pf-v5-c-form__label-text">Description</span></label>
+                                                                </div>
+                                                                <div class="pf-v5-c-form__group-control">
+                                                                    <span class="pf-v5-c-form-control">
+                                                                        <textarea
+                                                                            id="wizard-form-field-description"
+                                                                            name="big-text-field"
+                                                                            rows="5"
+                                                                            cols="50">Sample description.</textarea>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </main>
                                             </div>
+                                            <footer class="pf-v5-c-wizard__footer">
+                                                <button
+                                                    id="wizzard-step1-button-back"
+                                                    class="pf-v5-c-button pf-m-secondary"
+                                                    disabled="disabled"
+                                                    type="button">Back</button>
+                                                <button
+                                                    id="wizzard-step1-button-next"
+                                                    class="pf-v5-c-button pf-m-primary"
+                                                    type="submit">Next</button>
+                                                <div class="pf-v5-c-wizard__footer-cancel">
+                                                    <button
+                                                        id="wizzard-step1-button-cancel"
+                                                        class="pf-v5-c-button pf-m-link"
+                                                        type="button">Cancel</button>
+                                                </div>
+                                            </footer>
                                         </div>
                                     </div>
-
                                 </div>
+
+                                <!-- dialog component for configuration of the campaign -->
+                                <div
+                                    id="campaign_dialog_step2"
+                                    style="display: none;"
+                                    class="pf-v5-l-grid__item pf-m-12-col-on-md">
+                                    <div class="pf-v5-c-wizard">
+                                        <div class="pf-v5-c-wizard__header">
+                                            <div class="pf-v5-c-wizard__title">
+                                                <h1 class="pf-v5-c-wizard__title-text">Create campaign</h1>
+                                            </div>
+                                            <div class="pf-v5-c-wizard__description">Manage your C2 operations in campaigns</div>
+                                        </div>
+                                        <div class="pf-v5-c-wizard__outer-wrap">
+                                            <div class="pf-v5-c-wizard__inner-wrap">
+                                                <nav class="pf-v5-c-wizard__nav" aria-label="Steps">
+                                                    <ol class="pf-v5-c-wizard__nav-list" role="list">
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link" type="button">Information</button>
+                                                        </li>
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link pf-m-current" type="button">Configuration</button>
+                                                        </li>
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link" type="button">Additional</button>
+                                                        </li>
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link" type="button" disabled="disabled">Review</button>
+                                                        </li>
+                                                    </ol>
+                                                </nav>
+                                                <main class="pf-v5-c-wizard__main" tabindex="0">
+                                                    <div class="pf-v5-c-wizard__main-body">
+                                                        <form class="pf-v5-c-form pf-m-limit-width">
+                                                            <div class="pf-v5-c-form__group">
+                                                                <div class="pf-v5-c-form__group-label">
+                                                                    <label class="pf-v5-c-form__label" for="wizard-form-field-name">
+                                                                        <span class="pf-v5-c-form__label-text">Encryption key</span>&nbsp;<span class="pf-v5-c-form__label-required" aria-hidden="true">&#42;</span></label>
+                                                                </div>
+                                                                <div class="pf-v5-c-form__group-control">
+                                                                    <div class="pf-v5-c-input-group">
+                                                                        <div class="pf-v5-c-input-group__item pf-m-fill">
+                                                                            <span class="pf-v5-c-form-control ">
+                                                                                <input
+                                                                                    type="text"
+                                                                                    id="wizard-form-field-encryption-key"
+                                                                                    name="wizard-form-field-encryption-key"/>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="pf-v5-c-input-group__item">
+                                                                            <button
+                                                                                id="wizzard-form-button-encryption-key"
+                                                                                class="pf-v5-c-button pf-m-control"
+                                                                                type="button">
+                                                                                <i class="fas fa-sync-alt"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pf-v5-c-form__group">
+                                                                <div class="pf-v5-c-form__group-label">
+                                                                    <label class="pf-v5-c-form__label" for="wizard-form-field-start-date">
+                                                                        <span class="pf-v5-c-form__label-text">Approximate jitter</span>&nbsp;<span class="pf-v5-c-form__label-required" aria-hidden="true">&#42;</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="pf-v5-c-form__group-control">
+                                                                    <div class="pf-v5-c-input-group">
+                                                                        <div class="pf-v5-c-input-group__item pf-m-fill">
+                                                                            <span class="pf-v5-c-form-control ">
+                                                                                <input
+                                                                                    type="number"
+                                                                                    id="wizard-form-field-jitter"
+                                                                                    name="wizard-form-field-jitter"/>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pf-v5-c-form__group">
+                                                                <div class="pf-v5-c-form__group-label">
+                                                                    <label class="pf-v5-c-form__label" for="wizard-form-field-start-date">
+                                                                        <span class="pf-v5-c-form__label-text">Time unit for jitter</span>&nbsp;<span class="pf-v5-c-form__label-required" aria-hidden="true">&#42;</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="pf-v5-c-form__group-control">
+                                                                    <div class="pf-v5-c-input-group">
+                                                                        <div class="pf-v5-c-form__group-control pf-m-inline">
+                                                                            <div class="pf-v5-c-radio">
+                                                                                <input
+                                                                                    class="pf-v5-c-radio__input"
+                                                                                    type="radio"
+                                                                                    id="-time-zone-radio-1"
+                                                                                    name="-time-zone-radio"/>
+
+                                                                                <label class="pf-v5-c-radio__label" for="-time-zone-radio-1">Seconds</label>
+                                                                            </div>
+                                                                            <div class="pf-v5-c-radio">
+                                                                                <input
+                                                                                    class="pf-v5-c-radio__input"
+                                                                                    type="radio"
+                                                                                    id="-time-zone-radio-2"
+                                                                                    name="-time-zone-radio"/>
+
+                                                                                <label class="pf-v5-c-radio__label" for="-time-zone-radio-2">Minutes</label>
+                                                                            </div>
+                                                                            <div class="pf-v5-c-radio">
+                                                                                <input
+                                                                                    class="pf-v5-c-radio__input"
+                                                                                    type="radio"
+                                                                                    id="-time-zone-radio-3"
+                                                                                    name="-time-zone-radio"/>
+
+                                                                                <label class="pf-v5-c-radio__label" for="-time-zone-radio-3">Hours</label>
+                                                                            </div>
+                                                                            <div class="pf-v5-c-radio">
+                                                                                <input
+                                                                                    class="pf-v5-c-radio__input"
+                                                                                    type="radio"
+                                                                                    id="-time-zone-radio-4"
+                                                                                    name="-time-zone-radio"/>
+
+                                                                                <label class="pf-v5-c-radio__label" for="-time-zone-radio-4">Days</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </form>
+                                                    </div>
+                                                </main>
+                                            </div>
+                                            <footer class="pf-v5-c-wizard__footer">
+                                                <button
+                                                    id="wizzard-step2-button-back"
+                                                    class="pf-v5-c-button pf-m-secondary"
+                                                    type="button">Back</button>
+                                                <button
+                                                    id="wizzard-step2-button-next"
+                                                    class="pf-v5-c-button pf-m-primary"
+                                                    type="submit">Next</button>
+                                                <div class="pf-v5-c-wizard__footer-cancel">
+                                                    <button
+                                                        id="wizzard-step2-button-cancel"
+                                                        class="pf-v5-c-button pf-m-link"
+                                                        type="button">Cancel</button>
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- dialog component for additional configuration of the campaign -->
+                                <div
+                                    id="campaign_dialog_step3"
+                                    style="display: none;"
+                                    class="pf-v5-l-grid__item pf-m-12-col-on-md">
+                                    <div class="pf-v5-c-wizard">
+                                        <div class="pf-v5-c-wizard__header">
+                                            <div class="pf-v5-c-wizard__title">
+                                                <h1 class="pf-v5-c-wizard__title-text">Create campaign</h1>
+                                            </div>
+                                            <div class="pf-v5-c-wizard__description">Manage your C2 operations in campaigns</div>
+                                        </div>
+                                        <div class="pf-v5-c-wizard__outer-wrap">
+                                            <div class="pf-v5-c-wizard__inner-wrap">
+                                                <nav class="pf-v5-c-wizard__nav" aria-label="Steps">
+                                                    <ol class="pf-v5-c-wizard__nav-list" role="list">
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link" type="button">Information</button>
+                                                        </li>
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link" type="button">Configuration</button>
+                                                        </li>
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link pf-m-current" type="button">Additional</button>
+                                                        </li>
+                                                        <li class="pf-v5-c-wizard__nav-item">
+                                                            <button class="pf-v5-c-wizard__nav-link" type="button" disabled="disabled">Review</button>
+                                                        </li>
+                                                    </ol>
+                                                </nav>
+                                                <main class="pf-v5-c-wizard__main" tabindex="0">
+                                                    <div class="pf-v5-c-wizard__main-body">
+                                                        <form class="pf-v5-c-form pf-m-limit-width">
+                                                            <div class="pf-v5-c-form__group">
+                                                                <div class="pf-v5-c-form__group-label">
+                                                                    <label class="pf-v5-c-form__label" for="wizard-form-field-name">
+                                                                        <span class="pf-v5-c-form__label-text">Encryption key</span>&nbsp;<span class="pf-v5-c-form__label-required" aria-hidden="true">&#42;</span></label>
+                                                                </div>
+                                                                <div class="pf-v5-c-form__group-control">
+                                                                    <div class="pf-v5-c-input-group">
+                                                                        <div class="pf-v5-c-input-group__item pf-m-fill">
+                                                                            <span class="pf-v5-c-form-control ">
+                                                                                <input
+                                                                                    type="text"
+                                                                                    id="wizard-form-field-encryption-key"
+                                                                                    name="wizard-form-field-encryption-key"/>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="pf-v5-c-input-group__item">
+                                                                            <button
+                                                                                id="wizzard-form-button-encryption-key"
+                                                                                class="pf-v5-c-button pf-m-control"
+                                                                                type="button">
+                                                                                <i class="fas fa-sync-alt"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </main>
+                                            </div>
+                                            <footer class="pf-v5-c-wizard__footer">
+                                                <button
+                                                    id="wizzard-step3-button-back"
+                                                    class="pf-v5-c-button pf-m-secondary"
+                                                    type="button">Back</button>
+                                                <button
+                                                    id="wizzard-step3-button-next"
+                                                    class="pf-v5-c-button pf-m-primary"
+                                                    type="submit">Next</button>
+                                                <div class="pf-v5-c-wizard__footer-cancel">
+                                                    <button
+                                                        id="wizzard-step3-button-cancel"
+                                                        class="pf-v5-c-button pf-m-link"
+                                                        type="button">Cancel</button>
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- dialog component for review of the campaign -->
                             </div>
-                        </div>
                     </section>
                 </main>
             </div>
+            <script src="/javascripts/campaigns.js"></script>
         </body>
     </html>
