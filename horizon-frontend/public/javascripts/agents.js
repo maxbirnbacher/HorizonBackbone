@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="pf-v5-c-table__td" role="cell">${agent.ip}</td>
                     <td class="pf-v5-c-table__td" role="cell">${agent.username}</td>
                     <td class="pf-v5-c-table__td" role="cell">${agent.lastSeen}</td>
-                    <td class="pf-v5-c-table__td" role="cell"><button class="pf-c-button pf-m-danger remove-btn" data-id="${agent.id}">Remove</button></td>
+                    <td class="pf-v5-c-table__td" role="cell"><button class="pf-v5-c-button pf-m-danger remove-btn" data-id="${agent._id}">Remove</button></td>
                 `;
                 table.appendChild(row);
             });
