@@ -14,6 +14,8 @@ router.get('/agents', function(req, res, next) {
 });
 
 router.get('/agent/:agentID', function(req, res, next) {
+    console.log("trying to render agent page")
+    console.log('agentID: ' + req.params.agentID);
     // make a get request to the agent-api for agent details
     axios.get('/api/agents/' + req.params.agentID, {
     })
