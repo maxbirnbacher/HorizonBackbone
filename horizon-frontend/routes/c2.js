@@ -25,7 +25,7 @@ router.get('/agent/:agentID', function(req, res, next) {
     })
     .then(function (response) {
         console.log(response.data.connection);
-        if (response.data.length > 0) {
+        if (response.data.connection.length > 0) {
             res.render('agent', {agent: response.data.connection});
         } else {
             console.log('No data returned from API');
