@@ -29,6 +29,17 @@ async def list_connections():
     # Return the list of connections
     return {'connection_list': connection_list}
 
+# get a connection from the database
+@app.get('/c2/get-connection/{connection_id}')
+async def get_connection(connection_id: str):
+    # Retrieve the connection from MongoDB
+    connection = connections.find_one({"_id": ObjectId(connection_id)})
+    if not connection:
+        return HTMLResponse(content="Connection not found", status_code=404)
+
+    # Return the connection
+    return {'connection': connection}
+
 # register a new connection
 @app.post('/c2/register')
 async def register_connection(request: Request):

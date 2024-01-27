@@ -14,6 +14,20 @@ router.get('/agents', function(req, res, next) {
 });
 
 router.get('/agent/:agentID', function(req, res, next) {
+    // make a get request to the agent-api for agent details
+    axios.get('/api/agents/' + req.params.agentID, {
+    })
+    .then(function (response) {
+        // Check if response.data is an array
+        console.log(response.data);
+        if (response.data.length > 0) {
+            res.render('agent', {agent: response.data});
+        } else {
+            console.log('No data returned from API');
+        }
+    
+    })
+
     res.render('agent');
 });
 
