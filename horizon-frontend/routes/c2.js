@@ -19,7 +19,7 @@ router.get('/agent/:agentID', function(req, res, next) {
     console.log("trying to render agent page")
     console.log('agentID: ' + req.params.agentID);
     // make a get request to the agent-api for agent details
-    axios.get('/api/agents/' + req.params.agentID, {
+    axios.get('http://localhost:8001/c2/get-connection/' + req.params.agentID, {
     })
     .then(function (response) {
         // Check if response.data is an array
