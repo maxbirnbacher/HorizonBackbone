@@ -17,6 +17,12 @@ router.get('/agent/:agentID', function(req, res, next) {
     res.render('agent');
 });
 
+// //route to view agent page without id
+// router.get('/agent', function(req, res, next) {
+//     res.render('agent');
+// });
+
+
 router.get('/broadcast', function(req, res, next) {
     res.render('broadcast');
 });
