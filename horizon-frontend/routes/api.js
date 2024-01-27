@@ -45,12 +45,6 @@ router.get('/agents/all', function(req, res, next) {
         // Check if response.data is an array
         console.log(response.data.connection_list);
         if (response.data.connection_list.length > 0) {
-            // calculate the last seen time from the timestamp in the format of "%Y-%m-%d %H:%M:%S"
-            response.data.connection_list.forEach(agent => {
-                var lastSeen = new Date(agent.last_seen);
-                agent.lastSeen = lastSeen.toLocaleString();
-            });
-
             res.json(response.data.connection_list);
         } else {
             console.log('No data returned from API');

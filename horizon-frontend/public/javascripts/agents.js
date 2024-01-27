@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="pf-v5-c-table__td" role="cell">${agent._id}</td>
                     <td class="pf-v5-c-table__td" role="cell"><a href="/agent/${agent._id}">${agent.hostname}</a></td>
                     <td class="pf-v5-c-table__td" role="cell">${agent.os}</td>
-                    <td class="pf-v5-c-table__td" role="cell">${agent.ip}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${agent.ip_address}</td>
                     <td class="pf-v5-c-table__td" role="cell">${agent.username}</td>
-                    <td class="pf-v5-c-table__td" role="cell">${agent.lastSeen}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${agent.timestamp}</td>
                     <td class="pf-v5-c-table__td" role="cell"><button class="pf-v5-c-button pf-m-danger remove-btn" data-id="${agent._id}">Remove</button></td>
                 `;
                 table.appendChild(row);
