@@ -32,6 +32,7 @@ async def list_connections():
 # get a connection from the database
 @app.get('/c2/get-connection/{connection_id}')
 async def get_connection(connection_id: str):
+    print("Retrieving agent details from connection ID: " + connection_id)
     # Retrieve the connection from MongoDB
     connection = connections.find_one({"_id": ObjectId(connection_id)})
     if not connection:
@@ -39,6 +40,8 @@ async def get_connection(connection_id: str):
 
     # Convert ObjectId to string
     connection['_id'] = str(connection['_id'])
+
+    print("Connection details: " + str(connection))
 
     # Return the connection
     return {'connection': connection}

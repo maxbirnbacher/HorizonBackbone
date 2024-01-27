@@ -23,12 +23,12 @@ router.get('/agent/:agentID', function(req, res, next) {
     axios.get('http://localhost:8001/c2/get-connection/' + req.params.agentID, {
     })
     .then(function (response) {
-        // Check if response.data is an array
-        console.log(response.data);
+        console.log(response.data.connection);
         if (response.data.length > 0) {
-            res.render('agent', {agent: response.data});
+            res.render('agent', {agent: response.data.connection});
         } else {
             console.log('No data returned from API');
+            res.render('agents');
         }
     })
 });
