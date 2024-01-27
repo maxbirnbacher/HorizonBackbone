@@ -37,6 +37,9 @@ async def get_connection(connection_id: str):
     if not connection:
         return HTMLResponse(content="Connection not found", status_code=404)
 
+    # Convert ObjectId to string
+    connection['_id'] = str(connection['_id'])
+
     # Return the connection
     return {'connection': connection}
 
