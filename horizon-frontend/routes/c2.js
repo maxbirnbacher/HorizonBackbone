@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const fs = require('fs');
+const path = require('path');
 
 router.get('/campaigns', function(req, res, next) {
     res.render('campaigns');
@@ -33,10 +35,22 @@ router.get('/agent/:agentID', function(req, res, next) {
     res.render('agent');
 });
 
-// //route to view agent page without id
-// router.get('/agent', function(req, res, next) {
-//     res.render('agent');
-// });
+//route to view agent page without id
+router.get('/agent', function(req, res, next) {
+    console.log('Entering /agent route');
+    try {
+        // find the agent.ejs file
+        const viewPath = path.join(__dirname, '../views/agent.ejs');
+
+        fs.access(viewPath, fs.constants.F_OK, (err) => {
+            console.log(`Agent view ${err ? 'does not exist' : 'exists'}`);
+        });
+
+        res.render(viewPath, {agent: 'test'});
+    } catch (err) {
+        console.log(err);
+    }
+});
 
 
 router.get('/broadcast', function(req, res, next) {

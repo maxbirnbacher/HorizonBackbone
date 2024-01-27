@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.classList.add('pf-v5-c-table__tr');
                 row.innerHTML = `
                     <td class="pf-v5-c-table__td" role="cell">${agent._id}</td>
-                    <td class="pf-v5-c-table__td" role="cell"><a href="/c2/agent/${agent._id}">${agent.hostname}</a></td>
+                    <td class="pf-v5-c-table__td" role="cell"><a href="/c2/testingifthisshowsup/agent/${agent._id}">${agent.hostname}</a></td>
                     <td class="pf-v5-c-table__td" role="cell">${agent.os}</td>
                     <td class="pf-v5-c-table__td" role="cell">${agent.ip_address}</td>
                     <td class="pf-v5-c-table__td" role="cell">${agent.username}</td>
