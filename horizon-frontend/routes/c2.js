@@ -25,11 +25,10 @@ router.get('/agent/:agentID', function(req, res, next) {
     })
     .then(function (response) {
         console.log(response.data.connection);
-        if (response.data.connection.length > 0) {
+        if (response.data.connection) {
             res.render('agent', {agent: response.data.connection});
         } else {
             console.log('No data returned from API');
-            res.render('agents');
         }
     })
 });
