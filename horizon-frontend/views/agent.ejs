@@ -105,9 +105,13 @@
                 </div>
             </div>
             <main class="pf-v5-c-page__main" tabindex="-1">
+                <!-- toast list -->
+                <ul class="pf-v5-c-alert-group pf-m-toast" role="list" id="alert_group">
+
+                </ul>
                 <section class="pf-v5-c-page__main-section pf-m-light">
                     <div class="pf-v5-c-content">
-                        <h1 id="agent_name">Agent</h1>
+                        <h1 id="agent_name">Agent <span id="agent_id"><%= agent._id %></span></h1>
                         <p>
                             Send commands and view output from the agent. Modules are also available to run
                             on the agent.
@@ -164,9 +168,7 @@
                                     <div class="pf-v5-c-tab-content__body pf-m-padding">
                                         <h2>Send command</h2>
                                         <form
-                                            id="command-form"
-                                            action="/c2/agents/<%= agent['_id'] %>/command"
-                                            method="POST">
+                                            id="command-form">
                                             <div class="pf-v5-c-input-group">
                                                 <div class="pf-v5-c-input-group__item pf-m-fill">
                                                     <span class="pf-v5-c-form-control pf-m-resize-vertical">
@@ -174,6 +176,7 @@
                                                             name="command"
                                                             id="command_textarea"
                                                             aria-label="Textarea for command with button"
+                                                            placeholder="Enter command here..."
                                                             aria-describedby="command_Button"></textarea>
                                                     </span>
                                                 </div>
@@ -187,51 +190,42 @@
                                             <dl class="pf-v5-c-description-list pf-m-2-col-on-lg pf-m-3-col-on-xl">
                                                 <div class="pf-v5-c-description-list__group">
                                                     <dt class="pf-v5-c-description-list__term">
-                                                        <span class="pf-v5-c-description-list__text">Name</span>
+                                                        <span class="pf-v5-c-description-list__text">Hostname</span>
                                                     </dt>
                                                     <dd class="pf-v5-c-description-list__description">
-                                                        <div class="pf-v5-c-description-list__text">example</div>
+                                                        <div class="pf-v5-c-description-list__text"><%= agent.hostname %></div>
                                                     </dd>
                                                 </div>
                                                 <div class="pf-v5-c-description-list__group">
                                                     <dt class="pf-v5-c-description-list__term">
-                                                        <span class="pf-v5-c-description-list__text">Namespace</span>
+                                                        <span class="pf-v5-c-description-list__text">Username</span>
                                                     </dt>
                                                     <dd class="pf-v5-c-description-list__description">
-                                                        <div class="pf-v5-c-description-list__text">
-                                                            <a href="#">mary-test</a>
-                                                        </div>
+                                                        <div class="pf-v5-c-description-list__text"><%= agent.username %></div>
                                                     </dd>
                                                 </div>
                                                 <div class="pf-v5-c-description-list__group">
                                                     <dt class="pf-v5-c-description-list__term">
-                                                        <span class="pf-v5-c-description-list__text">Labels</span>
+                                                        <span class="pf-v5-c-description-list__text">IP Address</span>
                                                     </dt>
                                                     <dd class="pf-v5-c-description-list__description">
-                                                        <div class="pf-v5-c-description-list__text">example</div>
+                                                        <div class="pf-v5-c-description-list__text"><%= agent.ip_address %></div>
                                                     </dd>
                                                 </div>
                                                 <div class="pf-v5-c-description-list__group">
                                                     <dt class="pf-v5-c-description-list__term">
-                                                        <span class="pf-v5-c-description-list__text">Pod selector</span>
+                                                        <span class="pf-v5-c-description-list__text">Operating System</span>
                                                     </dt>
                                                     <dd class="pf-v5-c-description-list__description">
-                                                        <div class="pf-v5-c-description-list__text">
-                                                            <button class="pf-v5-c-button pf-m-link pf-m-inline" type="button">
-                                                                <span class="pf-v5-c-button__icon pf-m-start">
-                                                                    <i class="fas fa-plus-circle" aria-hidden="true"></i>
-                                                                </span>
-                                                                app=MyApp
-                                                            </button>
-                                                        </div>
+                                                        <div class="pf-v5-c-description-list__text"><%= agent.os %></div>
                                                     </dd>
                                                 </div>
                                                 <div class="pf-v5-c-description-list__group">
                                                     <dt class="pf-v5-c-description-list__term">
-                                                        <span class="pf-v5-c-description-list__text">Annotation</span>
+                                                        <span class="pf-v5-c-description-list__text">Last seen</span>
                                                     </dt>
                                                     <dd class="pf-v5-c-description-list__description">
-                                                        <div class="pf-v5-c-description-list__text">2 Annotations</div>
+                                                        <div class="pf-v5-c-description-list__text"><%= agent.timestamp %></div>
                                                     </dd>
                                                 </div>
                                             </dl>

