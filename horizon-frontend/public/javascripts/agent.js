@@ -94,36 +94,27 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 <td class="pf-v5-c-table__td" role="cell">${task.timestamp}</td>
             `;
             tableTasks.appendChild(rowTable);
-            // create a new tr element in the table for the task details
-            const tr = document.createElement('tr');
-            tr.setAttribute('class', 'pf-v5-c-table__tr pf-v5-c-table__expandable-row');
 
-            // create a new td element in the tr
-            const td = document.createElement('td');
-            td.setAttribute('class', 'pf-v5-c-table__td');
-            td.setAttribute('colspan', '4');
-            td.setAttribute('role', 'cell');
-
-            // create a new div element in the td
-            const div = document.createElement('div');
-            div.setAttribute('class', 'pf-v5-c-table__expandable-row-content pf-m-expanded');
-            div.setAttribute('id', 'table-expandable-content-' + task._id);
-            div.innerHTML = `
-                <h4>Input</h4>
-                <p>${task.input}</p>
-                <h4>Output</h4>
-                <p>${task.output}</p>
+            const rowTable2 = document.createElement('tr');
+            rowTable2.setAttribute('class', 'pf-v5-c-table__tr pf-v5-c-table__expandable-row');
+            rowTable2.setAttribute('role', 'row');
+            rowTable2.setAttribute('id', 'table-expandable-content-' + task._id);
+            rowTable2.innerHTML = `
+                <td class="pf-v5-c-table__td"></td>
+                <td class="pf-v5-c-table__td" role="cell" colspan="4">
+                    <div class="pf-v5-c-table__expandable-row-content" role="cell">
+                        <h4>Input</h4>
+                        <p>${task.input}</p>
+                        <h4>Output</h4>
+                        <p>${task.output}</p>
+                    </div>
+                </td>
+                <td class="pf-v5-c-table__td"></td>
+                <td class="pf-v5-c-table__td"></td>
+                <td class="pf-v5-c-table__td"></td>
             `;
 
-            // append the div to the td
-            td.appendChild(div);
-            // append the td to the tr
-            tr.appendChild(td);
-            // append the tr to the table
-            tableTasks.appendChild(tr);
-            const row = document.createElement('tr');
-            row.setAttribute('class', 'pf-v5-c-table__tr');
-
+            tableTasks.appendChild(rowTable2);
         });
     });
 
