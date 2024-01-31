@@ -50,14 +50,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
             },
             body: JSON.stringify({command: base64str})
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            
-        })
-        .catch(error => {
-            console.log(error);
-        });
 
         commandInput.value = '';
     });
