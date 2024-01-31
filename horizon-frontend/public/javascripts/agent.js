@@ -52,48 +52,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
         })
         .then(response => response.json())
         .then(data => {
-            // create a new li element in the alert group
-            const li = document.createElement('li');
-            li.setAttribute('class', 'pf-v5-c-alert-group__item');
-            // create a new div element in the li
-            const div = document.createElement('div');
-            div.setAttribute('class', 'pf-v5-c-alert pf-m-success');
-            const iconDiv = document.createElement('div');
-            iconDiv.setAttribute('class', 'pf-v5-c-alert__icon');
-            // create a new icon element in the div
-            const icon = document.createElement('i');
-            icon.setAttribute('class', 'fas fa-fw fa-check-circle');
-            // create a new p element in the div
-            const p = document.createElement('p');
-            p.setAttribute('class', 'pf-v5-c-alert__title');
-            p.innerHTML = 'Command sent';
-            
-            // append the icon to the icon div
-            iconDiv.appendChild(icon);
-            // append the iconDiv and p to the div
-            div.appendChild(iconDiv);
-            div.appendChild(p);
-
-            // append the div to the li
-            li.appendChild(div);
-
-            // append the li to the alert group
-            alertGroup.appendChild(li);
-            
             console.log(data);
-
-            // remove the toast after 5 seconds
-            setTimeout(() => {
-                li.remove();
-            }, 5000);
             
         })
         .catch(error => {
             console.log(error);
         });
-
-
-
 
         commandInput.value = '';
     });
@@ -111,8 +75,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
         },
     })
     .then(response => response.json())
+    console.log(response.json())
     .then(tasks => {
         tasks.forEach(task => {
+            console.log(task);
             const row = document.createElement('tr');
             row.setAttribute('class', 'pf-v5-c-table__tr');
             row.innerHTML = `
