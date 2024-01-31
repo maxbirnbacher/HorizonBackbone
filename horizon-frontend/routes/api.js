@@ -76,6 +76,8 @@ router.get('/agents/:agentID', function(req, res, next) {
 });
 
 router.post('/agent/:agentID/command', function(req, res, next) {
+    console.log('agentID for adding command: ' + req.params.agentID);
+    console.log('agentID header: ' + req.headers.agentID)
     // decode command with base64 using UTF-8
     let utf8str = atob(req.body.command);
     let command = decodeURIComponent(escape(utf8str));

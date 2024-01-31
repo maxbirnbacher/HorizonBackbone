@@ -38,7 +38,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
         fetch('/api/agent/' + agentID + '/command', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'agentID': agentID,
             },
             body: JSON.stringify({command: base64str})
         })
