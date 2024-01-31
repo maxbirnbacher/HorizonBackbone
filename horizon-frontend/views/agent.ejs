@@ -106,17 +106,24 @@
             </div>
             <main class="pf-v5-c-page__main" tabindex="-1">
                 <!-- toast list -->
-                <ul class="pf-v5-c-alert-group pf-m-toast" role="list" id="alert_group">
-
-                </ul>
+                <ul class="pf-v5-c-alert-group pf-m-toast" role="list" id="alert_group"></ul>
                 <section class="pf-v5-c-page__main-section pf-m-light">
                     <div class="pf-v5-c-content">
-                        <h1 id="agent_name">Agent <span id="agent_id"><%= agent._id %></span></h1>
+                        <h1 id="agent_name">Agent
+                            <span id="agent_id"><%= agent._id %></span></h1>
                         <p>
                             Send commands and view output from the agent. Modules are also available to run
                             on the agent.
                         </p>
                         <p id="agent-info"></p>
+
+                        <button
+                            class="pf-v5-c-button pf-m-inline"
+                            type="button"
+                            onclick="location.reload();">
+                            <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                            Refresh
+                        </button>
                     </div>
                 </section>
                 <section class="pf-v5-c-page__main-section">
@@ -167,8 +174,7 @@
                                     tabindex="0">
                                     <div class="pf-v5-c-tab-content__body pf-m-padding">
                                         <h2>Send command</h2>
-                                        <form
-                                            id="command-form">
+                                        <form id="command-form">
                                             <div class="pf-v5-c-input-group">
                                                 <div class="pf-v5-c-input-group__item pf-m-fill">
                                                     <span class="pf-v5-c-form-control pf-m-resize-vertical">
@@ -247,16 +253,72 @@
                                     role="tabpanel"
                                     tabindex="0"
                                     hidden="hidden">
-                                    <div class="pf-v5-c-tab-content__body pf-m-padding">Panel 3</div>
-                                </section>
+                                    <div class="pf-v5-c-tab-content__body pf-m-padding">
+                                        <!-- expandable list for tasks to see full input and output -->
+                                        <table
+                                            class="pf-v5-c-table pf-m-expandable pf-m-grid-lg"
+                                            role="grid"
+                                            aria-label="Expandable table for tasks"
+                                            id="table_tasks">
+                                            <thead class="pf-v5-c-table__thead">
+                                                <tr class="pf-v5-c-table__tr" role="row">
+                                                    <td class="pf-v5-c-table__td pf-v5-c-table__toggle" role="cell">
+                                                        <button
+                                                            class="pf-v5-c-button pf-m-plain"
+                                                            id="table-expandable-expandable-toggle-thead"
+                                                            aria-label="Expand all">
+                                                            <div class="pf-v5-c-table__toggle-icon">
+                                                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                            </div>
+                                                        </button>
+                                                    </td>
 
-                            </div>
+                                                    <td class="pf-v5-c-table__td pf-v5-c-table__check" role="cell">
+                                                        <label>
+                                                            <div class="pf-v5-c-check pf-m-standalone">
+                                                                <input
+                                                                    class="pf-v5-c-check__input"
+                                                                    type="checkbox"
+                                                                    name="table-expandable-checkrowthead"
+                                                                    aria-label="Select all rows"/>
+                                                            </div>
+                                                        </label>
+                                                    </td>
+                                                    <th
+                                                        class="pf-v5-c-table__th pf-m-width-30 pf-m-selected"
+                                                        role="columnheader"
+                                                        scope="col">
+                                                        <span class="pf-v5-c-table__text">Task ID</span>
+
+                                                    </th>
+                                                    <th class="pf-v5-c-table__th" role="columnheader" scope="col">
+                                                        <span class="pf-v5-c-table__text">Input</span>
+
+                                                    </th>
+                                                    <th class="pf-v5-c-table__th" role="columnheader" scope="col">
+                                                        <span class="pf-v5-c-table__text">Status</span>
+                                                    </button>
+                                                </th>
+                                                <th class="pf-v5-c-table__th" role="columnheader" scope="col">
+                                                    <span class="pf-v5-c-table__text">Updated at</span>
+                                                </th>
+
+                                                <td class="pf-v5-c-table__td"></td>
+                                                <td class="pf-v5-c-table__td"></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </section>
+
                         </div>
                     </div>
                 </div>
-            </section>
-        </main>
-    </div>
-    <script src="/javascripts/agent.js"></script>
+            </div>
+        </section>
+    </main>
+</div>
+<script src="/javascripts/agent.js"></script>
 </body>
 </html>
