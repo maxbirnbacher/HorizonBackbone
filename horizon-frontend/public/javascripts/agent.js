@@ -33,7 +33,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
         let base64str = btoa(utf8str);
 
         // send command to server
-        const agentID = document.getElementById('agent_id').value;
+        // const agentID = document.getElementById('agent_id').value;
+        // console.log('agentID: ' + agentID);
+
+        // get the agentID from the url path 
+        let url = window.location.pathname;
+        let agentID = url.substring(url.lastIndexOf('/') + 1);
+        console.log('agentID: ' + agentID);
 
         fetch('/api/agent/' + agentID + '/command', {
             method: 'POST',
