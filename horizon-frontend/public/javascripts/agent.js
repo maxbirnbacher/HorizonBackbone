@@ -3,7 +3,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const tabSections = document.querySelectorAll('.pf-v5-c-tab-content');
     const commandButton = document.getElementById('command_Button');
     const alertGroup = document.getElementById('alert_group');
-    const tableTasks = document.getElementById('table_tasks');
+    const tableTasks = document.getElementById('table_tasks_body');
 
     tabButtons.forEach((button, index) => {
         button.addEventListener('click', () => {
@@ -52,6 +52,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
         })
 
         commandInput.value = '';
+        // reload the page
+        location.reload();
     });
 
     // get the agentID from the url path
@@ -71,6 +73,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
         console.log(data.tasks);
         data.tasks.forEach(task => {
             console.log(task);
+            if (task.output === null || task.output === undefined || task.output === '') {
+                task.output = 'Still running...';
+            }
             const rowTable = document.createElement('tr');
             rowTable.setAttribute('class', 'pf-v5-c-table__tr');
             rowTable.innerHTML = `
