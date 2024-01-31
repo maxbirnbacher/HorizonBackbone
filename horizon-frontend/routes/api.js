@@ -107,7 +107,7 @@ router.get('/agent/:agentID/tasks', function(req, res, next) {
     const agentID = req.params.agentID;
 
     // make a get request to the agent-api for agent details
-    axios.get('http://localhost:8001/c2/get-command-list' + agentID, {
+    axios.get('http://localhost:8001/c2/get-command-list/' + agentID, {
     })
     .then(function (response) {
         // Check if response.data is an array
