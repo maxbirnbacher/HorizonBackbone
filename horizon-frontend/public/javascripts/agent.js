@@ -1,4 +1,7 @@
 function updateTaskTable(agentID) {
+    // get the table body
+    const tableTasks = document.getElementById('table_tasks_body');
+
     // make a get request to the agent-api for the tasks
     fetch('/api/agent/' + agentID + '/tasks')
     .then(response => {
@@ -75,8 +78,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const tabButtons = document.querySelectorAll('.pf-v5-c-tabs__link');
     const tabSections = document.querySelectorAll('.pf-v5-c-tab-content');
     const commandButton = document.getElementById('command_Button');
-    const alertGroup = document.getElementById('alert_group');
-    const tableTasks = document.getElementById('table_tasks_body');
 
     tabButtons.forEach((button, index) => {
         button.addEventListener('click', () => {
