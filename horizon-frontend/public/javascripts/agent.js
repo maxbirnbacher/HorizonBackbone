@@ -106,7 +106,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
             // create a new div element in the td
             const div = document.createElement('div');
-            div.setAttribute('class', 'pf-v5-c-table__expandable-row-content');
+            div.setAttribute('class', 'pf-v5-c-table__expandable-row-content pf-m-expanded');
             div.setAttribute('id', 'table-expandable-content-' + task._id);
             div.innerHTML = `
                 <h4>Input</h4>
