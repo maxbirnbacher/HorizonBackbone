@@ -3,7 +3,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const tabSections = document.querySelectorAll('.pf-v5-c-tab-content');
     const commandButton = document.getElementById('command_Button');
     const alertGroup = document.getElementById('alert_group');
-    
+    const tableTasks = document.getElementById('table_tasks');
 
     tabButtons.forEach((button, index) => {
         button.addEventListener('click', () => {
@@ -97,5 +97,71 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         commandInput.value = '';
     });
+
+    // get the agentID from the url path
+    let url = window.location.pathname;
+    let agentID = url.substring(url.lastIndexOf('/') + 1);
+    
+    // make a get request to the agent-api for the tasks
+    fetch('/api/agent/' + agentID + '/tasks', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'agentID': agentID,
+        },
+    })
+    .then(response => response.json())
+    .then(tasks => {
+        tasks.forEach(task => {
+            const row = document.createElement('tr');
+            row.setAttribute('class', 'pf-v5-c-table__tr');
+            row.innerHTML = `
+                <td class="pf-v5-c-table__td pf-v5-c-table__toggle" role="cell">
+                    <button
+                        class="pf-v5-c-button pf-m-plain pf-m-expanded"
+                        aria-labelledby="table-expandable-node1 table-expandable-expandable-toggle1"
+                        id="table-expandable-expandable-toggle1"
+                        aria-label="Details"
+                        aria-controls="table-expandable-content1"
+                        aria-expanded="true">
+                        <div class="pf-v5-c-table__toggle-icon">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </div>
+                    </button>
+                </td>
+                <td class="pf-v5-c-table__td " role="cell">${task._id}</td>
+                <td class="pf-v5-c-table__td" role="cell">${task.command}</td>
+                <td class="pf-v5-c-table__td" role="cell">${task.status}</td>
+                <td class="pf-v5-c-table__td" role="cell">${task.timestamp}</td>
+            `;
+            tableTasks.appendChild(row);
+            // create a new tr element in the table for the task details
+            const tr = document.createElement('tr');
+            tr.setAttribute('class', 'pf-v5-c-table__tr pf-v5-c-table__expandable-row');
+
+            // create a new td element in the tr
+            const td = document.createElement('td');
+            td.setAttribute('class', 'pf-v5-c-table__td');
+            td.setAttribute('colspan', '4');
+            td.setAttribute('role', 'cell');
+
+            // create a new div element in the td
+            const div = document.createElement('div');
+            div.setAttribute('class', 'pf-v5-c-table__expandable-row-content');
+            div.innerHTML = `
+                <h4>Input</h4>
+                <p>${task.input}</p>
+                <h4>Output</h4>
+                <p>${task.output}</p>
+            `;
+
+            // append the div to the td
+            td.appendChild(div);
+            // append the td to the tr
+            tr.appendChild(td);
+            // append the tr to the table
+            tableTasks.appendChild(tr);
+        });
+    })
 
 });
