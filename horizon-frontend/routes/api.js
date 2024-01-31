@@ -90,7 +90,7 @@ router.post('/agent/:agentID/command', function(req, res, next) {
     .then(function (response) {
         // Check if response.data is an array
         console.log(response.data);
-        if (response.data.length > 0) {
+        if (response.data.length) {
             res.send('Command sent');
         } else {
             console.log('No data returned from API');
@@ -112,7 +112,7 @@ router.get('agent/:agentID/tasks', function(req, res, next) {
     .then(function (response) {
         // Check if response.data is an array
         console.log(response.data.task_list);
-        if (response.data.length > 0) {
+        if (response.data.task_list) {
             res.render('agent', {agent: response.data.task_list});
         } else {
             console.log('No data returned from API');
