@@ -119,6 +119,9 @@ router.get('agent/:agentID/tasks', function(req, res, next) {
         }
     
     })
-
+    .catch(function (error) {
+        console.log(error);
+    });
+});
 
 module.exports = router;
