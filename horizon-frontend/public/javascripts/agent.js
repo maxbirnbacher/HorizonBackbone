@@ -66,15 +66,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
             'agentID': agentID,
         },
     })
-    .then(response => response.json()
-    )
+    .then(response => {
+        if (response.status === 200) {
+            console.log('response: ' + response);
+            return response.json();
+        }
+    })
     .then(tasks => {
         console.log(tasks);
         tasks.forEach(task => {
             console.log(task);
-            const row = document.createElement('tr');
-            row.setAttribute('class', 'pf-v5-c-table__tr');
-            row.innerHTML = `
+            const rowTable = document.createElement('tr');
+            rowTable.setAttribute('class', 'pf-v5-c-table__tr');
+            rowTable.innerHTML = `
                 <td class="pf-v5-c-table__td pf-v5-c-table__toggle" role="cell">
                     <button
                         class="pf-v5-c-button pf-m-plain pf-m-expanded"
@@ -93,7 +97,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 <td class="pf-v5-c-table__td" role="cell">${task.status}</td>
                 <td class="pf-v5-c-table__td" role="cell">${task.timestamp}</td>
             `;
-            tableTasks.appendChild(row);
+            tableTasks.appendChild(rowTable);
             // create a new tr element in the table for the task details
             const tr = document.createElement('tr');
             tr.setAttribute('class', 'pf-v5-c-table__tr pf-v5-c-table__expandable-row');
@@ -120,7 +124,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
             tr.appendChild(td);
             // append the tr to the table
             tableTasks.appendChild(tr);
+            const row = document.createElement('tr');
+            row.setAttribute('class', 'pf-v5-c-table__tr');
+
         });
-    })
+    });
 
 });
