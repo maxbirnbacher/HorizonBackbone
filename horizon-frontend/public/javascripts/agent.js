@@ -66,9 +66,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
             'agentID': agentID,
         },
     })
-    .then(response => response.json())
-    console.log(response.json())
+    .then(response => response.json()
+    )
     .then(tasks => {
+        console.log(tasks);
         tasks.forEach(task => {
             console.log(task);
             const row = document.createElement('tr');
