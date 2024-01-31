@@ -24,7 +24,7 @@ function updateTaskTable(agentID) {
 
             if ((task.output === null || task.output === undefined || task.output === '') && (task.status != 'completed')) {
                 task.output = 'Still running...';
-            } else {
+            } else if(task.output === null || task.output === undefined || task.output === '') {
                 task.output = "Failed to execute command or no output";
             }
             const rowTable = document.createElement('tr');
