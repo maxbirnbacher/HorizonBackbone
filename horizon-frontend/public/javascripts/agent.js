@@ -104,9 +104,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 <td class="pf-v5-c-table__td" role="cell" colspan="4">
                     <div class="pf-v5-c-table__expandable-row-content" role="cell">
                         <h4>Input</h4>
-                        <p>${task.input}</p>
+                        <div class="pf-v5-c-code-block">
+                            <div class="pf-v5-c-code-block__content">
+                                <pre class="pf-v5-c-code-block__pre"><code class="pf-v5-c-code-block__code">${task.input}</code></pre>
+                            </div>
+                        </div>
                         <h4>Output</h4>
-                        <p>${task.output}</p>
+                        <div class="pf-v5-c-code-block">
+                            <div class="pf-v5-c-code-block__content">
+                                <pre class="pf-v5-c-code-block__pre"><code class="pf-v5-c-code-block__code">${task.output}</code></pre>
+                            </div>
+                        </div>
                     </div>
                 </td>
                 <td class="pf-v5-c-table__td"></td>
