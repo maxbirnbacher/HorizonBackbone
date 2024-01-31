@@ -148,6 +148,8 @@ async def add_command_output(connection_id: str, task_id: str, request: Request)
     # Add the timestamp to the command output
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    print("Adding command output to task list: " + str(data))
+
     # add the task output to the task
     tasks.update_one({"_id": ObjectId(task_id)}, {"$set": {"output": data['output'], "timestamp": timestamp, "status": "completed"}})
 

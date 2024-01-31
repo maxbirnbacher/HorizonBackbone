@@ -3,6 +3,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const tabSections = document.querySelectorAll('.pf-v5-c-tab-content');
     const commandButton = document.getElementById('command_Button');
     const alertGroup = document.getElementById('alert_group');
+    
 
     tabButtons.forEach((button, index) => {
         button.addEventListener('click', () => {
