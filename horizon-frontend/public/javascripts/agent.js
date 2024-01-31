@@ -15,8 +15,17 @@ function updateTaskTable(agentID) {
         console.log(data.tasks);
         data.tasks.forEach(task => {
             console.log(task);
-            if (task.output === null || task.output === undefined || task.output === '') {
+
+            // cut the iput after the first 30 characters
+            let inputShort = task.input;
+            if (inputShort.length > 30) {
+                inputShort = inputShort.substring(0, 30) + '...';
+            }
+
+            if ((task.output === null || task.output === undefined || task.output === '') && (task.status != 'completed')) {
                 task.output = 'Still running...';
+            } else {
+                task.output = "Failed to execute command or no output";
             }
             const rowTable = document.createElement('tr');
             rowTable.setAttribute('class', 'pf-v5-c-table__tr');
@@ -36,7 +45,7 @@ function updateTaskTable(agentID) {
                     </button>
                 </td>
                 <td class="pf-v5-c-table__td " role="cell">${task._id}</td>
-                <td class="pf-v5-c-table__td" role="cell">${task.command}</td>
+                <td class="pf-v5-c-table__td" role="cell">${inputShort}</td>
                 <td class="pf-v5-c-table__td" role="cell">${task.status}</td>
                 <td class="pf-v5-c-table__td" role="cell">${task.timestamp}</td>
             `;
