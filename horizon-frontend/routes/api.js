@@ -103,7 +103,7 @@ router.post('/agent/:agentID/command', function(req, res, next) {
     });
 });
 
-router.get('agent/:agentID/tasks', function(req, res, next) {
+router.get('/agent/:agentID/tasks', function(req, res, next) {
     const agentID = req.params.agentID;
 
     // make a get request to the agent-api for agent details
