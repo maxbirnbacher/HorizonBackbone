@@ -66,9 +66,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
             return response.json();
         }
     })
-    .then(tasks => {
-        console.log(tasks);
-        tasks.forEach(task => {
+    .then(data => {
+        console.log(data);
+        console.log(data.tasks)
+        data.tasks.forEach(task => {
             console.log(task);
             const rowTable = document.createElement('tr');
             rowTable.setAttribute('class', 'pf-v5-c-table__tr');
