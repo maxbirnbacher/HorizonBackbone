@@ -79,7 +79,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         class="pf-v5-c-button pf-m-plain pf-m-expanded"
                         aria-labelledby="table-expandable-node1 table-expandable-expandable-toggle1"
                         id="table-expandable-expandable-toggle1"
-                        <!-- add the class pf-m-expanded -->
                         onclick="document.getElementById('table-expandable-content-${task._id}').classList.toggle('pf-m-expanded'); document.getElementById('icon-${task._id}').classList.remove('fa-angle-right'); document.getElementById('icon-${task._id}').classList.add('fa-angle-down');"
                         aria-label="Details"
                         aria-controls="table-expandable-content1"
