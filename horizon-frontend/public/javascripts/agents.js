@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/agents/all')
         .then(response => response.json())
         .then(agents => {
-            const table = document.getElementById('table-basic');
+            const table = document.getElementById('table_agents_body');
             agents.forEach(agent => {
                 const row = document.createElement('tr');
                 row.classList.add('pf-v5-c-table__tr');
