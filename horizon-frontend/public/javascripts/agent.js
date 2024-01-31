@@ -68,7 +68,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     })
     .then(data => {
         console.log(data);
-        console.log(data.tasks)
+        console.log(data.tasks);
         data.tasks.forEach(task => {
             console.log(task);
             const rowTable = document.createElement('tr');
