@@ -59,16 +59,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let agentID = url.substring(url.lastIndexOf('/') + 1);
     
     // make a get request to the agent-api for the tasks
-    fetch('/api/agent/' + agentID + '/tasks', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'agentID': agentID,
-        },
-    })
+    fetch('/api/agent/' + agentID + '/tasks')
     .then(response => {
         if (response.status === 200) {
-            console.log('response: ' + response);
+            console.log('response: ' + response.json);
             return response.json();
         }
     })
