@@ -113,7 +113,7 @@ router.get('/agent/:agentID/tasks', function(req, res, next) {
         // Check if response.data is an array
         console.log(response.data.task_list);
         if (response.data.task_list) {
-            res.send({task: response.data.task_list});
+            res.send({tasks: response.data.task_list});
         } else {
             console.log('No data returned from API');
         }
