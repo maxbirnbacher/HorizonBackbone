@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Agent - HorizonBackbone</title>
+        <link rel='stylesheet' href='/stylesheets/patternfly.min.css'/>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    </head>
+    <body>
+        <div class="pf-v5-c-page">
+            <header class="pf-v5-c-masthead">
+                <span class="pf-v5-c-masthead__toggle">
+                    <button
+                        class="pf-v5-c-button pf-m-plain"
+                        type="button"
+                        aria-label="Global navigation"
+                        onclick="document.getElementById('nav').classList.toggle('pf-m-expanded');">
+                        <i class="fas fa-bars" aria-hidden="true"></i>
+                    </button>
+                </span>
+                <div class="pf-v5-c-masthead__main">
+                    <a class="pf-v5-c-masthead__brand" href="#"><img src="/images/only-logo-no-background.png" width="32px" alt="Logo"></a>
+                </div>
+                <div class="pf-v5-c-masthead__content">
+                    <span>HorizonBackbone</span>
+                    <div class="pf-v5-c-page__header-tools">
+                        <div class="pf-v5-c-toolbar__item pf-m-hidden pf-m-visible-on-sm">
+                            <button
+                                class="pf-v5-c-menu-toggle pf-m-full-height"
+                                type="button"
+                                aria-expanded="false"
+                                onclick="document.getElementById('user-menu').classList.toggle('pf-m-expanded');">
+                                <span class="pf-v5-c-menu-toggle__icon">
+                                    <img
+                                        class="pf-v5-c-avatar"
+                                        alt="Avatar image"
+                                        src="/images/img_avatar-light.svg">
+                                </span>
+                                <span class="pf-v5-c-menu-toggle__text">User</span>
+                                <span class="pf-v5-c-menu-toggle__controls">
+                                    <span class="pf-v5-c-menu-toggle__toggle-icon">
+                                        <a href="#">Logout</a>
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <div id="nav" class="pf-v5-c-page__sidebar">
+                <div class="pf-v5-c-page__sidebar-body">
+                    <nav class="pf-v5-c-nav" aria-label="Global">
+                        <section class="pf-v5-c-nav__section" aria-labelledby="group_home">
+                            <ul class="pf-v5-c-nav__list" role="list">
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="/" class="pf-v5-c-nav__link" aria-current="page">Home</a>
+                                </li>
+                            </ul>
+                        </section>
+                        <section class="pf-v5-c-nav__section" aria-labelledby="group_c2">
+                            <h2 class="pf-v5-c-nav__section-title" id="grouped-title1">Command & Control</h2>
+                            <ul class="pf-v5-c-nav__list" role="list">
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="/c2/campaigns" class="pf-v5-c-nav__link">Campaigns</a>
+                                </li>
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="/c2/agents" class="pf-v5-c-nav__link pf-m-current">Agents</a>
+                                </li>
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="/c2/broadcast" class="pf-v5-c-nav__link">Broadcast</a>
+                                </li>
+                            </ul>
+                        </section>
+                        <section class="pf-v5-c-nav__section" aria-labelledby="group_file_exfil">
+                            <h2 class="pf-v5-c-nav__section-title" id="grouped-title2">Files</h2>
+                            <ul class="pf-v5-c-nav__list" role="list">
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="#" class="pf-v5-c-nav__link">Delivery</a>
+                                </li>
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="/list-files" class="pf-v5-c-nav__link">Data Exfiltration</a>
+                                </li>
+                            </ul>
+                        </section>
+                        <section class="pf-v5-c-nav__section" aria-labelledby="group_system">
+                            <h2 class="pf-v5-c-nav__section-title" id="grouped-title2">System</h2>
+                            <ul class="pf-v5-c-nav__list" role="list">
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="#" class="pf-v5-c-nav__link">User Management</a>
+                                </li>
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="#" class="pf-v5-c-nav__link">Extra Modules</a>
+                                </li>
+                                <li class="pf-v5-c-nav__item">
+                                    <a href="#" class="pf-v5-c-nav__link">Support</a>
+                                </li>
+                            </ul>
+                        </section>
+                    </nav>
+                </div>
+            </div>
+            <main class="pf-v5-c-page__main" tabindex="-1">
+                <!-- toast list -->
+                <ul class="pf-v5-c-alert-group pf-m-toast" role="list" id="alert_group"></ul>
+                <section class="pf-v5-c-page__main-section pf-m-light">
+                    <div class="pf-v5-c-content">
+                        <h1 id="agent_name">Agent
+                            <span id="agent_id"><%= agent._id %></span></h1>
+                        <p>
+                            Send commands and view output from the agent. Modules are also available to run
+                            on the agent.
+                        </p>
+                        <p id="agent-info"></p>
+
+                        <button
+                            class="pf-v5-c-button pf-m-inline"
+                            type="button"
+                            onclick="location.reload();">
+                            <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                            Refresh
+                        </button>
+                    </div>
+                </section>
+                <section class="pf-v5-c-page__main-section">
+                    <div class="pf-v5-c-content">
+                        <div class="pf-v5-l-grid pf-m-gutter">
+                            <div class="pf-v5-c-card">
+
+                                <!-- tabs -->
+                                <div class="pf-v5-c-tabs pf-m-box" role="region" id="filled-box-with-icons">
+                                    <ul class="pf-v5-c-tabs__list" role="tablist">
+                                        <!-- hidden because the first one is slightly higher than the rest and it looks
+                                        crap -->
+                                        <li class="pf-v5-c-tabs__item" style="display: none;" role="presentation">
+                                            <!-- Hidden Secret - You found me! Congratulations! -->
+                                        </li>
+                                        <li class="pf-v5-c-tabs__item pf-m-current" role="presentation">
+                                            <button type="button" class="pf-v5-c-tabs__link" role="tab" id="tab-control">
+                                                <span class="pf-v5-c-tabs__item-icon">
+                                                    <i class="fas fa-fas fa-desktop" aria-hidden="true"></i>
+                                                </span>
+                                                <span class="pf-v5-c-tabs__item-text">Control</span>
+                                            </button>
+                                        </li>
+                                        <li class="pf-v5-c-tabs__item" role="presentation">
+                                            <button type="button" class="pf-v5-c-tabs__link" role="tab" id="tab-modules">
+                                                <span class="pf-v5-c-tabs__item-icon">
+                                                    <i class="fas fa-fas fa-box" aria-hidden="true"></i>
+                                                </span>
+                                                <span class="pf-v5-c-tabs__item-text">Modules</span>
+                                            </button>
+                                        </li>
+                                        <li class="pf-v5-c-tabs__item" role="presentation">
+                                            <button type="button" class="pf-v5-c-tabs__link" role="tab" id="tab-tasks">
+                                                <span class="pf-v5-c-tabs__item-icon">
+                                                    <i class="fas fa-fas fa-clipboard-check" aria-hidden="true"></i>
+                                                </span>
+                                                <span class="pf-v5-c-tabs__item-text">Tasks</span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- tab content -->
+                                <section
+                                    class="pf-v5-c-tab-content"
+                                    id="tab-control-panel"
+                                    role="tabpanel"
+                                    tabindex="0">
+                                    <div class="pf-v5-c-tab-content__body pf-m-padding">
+                                        <h2>Send command</h2>
+                                        <form id="command-form">
+                                            <div class="pf-v5-c-input-group">
+                                                <div class="pf-v5-c-input-group__item pf-m-fill">
+                                                    <span class="pf-v5-c-form-control pf-m-resize-vertical">
+                                                        <textarea
+                                                            name="command"
+                                                            id="command_textarea"
+                                                            aria-label="Textarea for command with button"
+                                                            placeholder="Enter command here..."
+                                                            aria-describedby="command_Button"></textarea>
+                                                    </span>
+                                                </div>
+                                                <div class="pf-v5-c-input-group__item">
+                                                    <button class="pf-v5-c-button pf-m-control" type="button" id="command_Button">Execute command</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <h2>Information</h2>
+                                        <div class="pf-v5-c-content">
+                                            <dl class="pf-v5-c-description-list pf-m-2-col-on-lg pf-m-3-col-on-xl">
+                                                <div class="pf-v5-c-description-list__group">
+                                                    <dt class="pf-v5-c-description-list__term">
+                                                        <span class="pf-v5-c-description-list__text">Hostname</span>
+                                                    </dt>
+                                                    <dd class="pf-v5-c-description-list__description">
+                                                        <div class="pf-v5-c-description-list__text"><%= agent.hostname %></div>
+                                                    </dd>
+                                                </div>
+                                                <div class="pf-v5-c-description-list__group">
+                                                    <dt class="pf-v5-c-description-list__term">
+                                                        <span class="pf-v5-c-description-list__text">Username</span>
+                                                    </dt>
+                                                    <dd class="pf-v5-c-description-list__description">
+                                                        <div class="pf-v5-c-description-list__text"><%= agent.username %></div>
+                                                    </dd>
+                                                </div>
+                                                <div class="pf-v5-c-description-list__group">
+                                                    <dt class="pf-v5-c-description-list__term">
+                                                        <span class="pf-v5-c-description-list__text">IP Address</span>
+                                                    </dt>
+                                                    <dd class="pf-v5-c-description-list__description">
+                                                        <div class="pf-v5-c-description-list__text"><%= agent.ip_address %></div>
+                                                    </dd>
+                                                </div>
+                                                <div class="pf-v5-c-description-list__group">
+                                                    <dt class="pf-v5-c-description-list__term">
+                                                        <span class="pf-v5-c-description-list__text">Operating System</span>
+                                                    </dt>
+                                                    <dd class="pf-v5-c-description-list__description">
+                                                        <div class="pf-v5-c-description-list__text"><%= agent.os %></div>
+                                                    </dd>
+                                                </div>
+                                                <div class="pf-v5-c-description-list__group">
+                                                    <dt class="pf-v5-c-description-list__term">
+                                                        <span class="pf-v5-c-description-list__text">Last seen</span>
+                                                    </dt>
+                                                    <dd class="pf-v5-c-description-list__description">
+                                                        <div class="pf-v5-c-description-list__text"><%= agent.timestamp %></div>
+                                                    </dd>
+                                                </div>
+                                            </dl>
+
+                                        </div>
+                                    </div>
+                                </section>
+                                <section
+                                    class="pf-v5-c-tab-content"
+                                    id="tab-modules-panel"
+                                    role="tabpanel"
+                                    tabindex="0"
+                                    hidden="hidden">
+                                    <div class="pf-v5-c-tab-content__body pf-m-padding">Panel 2</div>
+                                </section>
+                                <section
+                                    class="pf-v5-c-tab-content"
+                                    id="tab-tasks-panel"
+                                    role="tabpanel"
+                                    tabindex="0"
+                                    hidden="hidden">
+                                    <div class="pf-v5-c-tab-content__body pf-m-padding">
+                                        <!-- expandable list for tasks to see full input and output -->
+                                        <table
+                                            class="pf-v5-c-table pf-m-expandable pf-m-grid-lg"
+                                            role="grid"
+                                            aria-label="Expandable table for tasks"
+                                            id="table_tasks">
+                                            <thead class="pf-v5-c-table__thead">
+                                                <tr class="pf-v5-c-table__tr" role="row">
+                                                    <th class="pf-v5-c-table__td pf-v5-c-table__toggle" role="cell">
+                                                        <button
+                                                            class="pf-v5-c-button pf-m-plain"
+                                                            id="table-expandable-expandable-toggle-thead"
+                                                            aria-label="Expand all">
+                                                            <div class="pf-v5-c-table__toggle-icon">
+                                                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                            </div>
+                                                        </button>
+                                                    </th>
+
+                                                    <th
+                                                        class="pf-v5-c-table__th pf-m-width-30 pf-m-selected"
+                                                        role="columnheader"
+                                                        scope="col">
+                                                        <span class="pf-v5-c-table__text">Task ID</span>
+
+                                                    </th>
+                                                    <th class="pf-v5-c-table__th" role="columnheader" scope="col">
+                                                        <span class="pf-v5-c-table__text">Input</span>
+
+                                                    </th>
+                                                    <th class="pf-v5-c-table__th" role="columnheader" scope="col">
+                                                        <span class="pf-v5-c-table__text">Status</span>
+
+                                                    </th>
+                                                    <th class="pf-v5-c-table__th" role="columnheader" scope="col">
+                                                        <span class="pf-v5-c-table__text">Updated at</span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="table_tasks_body"></tbody>
+                                        </table>
+                                    </div>
+                                </section>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/javascripts/agent.js"></script>
+</body>
+</html>

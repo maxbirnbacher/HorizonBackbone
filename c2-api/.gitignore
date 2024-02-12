@@ -25,6 +25,7 @@ htmlcov/
 .tox/
 .pytest_cache/
 pytest.ini
+.env/
 
 # PyCharm
 .idea/

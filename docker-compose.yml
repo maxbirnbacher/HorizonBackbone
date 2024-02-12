@@ -1,17 +1,77 @@
 version: '3'
 
 services:
-  upload-handler:
+  horizon-frontend:
     build:
-      context: ./upload-handler # Specify the directory containing your upload handler Dockerfile
-      dockerfile: Dockerfile    # Specify the Dockerfile name if different
-      tag: upload-handler
-    container_name: upload-handler
+      context: ./horizon-frontend
+      dockerfile: Dockerfile
+      tag: horizon-frontend
+    container_name: horizon-frontend
     ports:
-      - "8000:8000"
+      - "3000:3000"
+    depends_on:
+      # - kafka
+      - mongo
+      - c2-api
+      - user-api
+      - file-api
+
+  c2-api:
+    build:
+      context: ./c2-api
+      dockerfile: Dockerfile
+      tag: c2-api
+    container_name: c2-api
+    ports:
+      - "8001:8001"
+    depends_on:
+      # - kafka
+      - mongo
+
+  user-api:
+    build:
+      context: ./user-api
+      dockerfile: Dockerfile
+      tag: user-api
+    container_name: user-api
+    ports:
+      - "8002:8002"
+    depends_on:
+      # - kafka
+      - mongo
+
+  file-api:
+    build:
+      context: ./file-api
+      dockerfile: Dockerfile
+      tag: file-api
+    container_name: file-api
+    ports:
+      - "8003:8003"
+    depends_on:
+      # - kafka
+      - mongo
 
   mongo:
-    image: mongo:latest
+    image: docker.io/library/mongo:latest
     container_name: horizon-database
     ports:
       - "27017:27017"
+
+  # kafka:
+  #   image: confluentinc/cp-kafka
+  #   container_name: horizon-kafka
+  #   ports:
+  #     - "9092:9092"
+  #   environment:
+  #     - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+  #     - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+  #     - KAFKA_CREATE_TOPICS=c2-connections:1:1,revshell-handler:1:1,user-handler:1:1
+  #   depends_on:
+  #     - zookeeper
+
+  # zookeeper:
+  #   image: confluentinc/cp-zookeeper
+  #   container_name: horizon-zookeeper
+  #   ports:
+  #     - "2181:2181"

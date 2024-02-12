@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Command Center - HorizonBackbone</title>
+        <link rel='stylesheet' href='/stylesheets/patternfly.min.css'/>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    </head>
+    <body>
+        <div class="flex justify-center">
+            <h1 class="font-semibold text-4xl pt-2">HorizonBackbone</h1>
+        </div>
+        <nav class="bg-gray-800 m-5 rounded-sm">
+            <div class="">
+                <div class="flex justify-between p-2">
+                    <div class="flex space-x-4">
+                        <a
+                            href="/"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-red-600 px-3 py-2 text-sm rounded-sm font-medium">Home</a>
+                        <a
+                            href="/list-files"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-red-600 px-3 py-2 text-sm rounded-sm font-medium">View Uploaded Files</a>
+                        <a
+                            href="/command-center"
+                            class="text-gray-300 bg-gray-700 hover:bg-gray-700 hover:text-red-600 px-3 py-2 text-sm rounded-sm font-medium">Reverse Shells</a>
+                        <a
+                            href="/user/login"
+                            class="text-gray-300 hover:bg-gray-700 hover:text-red-600 px-3 py-2 text-sm rounded-sm font-medium ">Login</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <% if (connection_list) { %>
+            <ul>
+                <% connection_list.forEach(function(connection) { %>
+                    <li>
+                        <a href="/command-center/terminal/<%= connection['_id'] %>"><%= connection['hostname'] %></a>
+                    </li>
+                    <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p>No connections found.</p>
+                <% } %>
+            </body>
+        </html>

