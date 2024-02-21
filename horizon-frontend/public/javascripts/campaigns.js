@@ -115,6 +115,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     encryptionKeyButton.addEventListener("click", function() {
         alert("Generating random encryption key...")
+        // TODO: replace with a more secure method of generating a random encryption key that is server-side
         // create a random encryption key
         var randomEncryptionKey = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
