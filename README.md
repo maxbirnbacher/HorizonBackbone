@@ -9,8 +9,6 @@
 
 # HorizonBackbone
 
------------------------------------------------------------------------------------
-
 **THIS PROJECT IS MAINLY DEVELOPED FOR EDUCATIONAL PURPOSE! DO NOT USE IT FOR ILLEGAL ACTIVITIES!**
 
 ***Go to the [development-microservices](https://github.com/maxbirnbacher/HorizonBackbone/tree/development-microservices) branch for a preview of the microservices version (currently in development and not ready for production).***
