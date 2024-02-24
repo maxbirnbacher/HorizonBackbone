@@ -61,11 +61,11 @@ To exfiltrate data you can use the '/upload' endpoint.
 
 You can see your uploaded files under `http://SERVER_IP_OR_DOMAIN:8000/list-files-view`.
 
-![DataExfil](https://github.com/maxbirnbacher/HorizonBackbone/assets/66524685/39b7923c-8328-4672-8dc7-5f75cc725565)
+<!-- ![DataExfil](https://github.com/maxbirnbacher/HorizonBackbone/assets/66524685/39b7923c-8328-4672-8dc7-5f75cc725565) -->
 
 If you click on the filename you can access the file and download it.
 
-![FileView](https://github.com/maxbirnbacher/HorizonBackbone/assets/66524685/75e3ff57-d2e7-45da-8c4d-8f8beffb0653)
+<!-- ![FileView](https://github.com/maxbirnbacher/HorizonBackbone/assets/66524685/75e3ff57-d2e7-45da-8c4d-8f8beffb0653) -->
 
 ### C2 Server (DEPRECATED)
 
@@ -89,8 +89,3 @@ At the moment I recommend using the `simpleBeacon2.ps1` script. It is a simple r
 ### API
 
 You can find all the API endpoints at `/docs` on their respective ports.
-
-
-
-
-
