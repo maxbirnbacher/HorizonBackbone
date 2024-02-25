@@ -155,14 +155,15 @@ router.get('/files/download/:fileID', function(req, res, next) {
         // Check if response.data is an array
         console.log('returned data from file-api:')
         console.log(response.data);
+        console.log(response.headers)
         if (response.data) {
             res.send({
                 data: response.data,
-                filename: response.data.filename,
-                extension: response.data.extension,
+                filename: response.headers.filename,
+                extension: response.headers.extension,
             }, {
                 'Content-Type': 'application/octet-stream',
-                'Content-Disposition': 'attachment; filename=' + response.data.filename
+                'Content-Disposition': 'attachment; filename=' + response.headers.filename
             });
         } else {
             console.log('No data returned from API');

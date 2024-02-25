@@ -60,13 +60,17 @@ async def download_file(fileID: str):
     if not grid_file:
         return HTMLResponse(content="File not found", status_code=404)
 
+    # extract file name and extension
+    filename = grid_file.filename
+    file_extension = filename.split('.')[-1] if '.' in filename else ''
+
     # Convert base64 string to bytes and yield
     def decode_base64(file_data):
         for chunk in file_data:
             yield base64.b64decode(chunk)
 
     # Create a streaming response with the decoded file
-    return StreamingResponse(decode_base64(grid_file), media_type='application/octet-stream', headers={"Content-Disposition": f"attachment; filename={grid_file.filename}, extension={grid_file.extension}"})
+    return StreamingResponse(decode_base64(grid_file), media_type='application/octet-stream', headers={"Content-Disposition": f"attachment; filename={filename}, extension={file_extension}"})
 
 # delete a file from the server
 @app.delete('/file-exfil/delete/{filename}')
