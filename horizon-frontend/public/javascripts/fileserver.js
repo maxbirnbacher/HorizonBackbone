@@ -33,6 +33,38 @@ function showUpload() {
     document.body.insertAdjacentHTML('beforeend', modal);
 }
 
+function downloadFile(id) {
+    fetch('/api/files/download/' + id)
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = id;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        });
+}
+
+function rawFile(id) {
+    // open a new tab with the raw file content
+    window.open('/api/files/raw/' + id);
+}
+
+function removeFile(id) {
+    fetch('/api/files/remove/' + id)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('File removed successfully');
+                window.location.reload();
+            } else {
+                alert('Failed to remove file');
+            }
+        });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/files/all')
         .then(response => response.json())
@@ -47,7 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="pf-v5-c-table__td" role="cell">${file.filename}</td>
                     <td class="pf-v5-c-table__td" role="cell">${file.length}b</td>
                     <td class="pf-v5-c-table__td" role="cell">${file.uploadDate}</td>
-                    <td class="pf-v5-c-table__td" role="cell"><button class="pf-v5-c-button pf-m-primary download-btn" data-id="${file._id}">Download</button></td>
+                    <td class="pf-v5-c-table__td" role="cell">
+                        <button class="pf-v5-c-button pf-m-primary download-btn pf-m-inline" data-id="${file._id} onclick="downloadFile('${file._id}')>Download</button>
+                        <button class="pf-v5-c-button pf-m-secondary download-btn pf-m-inline" data-id="${file._id} onclick="rawFile('${file._id}')">Raw content</button>
+                        <button class="pf-v5-c-button pf-m-secondary remove-btn pf-m-inline" data-id="${file._id} onclick="removeFile('${file._id}')">Remove</button>
+                    </td>
                 `;
                 table.appendChild(row);
             });
