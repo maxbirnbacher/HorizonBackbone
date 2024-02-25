@@ -42,6 +42,7 @@ function downloadFile(id) {
                 throw new Error('Network response was not ok');
             }
             // Get the filename from the Content-Disposition header
+            console.log(response);
             const contentDisposition = response.headers.get('Content-Disposition');
             const filename = response.filename
             console.log('filename: ' + filename);
