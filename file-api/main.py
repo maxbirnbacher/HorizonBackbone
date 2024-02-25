@@ -1,7 +1,7 @@
 from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from gridfs import GridFS
-from pymongo import MongoClient
+from pymongo import MongoClient, ObjectId
 import datetime
 import base64
 
@@ -51,10 +51,10 @@ async def list_files():
     return {'file_list': file_list}
 
 # download a file from the server
-@app.get('/file-exfil/download/{filename}')
-async def download_file(filename: str):
+@app.get('/file-exfil/download/{fileID}')
+async def download_file(fileID: str):
      # Retrieve the file content from MongoDB GridFS
-    grid_file = fs.find_one({"filename": filename})
+    grid_file = fs.find_one({"_id": ObjectId(fileID)})
     if not grid_file:
         return HTMLResponse(content="File not found", status_code=404)
 

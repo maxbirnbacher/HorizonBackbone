@@ -146,4 +146,24 @@ router.get('/files/all', function(req, res, next) {
     });
 });
 
+// download file
+router.get('/files/:fileID', function(req, res, next) {
+    // make a get request to the file-api for file details
+    axios.get('http://file-api:8003/file-exfil/download/' + req.params.fileID, {
+    })
+    .then(function (response) {
+        // Check if response.data is an array
+        console.log(response.data);
+        if (response.data) {
+            res.send(response.data);
+        } else {
+            console.log('No data returned from API');
+        }
+    
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+});
+
 module.exports = router;
