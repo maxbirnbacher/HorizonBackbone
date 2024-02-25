@@ -6,7 +6,7 @@ from datetime import timedelta
 
 
 # Initialize the MongoDB client
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient("mongodb://mongo:27017/")
 db = client["database"]
 connections = db["users"]
 
