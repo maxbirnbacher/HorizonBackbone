@@ -29,7 +29,8 @@ async def upload_file(file: UploadFile = File(...)):
         file.file.read(), 
         filename=file.filename, 
         content_type='application/octet-stream', 
-        uploadDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        uploadDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        extension=file.filename.split('.')[-1] if '.' in file.filename else None
     )
 
     return {'message': 'File uploaded successfully', 'filename': file.filename, 'file_id': str(file_id)}
@@ -65,7 +66,7 @@ async def download_file(fileID: str):
             yield base64.b64decode(chunk)
 
     # Create a streaming response with the decoded file
-    return StreamingResponse(decode_base64(grid_file), media_type='application/octet-stream')
+    return StreamingResponse(decode_base64(grid_file), media_type='application/octet-stream', headers={"Content-Disposition": f"attachment; filename={grid_file.filename}, extension={grid_file.extension}"})
 
 # delete a file from the server
 @app.delete('/file-exfil/delete/{filename}')

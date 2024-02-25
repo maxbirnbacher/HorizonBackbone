@@ -41,7 +41,8 @@ function downloadFile(id) {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = id;
+            // Append the file extension to the id if it's available
+            a.download = id + (response.data.extension ? '.' + response.data.extension : '');
             document.body.appendChild(a);
             a.click();
             a.remove();
