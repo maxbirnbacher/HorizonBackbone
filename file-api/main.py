@@ -29,7 +29,7 @@ async def upload_file(file: UploadFile = File(...)):
         # get the file name
         grid_file.filename = file.filename
         # get the file size
-        grid_file.length = file.file._file._size
+        grid_file.length = file.size
         # add the date
         grid_file.upload_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         grid_file.write(file.file.read())
