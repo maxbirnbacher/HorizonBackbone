@@ -28,7 +28,7 @@ async def upload_file(file: UploadFile = File(...)):
         file.file.read(), 
         filename=file.filename, 
         content_type='application/octet-stream', 
-        uploadDate=datetime.datetime.strftime("%Y-%m-%d %H:%M:%S")
+        uploadDate=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     )
 
     return {'message': 'File uploaded successfully', 'filename': file.filename, 'file_id': str(file_id)}
