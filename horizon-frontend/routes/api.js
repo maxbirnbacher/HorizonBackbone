@@ -133,9 +133,9 @@ router.get('/files/all', function(req, res, next) {
     .then(function (response) {
         // Check if response.data is an array
         console.log('retuned data from file-api:');
-        console.log(response.data);
-        if (response.data.length > 0) {
-            res.json(response.data);
+        console.log(response.data.file_list);
+        if (response.data.file_list) {
+            res.send({files: response.data.file_list});
         } else {
             console.log('No data returned from API');
         }

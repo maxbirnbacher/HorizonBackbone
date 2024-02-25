@@ -14,13 +14,16 @@ function showUpload() {
             </button>
         </div>
         <header class="pf-v5-c-modal-box__header">
-            <h1 class="pf-v5-c-modal-box__title" id="modal-md-title">Modal title</h1>
+            <h1 class="pf-v5-c-modal-box__title" id="modal-md-title">Upload file</h1>
         </header>
         <div class="pf-v5-c-modal-box__body" id="modal-md-description">
-            Static text describing modal purpose. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat.
+            Use this url:
+            <div class="pf-v5-c-code-block">
+                <div class="pf-v5-c-code-block__content">
+                    <pre class="pf-v5-c-code-block__pre"><code class="pf-v5-c-code-block__code">http://file-api:8003/file-exfil/upload</code></pre>
+                </div>
+            </div>
+            to upload a file to the server.
         </div>
         <footer class="pf-v5-c-modal-box__footer">Modal footer</footer>
     </div>
