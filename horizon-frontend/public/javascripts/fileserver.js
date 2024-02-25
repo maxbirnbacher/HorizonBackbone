@@ -38,13 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             const table = document.getElementById('table_files_body');
+            table.innerHTML = '';
             data.files.forEach(file => {
                 const row = document.createElement('tr');
                 row.classList.add('pf-v5-c-table__tr');
                 row.innerHTML = `
                     <td class="pf-v5-c-table__td" role="cell">${file._id}</td>
                     <td class="pf-v5-c-table__td" role="cell">${file.filename}</td>
-                    <td class="pf-v5-c-table__td" role="cell">${file.length}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${file.length}b</td>
                     <td class="pf-v5-c-table__td" role="cell">${file.uploadDate}</td>
                     <td class="pf-v5-c-table__td" role="cell"><button class="pf-v5-c-button pf-m-primary download-btn" data-id="${file._id}">Download</button></td>
                 `;
