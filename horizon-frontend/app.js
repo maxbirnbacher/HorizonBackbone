@@ -46,13 +46,8 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// get ip address
-var ip = require('ip');
-var ipAddr = ip.address();
-
 console.log("Starting horizon-frontend");
-console.log("Listening on port 3000")
-console.log("URL: http://" + ipAddr + ":3000")
+console.log("Listening on port http://server:3000/")
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -63,6 +58,8 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+
+  console.log("Error: " + err);
 });
 
 module.exports = app;

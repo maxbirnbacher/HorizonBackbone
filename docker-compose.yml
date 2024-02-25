@@ -10,11 +10,12 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      # - kafka
       - mongo
       - c2-api
       - user-api
       - file-api
+    networks:
+      - horizon-network
 
   c2-api:
     build:
@@ -25,8 +26,9 @@ services:
     ports:
       - "8001:8001"
     depends_on:
-      # - kafka
       - mongo
+    networks:
+      - horizon-network
 
   user-api:
     build:
@@ -37,8 +39,9 @@ services:
     ports:
       - "8002:8002"
     depends_on:
-      # - kafka
       - mongo
+    networks:
+      - horizon-network
 
   file-api:
     build:
@@ -49,29 +52,18 @@ services:
     ports:
       - "8003:8003"
     depends_on:
-      # - kafka
       - mongo
+    networks:
+      - horizon-network
 
   mongo:
     image: docker.io/library/mongo:latest
     container_name: horizon-database
     ports:
       - "27017:27017"
+    networks:
+      - horizon-network
 
-  # kafka:
-  #   image: confluentinc/cp-kafka
-  #   container_name: horizon-kafka
-  #   ports:
-  #     - "9092:9092"
-  #   environment:
-  #     - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-  #     - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-  #     - KAFKA_CREATE_TOPICS=c2-connections:1:1,revshell-handler:1:1,user-handler:1:1
-  #   depends_on:
-  #     - zookeeper
-
-  # zookeeper:
-  #   image: confluentinc/cp-zookeeper
-  #   container_name: horizon-zookeeper
-  #   ports:
-  #     - "2181:2181"
+networks:
+  horizon-network:
+    driver: bridge

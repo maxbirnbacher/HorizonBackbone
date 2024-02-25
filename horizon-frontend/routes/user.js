@@ -12,7 +12,7 @@ router.get('/login', function(req, res, next) {
     const hashedPass = crypto.createHash('sha256').update(reqPassword).digest('hex');
 
     async function login() {
-        const response = await axios.get('http://localhost:8002/users/login', {
+        const response = await axios.get('http://user-api:8002/users/login', {
         username: req.body.username,
         password: hashedPass
     });
@@ -42,7 +42,7 @@ router.get('/signup', function(req, res, next) {
     const hashedPass = crypto.createHash('sha256').update(reqPassword).digest('hex');
 
     async function signup() {
-        const response = await axios.post('http://localhost:8002/users/signup', {
+        const response = await axios.post('http://user-api:8002/users/signup', {
         username: req.body.username,
         password: hashedPass
     });

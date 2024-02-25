@@ -11,6 +11,7 @@ document
             .querySelector('#login-demo-form-password')
             .value;
 
+        // TODO: change login to the new user api
         axios
             .post('http://localhost:3000/api/login', {
                 username: username,
