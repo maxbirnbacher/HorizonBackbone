@@ -81,9 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="pf-v5-c-table__td" role="cell">${file.length}b</td>
                     <td class="pf-v5-c-table__td" role="cell">${file.uploadDate}</td>
                     <td class="pf-v5-c-table__td" role="cell">
-                        <button class="pf-v5-c-button pf-m-primary download-btn pf-m-inline" data-id="${file._id} onclick="downloadFile('${file._id}')">Download</button>
-                        <button class="pf-v5-c-button pf-m-secondary download-btn pf-m-inline" data-id="${file._id} onclick="rawFile('${file._id}')">Raw content</button>
-                        <button class="pf-v5-c-button pf-m-secondary remove-btn pf-m-inline" data-id="${file._id} onclick="removeFile('${file._id}')">Remove</button>
+                        <button class="pf-v5-c-button pf-m-primary download-btn pf-m-inline" data-id="${file._id}" onclick="downloadFile('${file._id}')">Download</button>
+                        <button class="pf-v5-c-button pf-m-secondary download-btn pf-m-inline" data-id="${file._id}" onclick="rawFile('${file._id}')">Raw content</button>
+                        <button class="pf-v5-c-button pf-m-secondary remove-btn pf-m-inline" data-id="${file._id}" onclick="removeFile('${file._id}')">Remove</button>
                     </td>
                 `;
                 table.appendChild(row);
