@@ -29,3 +29,24 @@ function showUpload() {
     // append modal to body
     document.body.insertAdjacentHTML('beforeend', modal);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/api/files/all')
+        .then(response => response.json())
+        .then(files => {
+            const table = document.getElementById('table_files_body');
+            files.forEach(file => {
+                const row = document.createElement('tr');
+                row.classList.add('pf-v5-c-table__tr');
+                row.innerHTML = `
+                    <td class="pf-v5-c-table__td" role="cell">${file._id}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${file.filename}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${file.filepath}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${file.timestamp}</td>
+                    <td class="pf-v5-c-table__td" role="cell"><button class="pf-v5-c-button pf-m-primary download-btn" data-id="${file._id}">Download</button></td>
+                `;
+                table.appendChild(row);
+            });
+        }
+    );
+});

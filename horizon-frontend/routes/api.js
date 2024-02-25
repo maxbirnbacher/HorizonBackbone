@@ -124,4 +124,26 @@ router.get('/agent/:agentID/tasks', function(req, res, next) {
     });
 });
 
+// ----------------------------------------
+
+// route to get all files
+router.get('/files/all', function(req, res, next) {
+    axios.get('http://file-api:8003/file-exfil/list-files', {
+    })
+    .then(function (response) {
+        // Check if response.data is an array
+        console.log('retuned data from file-api:');
+        console.log(response.data);
+        if (response.data.length > 0) {
+            res.json(response.data);
+        } else {
+            console.log('No data returned from API');
+        }
+    
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+});
+
 module.exports = router;

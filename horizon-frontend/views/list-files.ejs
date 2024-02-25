@@ -152,23 +152,10 @@
                                                 <th class="pf-v5-c-table__th" role="columnheader" scope="col"></th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <% if(file_list) { %>
-                                                <% file_list.forEach(function(file) { %>
-                                                    <tr class="pf-v5-c-table__tr" role="row">
-                                                        <td class="pf-v5-c-table__td" role="cell"><%= file.name %></td>
-                                                        <td class="pf-v5-c-table__td" role="cell"><%= file.size %></td>
-                                                        <td class="pf-v5-c-table__td" role="cell"><%= file.date %></td>
-                                                        <td class="pf-v5-c-table__td" role="cell">
-                                                            <a href="/api/file/download/<%= file.name %>" class="pf-v5-c-button pf-m-primary">Download</a>
-                                                        </td>
-                                                    </tr>
-                                                <% }); %>
-                                            <% } else { %>
-                                                <tr class="pf-v5-c-table__tr" role="row">
-                                                    <td class="pf-v5-c-table__td" role="cell" colspan="4">No files found.</td>
-                                                </tr>
-                                            <% } %>
+                                        <tbody id="table_files_body">
+                                            <tr class="pf-v5-c-table__tr" role="row">
+                                                <td class="pf-v5-c-table__td" role="cell" colspan="4">No files found.</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
