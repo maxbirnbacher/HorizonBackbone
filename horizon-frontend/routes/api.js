@@ -132,7 +132,7 @@ router.get('/files/all', function(req, res, next) {
     })
     .then(function (response) {
         // Check if response.data is an array
-        console.log('retuned data from file-api:');
+        console.log('returned data from file-api:');
         console.log(response.data.file_list);
         if (response.data.file_list) {
             res.send({files: response.data.file_list});
@@ -147,12 +147,13 @@ router.get('/files/all', function(req, res, next) {
 });
 
 // download file
-router.get('/files/:fileID', function(req, res, next) {
+router.get('/files/download/:fileID', function(req, res, next) {
     // make a get request to the file-api for file details
     axios.get('http://file-api:8003/file-exfil/download/' + req.params.fileID, {
     })
     .then(function (response) {
         // Check if response.data is an array
+        console.log('returned data from file-api:')
         console.log(response.data);
         if (response.data) {
             res.send(response.data);
