@@ -2,7 +2,7 @@
 
 # Create the admin account
 hashed_password=$(echo -n "admin" | openssl dgst -sha256)
-curl -X POST http://localhost:8002/users/register \
+curl -X POST http://user-api:8002/users/register \
     -H "Content-Type: application/json" \
     -d '{
         "username": "admin",
