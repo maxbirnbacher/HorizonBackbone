@@ -23,18 +23,15 @@ async def upload_file(file: UploadFile = File(...)):
     if file.filename == '':
         return {'error': 'No selected file'}
 
-    # Save the file to MongoDB GridFS with name, size and date
-    
-    with fs.new_file(filename=file.filename) as grid_file:
-        # get the file name
-        grid_file.filename = file.filename
-        # get the file size
-        grid_file.length = file.size
-        # add the date
-        grid_file.upload_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        grid_file.write(file.file.read())
+    # Save the file to MongoDB GridFS with name, size, and date
+    file_id = fs.put(
+        file.file.read(), 
+        filename=file.filename, 
+        content_type='application/octet-stream', 
+        uploadDate=datetime.datetime.strftime("%Y-%m-%d %H:%M:%S")
+    )
 
-    return {'message': 'File uploaded successfully', 'filename': file.filename, 'file_size': grid_file.length, 'upload_date': grid_file.upload_date}
+    return {'message': 'File uploaded successfully', 'filename': file.filename, 'file_id': str(file_id)}
 
 # list files on the server
 @app.get('/file-exfil/list-files')
