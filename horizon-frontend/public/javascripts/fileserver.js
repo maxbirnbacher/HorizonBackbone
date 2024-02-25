@@ -44,8 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.innerHTML = `
                     <td class="pf-v5-c-table__td" role="cell">${file._id}</td>
                     <td class="pf-v5-c-table__td" role="cell">${file.filename}</td>
-                    <td class="pf-v5-c-table__td" role="cell">${file.filepath}</td>
-                    <td class="pf-v5-c-table__td" role="cell">${file.timestamp}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${file.length}</td>
+                    <td class="pf-v5-c-table__td" role="cell">${file.uploadDate}</td>
                     <td class="pf-v5-c-table__td" role="cell"><button class="pf-v5-c-button pf-m-primary download-btn" data-id="${file._id}">Download</button></td>
                 `;
                 table.appendChild(row);

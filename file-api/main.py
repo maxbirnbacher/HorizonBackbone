@@ -40,9 +40,13 @@ async def list_files():
 
     # Query MongoDB's GridFS for a list of files
     for grid_file in fs.find():
-        file_list.append(grid_file.filename)
-        file_list.append(grid_file.upload_date)
-        file_list.append(grid_file.length)
+        file_info = {
+            '_id': str(grid_file._id), # convert ObjectId to string
+            'filename': grid_file.filename,
+            'length': grid_file.length,
+            'uploadDate': grid_file.upload_date
+        }
+        file_list.append(file_info)
 
     return {'file_list': file_list}
 
