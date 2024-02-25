@@ -34,6 +34,7 @@ function showUpload() {
 }
 
 function downloadFile(id) {
+    console.log('downloading file: ' + id);
     fetch('/api/files/download/' + id)
         .then(response => response.blob())
         .then(blob => {
