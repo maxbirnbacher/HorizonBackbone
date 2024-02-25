@@ -44,12 +44,15 @@ function downloadFile(id) {
             // Get the filename from the Content-Disposition header
             const contentDisposition = response.headers.get('Content-Disposition');
             const filename = contentDisposition.match(/filename="(.+)"/)[1];
+            console.log('filename: ' + filename);
             const extension = filename.split('.').pop();
             return response.blob().then(blob => {
                 const url = window.URL.createObjectURL(blob);
+                console.log('url: ' + url);
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = filename; // Use the filename from the response headers
+                console.log('downloading file');
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
