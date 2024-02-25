@@ -1,7 +1,8 @@
 from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from gridfs import GridFS
-from pymongo import MongoClient, ObjectId
+from pymongo import MongoClient
+from bson import ObjectId
 import datetime
 import base64
 
