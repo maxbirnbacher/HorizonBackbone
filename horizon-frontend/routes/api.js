@@ -159,11 +159,13 @@ router.get('/files/download/:fileID', function(req, res, next) {
         console.log(response.headers['content-disposition'].split('filename=')[1]);
         if (response.data) {
             let filename = String(response.headers['content-disposition'].split('filename=')[1]);
-            res.download(response.data, filename,
-            {
-                'Content-Type': 'application/octet-stream',
-                'Content-Disposition': 'attachment; filename=' + String(response.headers['content-disposition'].split('filename=')[1])
-            }, 200);
+
+            // Set the headers
+            res.setHeader('Content-Disposition', 'attachment; filename=' + filename);
+            res.setHeader('Content-Type', 'application/octet-stream');
+
+            // Send the file content
+            res.send(response.data);
         } else {
             console.log('No data returned from API');
         }
