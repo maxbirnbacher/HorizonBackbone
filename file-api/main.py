@@ -70,7 +70,7 @@ async def download_file(fileID: str):
             yield base64.b64decode(chunk)
 
     # Create a streaming response with the decoded file
-    return StreamingResponse(decode_base64(grid_file), media_type='application/octet-stream', headers={"Content-Disposition": f"attachment; filename={filename}, extension={file_extension}"})
+    return StreamingResponse(decode_base64(grid_file), media_type='application/octet-stream', headers={"Content-Disposition": f"attachment; filename={filename}, extension={file_extension}"}, status_code=200)
 
 # delete a file from the server
 @app.delete('/file-exfil/delete/{filename}')
