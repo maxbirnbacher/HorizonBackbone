@@ -2,6 +2,7 @@ from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from gridfs import GridFS
 from pymongo import MongoClient
+import datetime
 import base64
 
 app = FastAPI()
@@ -22,11 +23,18 @@ async def upload_file(file: UploadFile = File(...)):
     if file.filename == '':
         return {'error': 'No selected file'}
 
-    # Save the file to MongoDB GridFS
+    # Save the file to MongoDB GridFS with name, size and date
+    
     with fs.new_file(filename=file.filename) as grid_file:
+        # get the file name
+        grid_file.filename = file.filename
+        # get the file size
+        grid_file.length = file.file._file._size
+        # add the date
+        grid_file.upload_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         grid_file.write(file.file.read())
 
-    return {'message': 'File uploaded successfully', 'filename': file.filename}
+    return {'message': 'File uploaded successfully', 'filename': file.filename, 'file_size': grid_file.length, 'upload_date': grid_file.upload_date}
 
 # list files on the server
 @app.get('/file-exfil/list-files')
@@ -36,6 +44,8 @@ async def list_files():
     # Query MongoDB's GridFS for a list of files
     for grid_file in fs.find():
         file_list.append(grid_file.filename)
+        file_list.append(grid_file.upload_date)
+        file_list.append(grid_file.length)
 
     return {'file_list': file_list}
 
