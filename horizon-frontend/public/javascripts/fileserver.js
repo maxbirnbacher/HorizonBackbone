@@ -36,16 +36,27 @@ function showUpload() {
 function downloadFile(id) {
     console.log('downloading file: ' + id);
     fetch('/api/files/download/' + id)
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            // Append the file extension to the id if it's available
-            a.download = id + (response.data.extension ? '.' + response.data.extension : '');
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
+        .then(response => {
+            // Check if the response is successful
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            // Get the filename from the Content-Disposition header
+            const contentDisposition = response.headers.get('Content-Disposition');
+            const filename = contentDisposition.match(/filename="(.+)"/)[1];
+            const extension = filename.split('.').pop();
+            return response.blob().then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename; // Use the filename from the response headers
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            });
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
         });
 }
 
