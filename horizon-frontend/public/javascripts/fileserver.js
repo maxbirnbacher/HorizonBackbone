@@ -36,9 +36,9 @@ function showUpload() {
 document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/files/all')
         .then(response => response.json())
-        .then(files => {
+        .then(data => {
             const table = document.getElementById('table_files_body');
-            files.forEach(file => {
+            data.files.forEach(file => {
                 const row = document.createElement('tr');
                 row.classList.add('pf-v5-c-table__tr');
                 row.innerHTML = `
