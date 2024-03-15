@@ -25,7 +25,6 @@ function showUpload() {
             </div>
             to upload a file to the server.
         </div>
-        <footer class="pf-v5-c-modal-box__footer">Modal footer</footer>
     </div>
     `
 
