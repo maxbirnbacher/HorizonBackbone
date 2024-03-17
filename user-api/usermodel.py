@@ -44,6 +44,9 @@ class UserInDB(UserBase):
         return encoded_jwt
     
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    print(f"JWT_SECRET_KEY: {JWT_SECRET_KEY}")
+    # modify the JWT_SECRET_KEY to be string
+    JWT_SECRET_KEY = str(JWT_SECRET_KEY)
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
