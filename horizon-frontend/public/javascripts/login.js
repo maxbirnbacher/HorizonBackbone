@@ -1,8 +1,7 @@
 function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
-    const hashBuffer = window
-        .crypto
+    const hashBuffer = crypto
         .subtle
         .digest('SHA-256', data); // hash the password using the Web Crypto API
     const hashArray = Array.from(new Uint8Array(hashBuffer)); // convert the hash to an array of bytes
