@@ -14,5 +14,5 @@ curl -X POST http://user-api:8002/users/signup \
     -H "Content-Type: application/json" \
     -d '{
         "username": "admin",
-        "hashedPassword": "'"$hashed_password"'"
+        "hashedPassword": $hashed_password
     }'
