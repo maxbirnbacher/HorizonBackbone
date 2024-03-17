@@ -11,11 +11,13 @@ document
             .querySelector('#login-demo-form-password')
             .value;
 
-        // TODO: change login to the new user api
+        // hash the password with sha256
+        var hashedPass = sha256(password.toString());
+
         axios
             .post('http://localhost:3000/api/login', {
                 username: username,
-                password: password
+                password: hashedPass
             })
             .then(function (response) {
                 // Login successful, save the token
