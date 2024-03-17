@@ -23,7 +23,7 @@ router.post('/login', function(req, res, next) {
     .then(function (response) {
         if (response.status === 200) {
             //login successful, save the token
-            localStorage.setItem('token', response.data.access_token);
+            localStorage.setItem({token: response.data.access_token, username: req.body.username});
             res.redirect('/');
         } else {
             //login failed

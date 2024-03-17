@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
 
             var username = document
-                .querySelector('#login-demo-form-username')
+                .querySelector('#login-form-username')
                 .value;
             var password = document
-                .querySelector('#login-demo-form-password')
+                .querySelector('#login-form-password')
                 .value;
 
             // hash the password with sha256
