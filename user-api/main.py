@@ -42,12 +42,9 @@ async def register_user(user: usermodel.UserHashedPassword):
     # Insert the user into MongoDB
     user_id = connections.insert_one(user.dict()).inserted_id
 
-    # Create an instance of UserInDB
-    user_in_db = usermodel.UserInDB(username=user.username, hashed_password=user.hashedPassword)
-
     # Create the access token
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = user_in_db.create_access_token(
+    access_token = usermodel.create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires)
 
     return {
