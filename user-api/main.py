@@ -28,14 +28,14 @@ async def list_users():
     return {'user_list': user_list}
 
 # register a new user
-@app.post('/users/register', response_model=usermodel.User)
-async def register_user(user: usermodel.UserCreate):
+@app.post('/users/signup', response_model=usermodel.User)
+async def register_user(username: str, hashedPassword: str):
     # check if the user already exists
-    if connections.find_one({"username": user.username}):
+    if connections.find_one({"username": username}):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User already exists")
 
     # create a new user object
-    user_object = usermodel.UserInDB(username=user.username, hashed_password=user.password)
+    user_object = usermodel.UserInDB(username=username, hashed_password=hashedPassword)
 
     # Insert the user into MongoDB
     user_id = connections.insert_one(user_object.dict()).inserted_id
@@ -45,6 +45,7 @@ async def register_user(user: usermodel.UserCreate):
 # return a user token for login
 app.post('/users/login')
 async def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
+    print(form_data)
     # retrieve the user from the database
     user = connections.find_one({"username": form_data.username})
     if not user:
