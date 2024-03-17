@@ -28,19 +28,20 @@ async def list_users():
     return {'user_list': user_list}
 
 # register a new user
-@app.post('/users/signup', response_model=usermodel.User)
-async def register_user(request: Request):
-    data = await request.json()
-    print(data)
-    # transform the data into a dictionary
-    data = dict(data)
+@app.post('/users/signup')
+async def register_user(username: str, hashedPassword: str):
+    # data = await request.json()
+    # print(data)
+    # # transform the data into a dictionary
+    # data = dict(data)
 
-    # check if the user has the required fields
-    if 'username' not in data or 'hashedPassword' not in data:
-        raise HTTPException(status_code=400, detail="Missing required fields")
+    # # check if the user has the required fields
+    # if 'username' not in data or 'hashedPassword' not in data:
+    #     raise HTTPException(status_code=400, detail="Missing required fields")
     
-    username = data['username']
-    hashedPassword = data['hashedPassword']
+    # username = data['username']
+    # hashedPassword = data['hashedPassword']
+    print(username, hashedPassword)
 
     # check if the user already exists
     if connections.find_one({"username": username}):
