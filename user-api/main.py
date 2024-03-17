@@ -4,6 +4,8 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import usermodel
 from datetime import timedelta
 
+# Define the access token expiry time in minutes
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 # Initialize the MongoDB client
@@ -37,13 +39,20 @@ async def register_user(user: usermodel.UserHashedPassword):
     if connections.find_one({"username": user.username}):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User already exists")
 
-    # create a new user object
-    user_object = usermodel.UserInDB(username=user.username, hashed_password=user.hashedPassword)
-
     # Insert the user into MongoDB
-    user_id = connections.insert_one(user_object.dict()).inserted_id
+    user_id = connections.insert_one(user.dict()).inserted_id
 
-    return {'message': 'User registered successfully', 'user_id': str(user_id)}
+    # Create the access token
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = usermodel.UserInDB.create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires)
+
+    return {
+        'message': 'User registered successfully',
+        'user_id': str(user_id),
+        'access_token': access_token,
+        'token_type': 'bearer'
+    }
 
 # return a user token for login
 app.post('/users/login')
