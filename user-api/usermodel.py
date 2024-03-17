@@ -27,6 +27,7 @@ class User(UserBase):
         orm_mode = True
 
 class UserInDB(UserBase):
+    username: str
     hashed_password: str
 
     def verify_password(self, plain_password):
