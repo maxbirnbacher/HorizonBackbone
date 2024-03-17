@@ -5,6 +5,7 @@ import usermodel
 from datetime import timedelta
 
 
+
 # Initialize the MongoDB client
 client = MongoClient("mongodb://mongo:27017/")
 db = client["database"]
@@ -29,26 +30,15 @@ async def list_users():
 
 # register a new user
 @app.post('/users/signup')
-async def register_user(username: str, hashedPassword: str):
-    # data = await request.json()
-    # print(data)
-    # # transform the data into a dictionary
-    # data = dict(data)
-
-    # # check if the user has the required fields
-    # if 'username' not in data or 'hashedPassword' not in data:
-    #     raise HTTPException(status_code=400, detail="Missing required fields")
-    
-    # username = data['username']
-    # hashedPassword = data['hashedPassword']
-    print(username, hashedPassword)
+async def register_user(user: usermodel.UserHashedPassword):
+    print(user.username, user.hashedPassword)
 
     # check if the user already exists
-    if connections.find_one({"username": username}):
+    if connections.find_one({"username": user.username}):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User already exists")
 
     # create a new user object
-    user_object = usermodel.UserInDB(username=username, hashed_password=hashedPassword)
+    user_object = usermodel.UserInDB(username=user.username, hashed_password=user.hashedPassword)
 
     # Insert the user into MongoDB
     user_id = connections.insert_one(user_object.dict()).inserted_id

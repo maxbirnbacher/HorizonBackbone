@@ -9,6 +9,10 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
+class UserHashedPassword(BaseModel):
+    username: str
+    hashedPassword: str
+
 class UserBase(BaseModel):
     username: str
     password: str
