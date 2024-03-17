@@ -14,7 +14,8 @@ COPY . .
 # create a env variable that can be used as a secret for the JWT token
 RUN export JWT_SECRET_KEY=$(openssl rand -hex 32) && \
     echo $JWT_SECRET_KEY && \
-    echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> /etc/environment
+    echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> /etc/environment && \
+    export $(cat /etc/environment | xargs)
 
 # Expose port 8002 to communicate with the FastAPI app
 EXPOSE 8002
