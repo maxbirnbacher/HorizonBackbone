@@ -1,19 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios');
-var crypto = require('crypto');
 
 /* make a post request to the user-api for login */
 router.post('/login', function(req, res, next) {
     // hash the password
-    const reqPassword = req.body.password;
-    console.log('req.body: ' + req.body);
-
-    // // Hash the password with sha256
-    // hashedPass = crypto
-    //         .createHash('sha256')
-    //         .update(reqPassword)
-    //         .digest('hex');
+    var reqPassword = req.body.password;
+    console.log('username: ' + req.body.username)
+    console.log('reqPassword: ' + reqPassword);
 
     // make a post request to the user-api for login
     axios.post('http://user-api:8002/users/login', {

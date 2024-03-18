@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             var hashedPass = hashPassword(password);
 
             fetch('/api/login', {
-                method: 'POST', // or 'PUT'
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
