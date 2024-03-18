@@ -5,6 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var fs = require('fs');
+var https = require('https');
 
 // Read the certificate and key files
 var privateKey = fs.readFileSync('/usr/src/app/key.pem', 'utf8');
