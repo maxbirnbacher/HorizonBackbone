@@ -5,11 +5,14 @@ function hashPassword(password) {
         const hashBuffer = crypto
             .subtle
             .digest('SHA-256', data);
+            console.log('hashBuffer: ' + hashBuffer);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
+        console.log('hashArray: ' + hashArray);
         const hashedPassword = hashArray
             .map(b => b.toString(16).padStart(2, '0'))
             .join('');
-        return String(hashedPassword);
+            console.log('hashedPassword: ' + hashedPassword);
+        return hashedPassword;
     } catch (error) {
         console.error('Error hashing password:', error);
         return null;
