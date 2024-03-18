@@ -13,7 +13,7 @@ router.post('/login', function(req, res, next) {
     // make a post request to the user-api for login
     axios.post('http://user-api:8002/users/login', {
         username: req.body.username,
-        password: reqPassword
+        hashedPassword: reqPassword
     })
     .then(function (response) {
         if (response.status === 200) {
