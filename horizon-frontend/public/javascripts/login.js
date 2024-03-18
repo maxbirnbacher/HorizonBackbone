@@ -1,8 +1,8 @@
-async function hashPassword(password) {
+function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
     try {
-        const hashBuffer = await crypto
+        const hashBuffer = crypto
             .subtle
             .digest('SHA-256', data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
