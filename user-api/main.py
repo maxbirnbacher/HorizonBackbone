@@ -56,15 +56,15 @@ async def register_user(user: usermodel.UserHashedPassword):
 
 # return a user token for login
 app.post('/users/login')
-async def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
-    print(form_data)
+async def login_user(user: usermodel.UserLogin):
+    print(user.username, user.hashedPassword)
     # retrieve the user from the database
-    user = connections.find_one({"username": form_data.username})
+    user = connections.find_one({"username": user.username})
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid username or password")
 
     # verify the password
-    if not user.verify_password(form_data.password):
+    if not user.verify_password(user.hashedPassword):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid username or password")
 
     # create the access token

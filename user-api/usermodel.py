@@ -26,6 +26,14 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
+class UserLogin(UserBase):
+    username: str
+    hashedPassword: str
+
+    # verify that the hashed password matches the hashed password in the database
+    def verify_password(self, hashed_password):
+        return passlib.hash.bcrypt.verify(self.hashedPassword, hashed_password)
+
 class UserInDB(UserBase):
     username: str
     hashed_password: str
