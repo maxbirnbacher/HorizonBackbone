@@ -4,6 +4,11 @@ var favicon = require('serve-favicon');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var fs = require('fs');
+
+// Read the certificate and key files
+var privateKey = fs.readFileSync('/usr/src/app/key.pem', 'utf8');
+var certificate = fs.readFileSync('/usr/src/app/cert.pem', 'utf8')
 
 var indexRouter = require('./routes/index');
 var filesRouter = require('./routes/list-files');
@@ -41,13 +46,21 @@ app.use('/user', userRouter);
 app.use('/login', loginRouter);
 app.use('/api', apiRouter);
 
+
+// Create an HTTPS service
+var credentials = { key: privateKey, cert: certificate };
+var httpsServer = https.createServer(credentials, app);
+
+// Start the server
+var port = 3000;
+httpsServer.listen(port, function() {
+    console.log("Server running at https://server:" + port);
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
-console.log("Starting horizon-frontend");
-console.log("Listening on port http://server:3000/")
 
 // error handler
 app.use(function(err, req, res, next) {

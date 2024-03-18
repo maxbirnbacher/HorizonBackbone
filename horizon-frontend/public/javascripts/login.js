@@ -1,14 +1,15 @@
-function hashPassword(password) {
+async function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
-    const hashBuffer = crypto
-        .subtle
-        .digest('SHA-256', data); // hash the password using the Web Crypto API
-    const hashArray = Array.from(new Uint8Array(hashBuffer)); // convert the hash to an array of bytes
-    const hashedPassword = hashArray
-        .map(b => b.toString(16).padStart(2, '0'))
-        .join(''); // convert the array of bytes to a hexadecimal string
-    return hashedPassword; 
+    try {
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashedPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashedPassword;
+    } catch (error) {
+        console.error('Error hashing password:', error);
+        return null;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

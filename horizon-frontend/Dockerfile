@@ -7,6 +7,12 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json to the container
 COPY package*.json ./
 
+# Install OpenSSL
+RUN apt-get update && apt-get install -y openssl
+
+# Generate a self-signed certificate
+RUN openssl req -x509 -sha256 -newkey rsa:4096 -nodes -keyout key.pem -out cert.pem -days 365 -subj '/CN=localhost'
+
 # Install project dependencies
 RUN npm install
 
