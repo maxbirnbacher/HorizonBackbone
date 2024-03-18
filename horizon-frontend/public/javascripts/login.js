@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // hash the password with sha256
             var hashedPass = hashPassword(password);
 
-            fetch('http://localhost:3000/api/login', {
+            fetch('/api/login', {
                 method: 'POST', // or 'PUT'
                 headers: {
                     'Content-Type': 'application/json'
