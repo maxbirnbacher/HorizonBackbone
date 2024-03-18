@@ -55,7 +55,7 @@ async def register_user(user: usermodel.UserHashedPassword):
     }
 
 # return a user token for login
-app.post('/users/login')
+@app.post('/users/login')
 async def login_user(user: usermodel.UserLogin):
     print(user.username, user.hashedPassword)
     # retrieve the user from the database
