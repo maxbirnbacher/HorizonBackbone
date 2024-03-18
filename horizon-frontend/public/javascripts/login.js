@@ -9,7 +9,7 @@ function hashPassword(password) {
         const hashedPassword = hashArray
             .map(b => b.toString(16).padStart(2, '0'))
             .join('');
-        return str(hashedPassword);
+        return String(hashedPassword);
     } catch (error) {
         console.error('Error hashing password:', error);
         return null;
