@@ -9,7 +9,7 @@ async function hashPassword(password) {
         const hashedPassword = hashArray
             .map(b => b.toString(16).padStart(2, '0'))
             .join('');
-        return hashedPassword;
+        return str(hashedPassword);
     } catch (error) {
         console.error('Error hashing password:', error);
         return null;
@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // hash the password with sha256
             var hashedPass = hashPassword(password);
+
+            console.log('username: ' + username);
+            console.log('password: ' + password);
+            console.log('hashedPass: ' + hashedPass);
 
             fetch('/api/login', {
                 method: 'POST',
