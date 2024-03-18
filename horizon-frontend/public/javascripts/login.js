@@ -2,9 +2,13 @@ async function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
     try {
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashBuffer = await crypto
+            .subtle
+            .digest('SHA-256', data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashedPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        const hashedPassword = hashArray
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join('');
         return hashedPassword;
     } catch (error) {
         console.error('Error hashing password:', error);
@@ -29,19 +33,22 @@ document.addEventListener('DOMContentLoaded', () => {
             // hash the password with sha256
             var hashedPass = hashPassword(password);
 
-            axios
-                .post('http://localhost:3000/api/login', {
-                    username: username,
-                    password: hashedPass
-                })
-                .then(function (response) {
+            fetch('http://localhost:3000/api/login', {
+                method: 'POST', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username: username, password: hashedPass})
+            })
+                .then(response => response.json())
+                .then(data => {
                     // Login successful, save the token
-                    localStorage.setItem('token', response.data.access_token);
+                    localStorage.setItem('token', data.access_token);
                     window.location.href = '/';
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     // Login failed
-                    console.log('Login failed');
+                    console.error('Login failed:', error);
                     alert('Invalid username or password');
                 });
         });
