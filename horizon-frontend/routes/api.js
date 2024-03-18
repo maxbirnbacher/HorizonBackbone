@@ -14,6 +14,11 @@ router.post('/login', function(req, res, next) {
     axios.post('http://user-api:8002/users/login', {
         username: req.body.username,
         hashedPassword: reqPassword
+    },
+    {
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
     .then(function (response) {
         if (response.status === 200) {
