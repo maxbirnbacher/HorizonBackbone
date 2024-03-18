@@ -9,6 +9,7 @@
     "@patternfly/patternfly": "^5.1.0",
     "axios": "^1.6.5",
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "ejs": "^3.1.9",
     "express": "^4.18.2",

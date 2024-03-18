@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 
 var indexRouter = require('./routes/index');
@@ -34,6 +35,8 @@ app.use(function(req, res, next) {
       "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/list-files', filesRouter);
