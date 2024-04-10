@@ -13,6 +13,7 @@ var c2Router = require('./routes/c2');
 var userRouter = require('./routes/user');
 var loginRouter = require('./routes/login');
 var apiRouter = require('./routes/api');
+var systemRouter = require('./routes/system');
 
 var app = express();
 
@@ -44,7 +45,7 @@ app.use('/c2', c2Router);
 app.use('/user', userRouter);
 app.use('/login', loginRouter);
 app.use('/api', apiRouter);
-
+app.use('/system', systemRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

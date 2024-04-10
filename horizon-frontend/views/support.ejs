@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Home - HorizonBackbone</title>
+        <title>Support - HorizonBackbone</title>
         <link rel='stylesheet' href='/stylesheets/patternfly.min.css'/>
-        <script src="/javascripts/fileserver.js"></script>
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -81,7 +80,7 @@
                             <h2 class="pf-v5-c-nav__section-title" id="grouped-title2">Files</h2>
                             <ul class="pf-v5-c-nav__list" role="list">
                                 <li class="pf-v5-c-nav__item">
-                                    <a href="/list-files" class="pf-v5-c-nav__link pf-m-current">Fileserver</a>
+                                    <a href="/list-files" class="pf-v5-c-nav__link">Fileserver</a>
                                 </li>
                                 <li class="pf-v5-c-nav__item">
                                     <a href="#" class="pf-v5-c-nav__link">Delivery</a>
@@ -101,7 +100,7 @@
                                     <a href="#" class="pf-v5-c-nav__link">Extra Modules</a>
                                 </li>
                                 <li class="pf-v5-c-nav__item">
-                                    <a href="/system/support" class="pf-v5-c-nav__link">Support</a>
+                                    <a href="/system/support" class="pf-v5-c-nav__link pf-m-current">Support</a>
                                 </li>
                             </ul>
                         </section>
@@ -111,56 +110,41 @@
             <main class="pf-v5-c-page__main" tabindex="-1">
                 <section class="pf-v5-c-page__main-section pf-m-light">
                     <div class="pf-v5-c-content">
-                        <h1>Fileserver</h1>
+                        <h1>Support</h1>
+
                         <p>
-                            This is the fileserver. Agents and users can upload and download files here.
+                            Support panel of HorizonBackbone. Find out more information about the project.
                         </p>
-                        <!-- inline button for upload -->
-                        <button
-                            class="pf-v5-c-button pf-m-inline pf-m-primary"
-                            type="button"
-                            onclick="showUpload()">
-                            <i class="fas fa-plus" aria-hidden="true"></i>
-                            Upload files
-                        </button>
-                        <!-- inline button for refresh -->
-                        <button
-                            class="pf-v5-c-button pf-m-inline"
-                            type="button"
-                            onclick="location.reload();">
-                            <i class="fas fa-sync-alt" aria-hidden="true"></i>
-                            Refresh
-                        </button>
+                        <p>
+                            If you want support, feel free to open a ticket on the GitHub repository, or buy a support plan (coming soon ...) to get direct support from the developers.
+                        </p>
                     </div>
                 </section>
-
-                <!-- section for file list -->
                 <section class="pf-v5-c-page__main-section">
                     <div class="pf-v5-c-content">
                         <div class="pf-v5-l-grid pf-m-gutter">
                             <div class="pf-v5-c-card">
-                                <div class="pf-v5-c-card__header">
-                                    <h2 class="pf-v5-c-card__title">Files</h2>
-                                </div>
+                                <h2 class="pf-v5-c-card__title">Support Plan</h2>
+                                </h2>
+
                                 <div class="pf-v5-c-card__body">
-                                    <table class="pf-v5-c-table pf-m-compact pf-m-grid-md">
-                                        <thead class="pf-v5-c-table__thead">
-                                            <tr class="pf-v5-c-table__tr" role="row">
-                                                <th class="pf-v5-c-table__th" role="columnheader" scope="col">ID</th>
-                                                <th class="pf-v5-c-table__th" role="columnheader" scope="col">Filename</th>
-                                                <th class="pf-v5-c-table__th" role="columnheader" scope="col">Size</th>
-                                                <th class="pf-v5-c-table__th" role="columnheader" scope="col">Last change</th>
-                                                <th class="pf-v5-c-table__th" role="columnheader" scope="col">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="table_files_body">
-                                            <tr class="pf-v5-c-table__tr" role="row">
-                                                <td class="pf-v5-c-table__td" role="cell" colspan="5">No files found.</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <p>
+                                        A support plan is coming soon. Stay tuned for more information.
+                                    </p>
                                 </div>
                             </div>
+
+                            <div class="pf-v5-c-card">
+                                <h2 class="pf-v5-c-card__title">GitHub Repository</h2>
+                                </h2>
+
+                                <div class="pf-v5-c-card__body">
+                                    <p>
+                                        You can find the GitHub repository of HorizonBackbone here: <a href="https://github.com/maxbirnbacher/HorizonBackbone">GitHub Repository</a>
+                                    </p>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </section>

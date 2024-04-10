@@ -5,15 +5,14 @@ var axios = require('axios');
 /* make a post request to the user-api for login */
 router.post('/login', function(req, res, next) {
     // hash the password
-    console.log(req.body)
     var reqPassword = req.body.password;
     console.log('username: ' + req.body.username)
     console.log('reqPassword: ' + reqPassword);
 
     // make a post request to the user-api for login
     axios.post('http://user-api:8002/users/login', {
-        username: req.body.username,
-        hashedPassword: reqPassword
+        username: String(req.body.username),
+        hashedPassword: String(reqPassword)
     },
     {
         headers: {
