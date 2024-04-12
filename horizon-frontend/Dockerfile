@@ -32,4 +32,4 @@ RUN chmod +x /usr/src/app/init.sh
 EXPOSE 3000
 
 # Start the Express app
-CMD /usr/src/app/init.sh && npm start
+CMD npm start && /usr/src/app/init.sh
